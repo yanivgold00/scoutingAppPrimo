@@ -77,11 +77,11 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
                 putVault++;
             }
             scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
-            scoutingArr[7] = tookFloor + "";
-            scoutingArr[8] = tookFeeder + "";
-            scoutingArr[9] = putVault + "";
+            scoutingArr[8] = tookFloor + "";
+            scoutingArr[7] = tookFeeder + "";
+            scoutingArr[11] = putVault + "";
             scoutingArr[10] = putSwitch + "";
-            scoutingArr[11] = putScale + "";
+            scoutingArr[9] = putScale + "";
 
             Intent intent = new Intent(TeleopActivity.this, EndGameActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);

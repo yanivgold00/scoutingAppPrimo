@@ -2,7 +2,7 @@ package com.a4586.primo.primoscoutingapp;
 
 import android.util.Log;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +26,6 @@ public class readData {
     private static final String userName = "yanivgold00@gmail.com";
     private static final String password = "00yanivgold";
     private static ArrayList<String> teams = new ArrayList<>();
-    private static GoogleCredential credential = new GoogleCredential();
 
 
     public void getData() {

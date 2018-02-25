@@ -56,7 +56,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         didCrashSwitch = findViewById(R.id.didCrashSwitch);
         commentsET = findViewById(R.id.commentsET);
         sendBtn = findViewById(R.id.sendBtn);
-
+        sendBtn.setClickable(true);
 
         sendBtn.setOnClickListener(this);
     }
@@ -68,6 +68,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
             scoutingArr[17] = didCrashSwitch.isChecked() + "";
             scoutingArr[18] = commentsET.getText().toString();
 
+            sendBtn.setClickable(false);
             sendFirebase();
 
         }
@@ -117,9 +118,17 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
 
                     database.collection("games").document(scoutingArr[1]+counter).set(game);
                     Log.v("TAG", "succes");
+                    Toast.makeText(SendActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SendActivity.this, GameActivity.class);
+                    intent.putExtra("scoutingArr", scoutingArr);
+                    startActivity(intent);
+                    finish();
+
 
                 } else {
-                    Log.v(TAG, "error");
+                    Toast.makeText(SendActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                    Log.v("TAG", "error");
+                    sendBtn.setClickable(true);
                 }
             }
         });

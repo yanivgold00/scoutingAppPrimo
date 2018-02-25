@@ -48,12 +48,12 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v.getId() == teleBtn.getId()) {
             Toast.makeText(AutonomousActivity.this, "autonomous sent!", Toast.LENGTH_SHORT).show();
-            scoutingArr[4] = pointSwitchEt.getText().toString();
-            scoutingArr[5] = pointScaleEt.getText().toString();
+            scoutingArr[5] = pointSwitchEt.getText().toString();
+            scoutingArr[6] = pointScaleEt.getText().toString();
             if (autoLine.isChecked()) {
-                scoutingArr[6] = "true";// adds true if crossed auto line
+                scoutingArr[4] = "true";// adds true if crossed auto line
             } else {
-                scoutingArr[6] = "false";// adds false if didn't crossed auto line
+                scoutingArr[4] = "false";// adds false if didn't crossed auto line
             }
 
 

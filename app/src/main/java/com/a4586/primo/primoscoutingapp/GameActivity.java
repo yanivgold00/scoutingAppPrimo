@@ -44,7 +44,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         autoBtn.setOnClickListener(this);
 
         if (getIntent().getStringArrayExtra("scoutingArr")[1] != null) {
-            int num = Integer.parseInt((getIntent().getStringArrayExtra("scoutingArr")[1]));
+            int num = Integer.parseInt((getIntent().getStringArrayExtra("scoutingArr")[2]));
             num++;
             gameNum.setText("" + num);
         }

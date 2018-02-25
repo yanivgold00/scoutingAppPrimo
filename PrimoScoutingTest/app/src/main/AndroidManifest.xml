@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.primo.primoscoutingtest">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/app_logo"
+        android:label="Scouting Primo"
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme"
+        android:name="android.support.multidex.MultiDexApplication" >
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ScoutingChooseActivity" />
+        <activity android:name=".GameActivity" />
+        <activity android:name=".AutonomousActivity" />
+        <activity android:name=".TeleopActivity" />
+        <activity android:name=".EndGameActivity" />
+        <activity android:name=".PitFormActivity" />
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".PitMainActivity" />
+        <activity android:name=".Pit2MainActivity" />
+        <activity android:name=".ResultsActivity"></activity>
+        <meta-data android:name="com.google.android.apps.drive.APP_ID" android:value="id=323330018118-ffkvsmivo8mm5n8orrvmbt7rgh7ovo6g.apps.googleusercontent.com" />
+        <action android:name="com.google.android.apps.drive.DRIVE_OPEN" />
+    </application>
+
+</manifest>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "890414930556",
+    "firebase_url": "https://primo-scouting-5eb2f.firebaseio.com",
+    "project_id": "primo-scouting-5eb2f",
+    "storage_bucket": "primo-scouting-5eb2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890414930556:android:f69017edbee069f4",
+        "android_client_info": {
+          "package_name": "com.a4586.primo.primoscoutingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890414930556-vp323786p7kqrnn4is4iukgailokqf9s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.a4586.primo.primoscoutingapp",
+            "certificate_hash": "eef61d6442847647734ab52abf8d6a53d6b5ccef"
+          }
+        },
+        {
+          "client_id": "890414930556-n42soi93pgruon85oemhegg6rivgq393.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHLmaWBLtla03PTnXA9jAop7nZfBpc7Ag"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890414930556-n42soi93pgruon85oemhegg6rivgq393.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

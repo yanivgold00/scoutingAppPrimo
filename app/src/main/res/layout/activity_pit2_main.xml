@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.a4586.primo.primoscoutingapp.Pit2MainActivity">
+
+    <TextView
+        android:id="@+id/drivingSystemTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="מערכת הנעה"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/drivingSystemET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text|textShortMessage|textLongMessage|textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/drivingSystemTV"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/wheelTypeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="סוג הגלגלים"
+        app:layout_constraintEnd_toEndOf="@+id/drivingSystemTV"
+        app:layout_constraintTop_toBottomOf="@+id/drivingSystemET" />
+
+    <EditText
+        android:id="@+id/wheelTypeET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text|textShortMessage|textLongMessage|textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/wheelTypeTV"
+        app:layout_constraintTop_toBottomOf="@+id/drivingSystemET" />
+
+    <Switch
+        android:id="@+id/visionSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="יש עיבוד תמונה"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wheelTypeET" />
+
+    <TextView
+        android:id="@+id/stratTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="אסטרטגיה כללית"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/visionSwitch" />
+
+    <EditText
+        android:id="@+id/stratET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text|textShortMessage|textLongMessage|textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/stratTV"
+        app:layout_constraintTop_toBottomOf="@+id/visionSwitch" />
+
+    <TextView
+        android:id="@+id/isueTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="פוטנציאל לבעיות"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stratET" />
+
+    <EditText
+        android:id="@+id/issueET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text|textShortMessage|textLongMessage|textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/isueTV"
+        app:layout_constraintTop_toBottomOf="@+id/stratET" />
+
+    <Button
+        android:id="@+id/sendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
+        android:text="שלח אוטונומי"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/issueET" />
+</android.support.constraint.ConstraintLayout>

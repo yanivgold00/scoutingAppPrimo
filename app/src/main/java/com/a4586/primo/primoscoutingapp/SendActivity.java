@@ -85,7 +85,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     int counter = 1;
 //                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
                     for (DocumentSnapshot doc:task.getResult().getDocuments()) {
-                        if (doc.getId().toString().substring(0,3).contains(scoutingArr[1]))
+                        if (doc.getId().toString().substring(0,4).contains(scoutingArr[1]))
                         {
                             counter++;
                         }

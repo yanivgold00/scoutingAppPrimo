@@ -55,8 +55,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == autoBtn.getId()) {
 
             String teamNumber = teamNum.getText().toString();
-
-            scoutingArr[2] = gameNum.getText().toString();//adds scouted game number
+            if (gameNum.getText().length()==0) {
+                scoutingArr[2] = "0";
+            }
+            else {
+                scoutingArr[2] = gameNum.getText().toString();//adds scouted game number
+            }
 
             while (teamNumber.length()<4) {
                 teamNumber = 0 + teamNumber;

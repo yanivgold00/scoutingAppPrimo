@@ -114,6 +114,8 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     game.put("role",scoutingArr[16]);
                     game.put("did_crash",scoutingArr[17]);
                     game.put("comments",scoutingArr[18]);
+
+                    database.collection("games").document(scoutingArr[1]+counter).set(game);
                     Log.v("TAG", "succes");
 
                 } else {

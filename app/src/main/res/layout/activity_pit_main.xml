@@ -54,118 +54,144 @@
         app:layout_constraintStart_toEndOf="@+id/commentRoleET"
         app:layout_constraintTop_toTopOf="@+id/commentRoleET" />
 
-    <Switch
-        android:id="@+id/dinamicGearSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
-        android:layout_marginTop="16dp"
-        android:text="עושה גיר דינאמי"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+    <EditText
+        android:id="@+id/elevatorET"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text|textShortMessage|textLongMessage|textPersonName"
+        android:singleLine="false"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/elevatorTV"
+        app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commentRoleET" />
+        app:layout_constraintTop_toBottomOf="@+id/vaultCB" />
 
-    <Switch
-        android:id="@+id/staticGearSwitch"
+    <TextView
+        android:id="@+id/elevatorTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="12dp"
-        android:text="עושה גיר סטטי"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="מערכת קוביות"
+        app:layout_constraintBottom_toBottomOf="@+id/elevatorET"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dinamicGearSwitch" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/commentRoleET"
+        app:layout_constraintTop_toTopOf="@+id/elevatorET"
+        app:layout_constraintVertical_bias="0.51" />
+
+    <EditText
+        android:id="@+id/helpsClimbET"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text|textShortMessage|textLongMessage|textPersonName"
+        android:singleLine="false"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/helpsClimbTV"
+        app:layout_constraintHorizontal_bias="0.65"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/climbsSwitch" />
+
+    <TextView
+        android:id="@+id/helpsClimbTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="8dp"
+        android:text="עוזר לטפס"
+        app:layout_constraintBottom_toBottomOf="@+id/helpsClimbET"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/helpsClimbET"
+        app:layout_constraintVertical_bias="0.59000003" />
+
 
     <Switch
         android:id="@+id/baseLineSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:text="עובר קו בסיס באוטונומי"
-        app:layout_constraintEnd_toEndOf="@+id/staticGearSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/staticGearSwitch" />
-
-    <Switch
-        android:id="@+id/isShootSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="האם יורה"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/baseLineSwitch" />
-
-    <Switch
-        android:id="@+id/autoShootSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="האם יורה באוטונומי"
-        app:layout_constraintEnd_toEndOf="@+id/isShootSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/isShootSwitch" />
-
-    <Switch
-        android:id="@+id/autoGearSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="האם עושה גיר באוטונומי"
-        app:layout_constraintEnd_toEndOf="@+id/autoShootSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/autoShootSwitch" />
-
-    <Spinner
-        android:id="@+id/autoGearSpinner"
-        android:layout_width="186dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/autoGearTv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoGearSwitch" />
-
-    <TextView
-        android:id="@+id/autoGearTv"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="איפה שם גיר באוטונומי"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoGearSwitch" />
-
-    <Switch
-        android:id="@+id/autoContSqSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="האם הולך לריבוע שליטה באוטונומי"
-        app:layout_constraintEnd_toEndOf="@+id/autoGearTv"
-        app:layout_constraintTop_toBottomOf="@+id/autoGearTv" />
-
-    <Switch
-        android:id="@+id/endContSqSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="האם הולך לריבוע שליטה בסוף משחק"
-        app:layout_constraintEnd_toEndOf="@+id/autoContSqSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/autoContSqSwitch" />
+        app:layout_constraintTop_toBottomOf="@+id/helpsClimbET" />
 
     <Button
         android:id="@+id/contBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="המשך"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/endContSqSwitch" />
+        app:layout_constraintTop_toBottomOf="@+id/baseLineSwitch" />
+
+    <TextView
+        android:id="@+id/cubeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="עושה קוביות"
+        app:layout_constraintBottom_toBottomOf="@+id/vaultCB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/vaultCB"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <CheckBox
+        android:id="@+id/vaultCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="אקסציינג"
+        app:layout_constraintEnd_toStartOf="@+id/cubeTV"
+        app:layout_constraintTop_toBottomOf="@+id/commentRoleET" />
+
+    <CheckBox
+        android:id="@+id/switchCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="סוויץ'"
+        app:layout_constraintEnd_toStartOf="@+id/vaultCB"
+        app:layout_constraintTop_toBottomOf="@+id/commentRoleET" />
+
+    <CheckBox
+        android:id="@+id/scaleCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="סקייל"
+        app:layout_constraintEnd_toStartOf="@+id/switchCB"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentRoleET" />
+
+    <Switch
+        android:id="@+id/climbsSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="מטפס"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/elevatorET" />
 
 </android.support.constraint.ConstraintLayout>

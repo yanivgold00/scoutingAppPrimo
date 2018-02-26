@@ -38,46 +38,46 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pit_main);
 
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
-
-        roleList = new ArrayList<>();
-        roleList.add("התקפה");
-        roleList.add("הגנה");
-        roleList.add("שניהם");
-        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, roleList);
-        roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
-        roleSpinner.setAdapter(adapter);
-
-        roleET = (EditText) findViewById(R.id.commentRoleET);
-
-        dinamiSwitch = (Switch) findViewById(R.id.dinamicGearSwitch);
-
-        statiSwitch = (Switch) findViewById(R.id.staticGearSwitch);
-
-        baseLineSwitch = (Switch) findViewById(R.id.baseLineSwitch);
-
-        doesShootSwitch = (Switch) findViewById(R.id.isShootSwitch);
-
-        autoShootSwitch = (Switch) findViewById(R.id.autoShootSwitch);
-
-        autoGearSwitch = (Switch) findViewById(R.id.autoGearSwitch);
-
-        gearDirList = new ArrayList<>();
-        gearDirList.add("לא שם גיר");
-        gearDirList.add("ימין");
-        gearDirList.add("שמאל");
-        gearDirList.add("שניהם");
-        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gearDirList);
-        autoGearSpinner = (Spinner) findViewById(R.id.autoGearSpinner);
-        autoGearSpinner.setAdapter(adapter);
-
-        autoControlSwitch = (Switch) findViewById(R.id.autoContSqSwitch);
-
-        endControlSwitch = (Switch) findViewById(R.id.endContSqSwitch);
-
-        contBtn = (Button) findViewById(R.id.contBtn);
-
-        contBtn.setOnClickListener(this);
+//        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+//
+//        roleList = new ArrayList<>();
+//        roleList.add("התקפה");
+//        roleList.add("הגנה");
+//        roleList.add("שניהם");
+//        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, roleList);
+//        roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
+//        roleSpinner.setAdapter(adapter);
+//
+//        roleET = (EditText) findViewById(R.id.commentRoleET);
+//
+//        dinamiSwitch = (Switch) findViewById(R.id.dinamicGearSwitch);
+//
+//        statiSwitch = (Switch) findViewById(R.id.staticGearSwitch);
+//
+//        baseLineSwitch = (Switch) findViewById(R.id.baseLineSwitch);
+//
+//        doesShootSwitch = (Switch) findViewById(R.id.isShootSwitch);
+//
+//        autoShootSwitch = (Switch) findViewById(R.id.autoShootSwitch);
+//
+//        autoGearSwitch = (Switch) findViewById(R.id.autoGearSwitch);
+//
+//        gearDirList = new ArrayList<>();
+//        gearDirList.add("לא שם גיר");
+//        gearDirList.add("ימין");
+//        gearDirList.add("שמאל");
+//        gearDirList.add("שניהם");
+//        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gearDirList);
+//        autoGearSpinner = (Spinner) findViewById(R.id.autoGearSpinner);
+//        autoGearSpinner.setAdapter(adapter);
+//
+//        autoControlSwitch = (Switch) findViewById(R.id.autoContSqSwitch);
+//
+//        endControlSwitch = (Switch) findViewById(R.id.endContSqSwitch);
+//
+//        contBtn = (Button) findViewById(R.id.contBtn);
+//
+//        contBtn.setOnClickListener(this);
     }
 
     @Override

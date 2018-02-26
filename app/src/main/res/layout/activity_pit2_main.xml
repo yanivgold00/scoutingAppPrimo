@@ -11,23 +11,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:text="מערכת הנעה"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/drivingSystemET" />
 
     <EditText
         android:id="@+id/drivingSystemET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="text|textShortMessage|textLongMessage|textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/drivingSystemTV"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/leftAutoScale" />
 
     <TextView
         android:id="@+id/wheelTypeTV"
@@ -50,39 +47,28 @@
         app:layout_constraintEnd_toStartOf="@+id/wheelTypeTV"
         app:layout_constraintTop_toBottomOf="@+id/drivingSystemET" />
 
-    <Switch
-        android:id="@+id/visionSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="יש עיבוד תמונה"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wheelTypeET" />
-
     <TextView
         android:id="@+id/stratTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:text="אסטרטגיה כללית"
+        app:layout_constraintBottom_toBottomOf="@+id/stratET"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/visionSwitch" />
+        app:layout_constraintTop_toTopOf="@+id/stratET" />
 
     <EditText
         android:id="@+id/stratET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="text|textShortMessage|textLongMessage|textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/stratTV"
-        app:layout_constraintTop_toBottomOf="@+id/visionSwitch" />
+        app:layout_constraintTop_toBottomOf="@+id/wheelTypeET" />
 
     <TextView
         android:id="@+id/isueTV"
@@ -111,11 +97,96 @@
         android:id="@+id/sendBtn"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="8dp"
         android:text="שלח אוטונומי"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/issueET" />
+
+    <TextView
+        android:id="@+id/autoSwitchTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="מאיזה צד סוויץ' באוטונומי"
+        app:layout_constraintBottom_toBottomOf="@+id/rightAutoSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rightAutoSwitch" />
+
+    <CheckBox
+        android:id="@+id/rightAutoSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="ימין"
+        app:layout_constraintEnd_toStartOf="@+id/autoSwitchTV"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/midAutoSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="מרכז"
+        app:layout_constraintEnd_toStartOf="@+id/rightAutoSwitch"
+        app:layout_constraintTop_toTopOf="@+id/rightAutoSwitch" />
+
+    <CheckBox
+        android:id="@+id/leftAutoSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="שמאל"
+        app:layout_constraintEnd_toStartOf="@+id/midAutoSwitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/midAutoSwitch" />
+
+    <TextView
+        android:id="@+id/autoScaleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="מאיזה צד סקייל באוטונומי"
+        app:layout_constraintBottom_toBottomOf="@+id/rightAutoScale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rightAutoScale"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <CheckBox
+        android:id="@+id/rightAutoScale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="8dp"
+        android:text="ימין"
+        app:layout_constraintEnd_toStartOf="@+id/autoScaleTV"
+        app:layout_constraintTop_toBottomOf="@+id/rightAutoSwitch" />
+
+    <CheckBox
+        android:id="@+id/midAutoScale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="מרכז"
+        app:layout_constraintEnd_toStartOf="@+id/rightAutoScale"
+        app:layout_constraintTop_toTopOf="@+id/rightAutoScale" />
+
+    <CheckBox
+        android:id="@+id/leftAutoScale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="שמאל"
+        app:layout_constraintEnd_toStartOf="@+id/midAutoScale"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/midAutoScale" />
 </android.support.constraint.ConstraintLayout>

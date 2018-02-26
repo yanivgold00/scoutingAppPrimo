@@ -37,16 +37,16 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_pit2_main);
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
-        drivingSystemET = (EditText) findViewById(R.id.drivingSystemET);
-        wheelTypeET = (EditText) findViewById(R.id.wheelTypeET);
-        visionSwitch = (Switch) findViewById(R.id.visionSwitch);
-        stratET = (EditText) findViewById(R.id.stratET);
-        issueET = (EditText) findViewById(R.id.issueET);
-
-        sendBtn = (Button) findViewById(R.id.sendBtn);
-        sendBtn.setClickable(true);
-        sendBtn.setOnClickListener(this);
+//        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+//        drivingSystemET = (EditText) findViewById(R.id.drivingSystemET);
+//        wheelTypeET = (EditText) findViewById(R.id.wheelTypeET);
+//        visionSwitch = (Switch) findViewById(R.id.visionSwitch);
+//        stratET = (EditText) findViewById(R.id.stratET);
+//        issueET = (EditText) findViewById(R.id.issueET);
+//
+//        sendBtn = (Button) findViewById(R.id.sendBtn);
+//        sendBtn.setClickable(true);
+//        sendBtn.setOnClickListener(this);
 
 
     }

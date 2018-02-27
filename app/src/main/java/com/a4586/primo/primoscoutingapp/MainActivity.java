@@ -40,14 +40,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
-                intent.putExtra("isAdmin", false);
+                intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
 
             } else if (this.pw.getText().toString().equals("admin")) {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
-                intent.putExtra("isAdmin", true);
+                intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
             } else {
                 Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();

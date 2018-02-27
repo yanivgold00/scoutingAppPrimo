@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="80dp"
                 android:clickable="false"
-                android:text="for results"
+                android:text="תוצאות"
                 android:visibility="invisible" />
         </TableRow>
     </TableLayout>

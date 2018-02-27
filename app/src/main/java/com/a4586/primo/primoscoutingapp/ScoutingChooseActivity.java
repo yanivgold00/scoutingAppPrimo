@@ -13,6 +13,8 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     private Button gameBtn;
     private Button pitBtn;
     private Button infoBtn;
+    private boolean isInfo;
+    String level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +23,20 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         gameBtn = (Button) findViewById(R.id.gameBtn);
         pitBtn = (Button) findViewById(R.id.pitBtn);
         infoBtn = (Button) findViewById(R.id.infoBtn);
-
-        if (getIntent().getBooleanExtra("isAdmin", false)) {
+        isInfo = false;
+        level = getIntent().getStringExtra("level");
+        if (level.equals("admin")) {
+            infoBtn.setText("תוצאות");
             infoBtn.setClickable(true);
             infoBtn.setVisibility(View.VISIBLE);
             infoBtn.setOnClickListener(this);
+        }
+        else if (level.equals("strat")) {
+            infoBtn.setText("אסטרטגיה");
+            infoBtn.setClickable(true);
+            infoBtn.setVisibility(View.VISIBLE);
+            infoBtn.setOnClickListener(this);
+
         }
 
         gameBtn.setOnClickListener(this);
@@ -37,26 +48,52 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         String[] scoutingArr;
         if (v.getId() == gameBtn.getId()) {
-            Toast.makeText(ScoutingChooseActivity.this, "Game Form", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(ScoutingChooseActivity.this, GameActivity.class);
-            scoutingArr = new String[21];
-            scoutingArr[0] = getIntent().getStringExtra("name");
-            intent.putExtra("scoutingArr", scoutingArr);
-            startActivity(intent);
+            if (!isInfo) {
+                Toast.makeText(ScoutingChooseActivity.this, "Game Form", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ScoutingChooseActivity.this, GameActivity.class);
+                scoutingArr = new String[19];
+                scoutingArr[0] = getIntent().getStringExtra("name");
+                intent.putExtra("scoutingArr", scoutingArr);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this,ResultsActivity.class);
+                intent.putExtra("type","game");
+                startActivity(intent);
+            }
         }
 
+
+
         if (v.getId() == pitBtn.getId()) {
-            Toast.makeText(ScoutingChooseActivity.this, "Pit Form", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(ScoutingChooseActivity.this, PitFormActivity.class);
-            scoutingArr = new String[19];
-            scoutingArr[0] = getIntent().getStringExtra("name");
-            intent.putExtra("scoutingArr", scoutingArr);
-            startActivity(intent);
+            if(!isInfo) {
+                Toast.makeText(ScoutingChooseActivity.this, "Pit Form", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ScoutingChooseActivity.this, PitFormActivity.class);
+                scoutingArr = new String[16];
+                scoutingArr[0] = getIntent().getStringExtra("name");
+                intent.putExtra("scoutingArr", scoutingArr);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this,ResultsActivity.class);
+                intent.putExtra("type","pit");
+                startActivity(intent);
+            }
         }
 
         if (v.getId() == infoBtn.getId()) {
-            Intent intent = new Intent(ScoutingChooseActivity.this, ResultsActivity.class);
-            startActivity(intent);
+            if (!isInfo) {
+                if (level.equals("strat")) {
+
+                } else {
+                    isInfo = true;
+                }
+            }
+            else {
+                Intent intent = new Intent(this,ResultsActivity.class);
+                intent.putExtra("type","comments");
+                startActivity(intent);
+            }
         }
 
     }

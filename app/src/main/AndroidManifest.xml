@@ -29,7 +29,8 @@
         <activity android:name=".PitMainActivity" />
         <activity android:name=".Pit2MainActivity" />
         <activity android:name=".ResultsActivity" />
-        <activity android:name=".SendActivity"></activity>
+        <activity android:name=".SendActivity" />
+        <activity android:name=".CommentActivity"></activity>
     </application>
 
 </manifest>

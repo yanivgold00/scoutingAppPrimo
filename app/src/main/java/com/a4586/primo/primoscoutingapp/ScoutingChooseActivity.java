@@ -59,6 +59,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,ResultsActivity.class);
                 intent.putExtra("type","game");
+                intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
         }
@@ -77,6 +78,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,ResultsActivity.class);
                 intent.putExtra("type","pit");
+                intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
         }
@@ -84,7 +86,10 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         if (v.getId() == infoBtn.getId()) {
             if (!isInfo) {
                 if (level.equals("strat")) {
-
+                    Intent intent = new Intent(this,CommentActivity.class);
+                    intent.putExtra("level","strat");
+                    intent.putExtra("name",getIntent().getStringExtra("name"));
+                    startActivity(intent);
                 } else {
                     isInfo = true;
                 }
@@ -92,6 +97,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,ResultsActivity.class);
                 intent.putExtra("type","comments");
+                intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
         }

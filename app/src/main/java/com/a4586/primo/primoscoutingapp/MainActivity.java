@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == loginBtn.getId()) {
-//            if (this.pw.getText().toString().equals("microgali0") || this.pw.getText().toString().equals("amitlaba0")) {
-            if (this.pw.getText().toString().equals("")) {
+//            if (this.pw.getText().toString().equals("microgali0") || this.pw.getText().toString().equals("amitlaba0")||this.pw.getText().toString().equals("strat")) {
+            if (this.pw.getText().toString().equals("")||this.pw.getText().toString().equals("strat")) {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());

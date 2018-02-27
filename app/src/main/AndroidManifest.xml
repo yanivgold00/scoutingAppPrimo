@@ -10,27 +10,29 @@
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ScoutingChooseActivity" />
-        <activity android:name=".GameActivity" />
-        <activity android:name=".AutonomousActivity" />
-        <activity android:name=".TeleopActivity" />
-        <activity android:name=".EndGameActivity" />
-        <activity android:name=".PitFormActivity" />
-        <activity android:name=".SplashActivity">
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme"
+        >
+
+        <activity android:name=".MainActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ScoutingChooseActivity" android:screenOrientation="portrait" />
+        <activity android:name=".GameActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".AutonomousActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".TeleopActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".EndGameActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".PitFormActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SplashActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PitMainActivity" />
-        <activity android:name=".Pit2MainActivity" />
-        <activity android:name=".ResultsActivity" />
-        <activity android:name=".SendActivity" />
-        <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".PitMainActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Pit2MainActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ResultsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SendActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".CommentActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

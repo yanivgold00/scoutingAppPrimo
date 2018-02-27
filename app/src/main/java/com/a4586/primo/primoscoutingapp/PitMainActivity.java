@@ -68,7 +68,24 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         if (v.getId() == contBtn.getId()) {
             scoutingArr[3] = roleSpinner.getSelectedItem().toString();
             scoutingArr[4] = roleET.getText().toString();
+            scoutingArr[5] = "";
+            if(vaultCB.isChecked()){
+                scoutingArr[5]+="אקסציינג', ";
+            }
+            if(switchCB.isChecked()){
+                scoutingArr[5]+="סוויץ', ";
+            }
+            if(scaleCB.isChecked()){
+                scoutingArr[5]+="סקייל, ";
+            }
 
+            scoutingArr[6] = cubeSystemET.getText().toString();
+
+            scoutingArr[7] = climbsSwitch.isChecked()+"";
+
+            scoutingArr[8] = helpsClimbET.getText().toString();
+
+            scoutingArr[9] = baseLineSwitch.isChecked()+"";
 
             Intent intent = new Intent(PitMainActivity.this, Pit2MainActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);

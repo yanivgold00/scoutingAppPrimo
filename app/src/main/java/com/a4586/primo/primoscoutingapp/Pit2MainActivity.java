@@ -27,11 +27,10 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     private CheckBox rightAutoScaleCB, midAutoScaleCB, leftAutoScaleCB;
     private EditText drivingSystemET;
     private EditText wheelTypeET;
-    private Switch visionSwitch;
     private EditText stratET;
     private EditText issueET;
     private Button sendBtn;
-//    DatabaseReference myRef = database.getReference("message");
+
     private String[] scoutingArr;
 
     @Override
@@ -40,16 +39,22 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_pit2_main);
-//        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
-//        drivingSystemET = (EditText) findViewById(R.id.drivingSystemET);
-//        wheelTypeET = (EditText) findViewById(R.id.wheelTypeET);
-//        visionSwitch = (Switch) findViewById(R.id.visionSwitch);
-//        stratET = (EditText) findViewById(R.id.stratET);
-//        issueET = (EditText) findViewById(R.id.issueET);
-//
-//        sendBtn = (Button) findViewById(R.id.sendBtn);
-//        sendBtn.setClickable(true);
-//        sendBtn.setOnClickListener(this);
+        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+        drivingSystemET = (EditText) findViewById(R.id.drivingSystemET);
+        wheelTypeET = (EditText) findViewById(R.id.wheelTypeET);
+        stratET = (EditText) findViewById(R.id.stratET);
+        issueET = (EditText) findViewById(R.id.issueET);
+        rightAutoScaleCB = findViewById(R.id.rightAutoScale);
+        midAutoScaleCB = findViewById(R.id.midAutoScale);
+        leftAutoScaleCB = findViewById(R.id.leftAutoScale);
+
+        rightAutoSwitchCB = findViewById(R.id.rightAutoSwitch);
+        midAutoSwitchCB =findViewById(R.id.midAutoSwitch);
+        leftAutoSwitchCB = findViewById(R.id.leftAutoSwitch);
+
+        sendBtn = (Button) findViewById(R.id.sendBtn);
+        sendBtn.setClickable(true);
+        sendBtn.setOnClickListener(this);
 
 
     }
@@ -58,15 +63,31 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if ((v.getId() == sendBtn.getId())) {
             sendBtn.setClickable(false);
-            scoutingArr[14] = drivingSystemET.getText().toString();
-            scoutingArr[15] = wheelTypeET.getText().toString();
-            if (visionSwitch.isChecked()) {
-                scoutingArr[16] = "TRUE";
-            } else {
-                scoutingArr[16] = "TRUE";
+            scoutingArr[10] = "";
+            if(rightAutoSwitchCB.isChecked()) {
+                scoutingArr[10] += "ימין,";
             }
-            scoutingArr[17] = stratET.getText().toString();
-            scoutingArr[18] = issueET.getText().toString();
+            if(midAutoSwitchCB.isChecked()) {
+                scoutingArr[10] += "מרכז,";
+            }
+            if(leftAutoSwitchCB.isChecked()) {
+                scoutingArr[10] += "שמאל,";
+            }
+
+            scoutingArr[11] = "";
+            if(rightAutoScaleCB.isChecked()) {
+                scoutingArr[11] += "ימין,";
+            }
+            if(midAutoScaleCB.isChecked()) {
+                scoutingArr[11] += "מרכז,";
+            }
+            if(leftAutoScaleCB.isChecked()) {
+                scoutingArr[11] += "שמאל,";
+            }
+            scoutingArr[12] = drivingSystemET.getText().toString();
+            scoutingArr[13] = wheelTypeET.getText().toString();
+            scoutingArr[14] = stratET.getText().toString();
+            scoutingArr[15] = issueET.getText().toString();
 
             sendForm();
             Toast.makeText(Pit2MainActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
@@ -82,61 +103,19 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         team.put("name", scoutingArr[2]);
         team.put("role", scoutingArr[3]);
         team.put("role_comment", scoutingArr[4]);
-        team.put("dinami_gear", scoutingArr[5]);
-        team.put("stati_gear", scoutingArr[6]);
-        team.put("base_line", scoutingArr[7]);
-        team.put("shoots", scoutingArr[8]);
-        team.put("auto_shoot", scoutingArr[9]);
-        team.put("auto_gear", scoutingArr[10]);
-        team.put("where_auto_gear", scoutingArr[11]);
-        team.put("auto_cont_square", scoutingArr[12]);
-        team.put("end_cont_square", scoutingArr[13]);
-        team.put("driving_system", scoutingArr[14]);
-        team.put("wheel_type", scoutingArr[15]);
-        team.put("vision", scoutingArr[16]);
-        team.put("strategy", scoutingArr[17]);
-        team.put("problems", scoutingArr[18]);
-        team.put("number", scoutingArr[1]);
-        team.put("name", scoutingArr[2]);
-        team.put("role", scoutingArr[3]);
-        team.put("role_comment", scoutingArr[4]);
-        team.put("dinami_gear", scoutingArr[5]);
-        team.put("stati_gear", scoutingArr[6]);
-        team.put("base_line", scoutingArr[7]);
-        team.put("shoots", scoutingArr[8]);
-        team.put("auto_shoot", scoutingArr[9]);
-        team.put("auto_gear", scoutingArr[10]);
-        team.put("where_auto_gear", scoutingArr[11]);
-        team.put("auto_cont_square", scoutingArr[12]);
-        team.put("end_cont_square", scoutingArr[13]);
-        team.put("driving_system", scoutingArr[14]);
-        team.put("wheel_type", scoutingArr[15]);
-        team.put("vision", scoutingArr[16]);
-        team.put("strategy", scoutingArr[17]);
-        team.put("problems", scoutingArr[18]);
+        team.put("cubes_at", scoutingArr[5]);
+        team.put("cube_system", scoutingArr[6]);
+        team.put("does_climb", scoutingArr[7]);
+        team.put("helps_climb", scoutingArr[8]);
+        team.put("auto_line", scoutingArr[9]);
+        team.put("auto_switch", scoutingArr[10]);
+        team.put("auto_scale", scoutingArr[11]);
+        team.put("driving_system", scoutingArr[12]);
+        team.put("wheel_type", scoutingArr[13]);
+        team.put("strategy", scoutingArr[14]);
+        team.put("problems", scoutingArr[15]);
 
-        // auto
-        team.put("auto_gear_try", "");
-        team.put("auto_gear_success", "");
-        team.put("gear_side", "");
-        team.put("did_auto_shot", "");
-        team.put("how_much_auto_shoot", "");
-        team.put("auto_base_line", "");
-        team.put("auto_control_square", "");
-        //teleop
-        team.put("teleop_static_gear", "");
-        team.put("teleop_dynamic_gears", "");
-        team.put("teleop_shoot", "");
-        team.put("how_much_teleop_shoot", "");
-        //end game
-        team.put("tube_color", "");
-        team.put("end_control_square", "");
-        team.put("speed", "");
-        team.put("did_defence", "");
-        team.put("did_crash", "");
-        team.put("comment", "");
-
-//        database.collection("teams").document(scoutingArr[1]).set(team);
+        database.collection("teams").document(scoutingArr[1]).set(team);
 
     }
 

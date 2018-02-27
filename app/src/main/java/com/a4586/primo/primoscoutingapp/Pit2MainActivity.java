@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -22,6 +23,8 @@ import java.util.Map;
 public class Pit2MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private CheckBox rightAutoSwitchCB, midAutoSwitchCB, leftAutoSwitchCB;
+    private CheckBox rightAutoScaleCB, midAutoScaleCB, leftAutoScaleCB;
     private EditText drivingSystemET;
     private EditText wheelTypeET;
     private Switch visionSwitch;

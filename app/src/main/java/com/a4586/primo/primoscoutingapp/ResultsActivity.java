@@ -11,8 +11,6 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -26,56 +24,102 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     ListView lv;
     String[] arr;
     ArrayAdapter adapter;
-    ArrayList<String> teams;
+    ArrayList<Team> teams;
     boolean isInTeams;
 
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DatabaseReference myRef = database.getReference("message");
+    String type;
+    FirebaseFirestore database = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         isInTeams = false;
-//        arr = new String[3];
-//        arr[0] = "0";
-//        arr[1] = "1";
-//        arr[2] = "2";
-//        lv = (ListView) findViewById(R.id.resultListView);
-//        lv.setOnItemClickListener(this);
-////        myRef.addValueEventListener(this);
-//        teams = new ArrayList<>();
-//        db.collection("teams")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            //for (DocumentSnapshot document : task.getResult()) {
-//                            DocumentSnapshot document = task.getResult().getDocuments().get(2);
-//                            Log.d(TAG, document.getId() + " => " + document.getData());
-//                            for (DocumentSnapshot doc : task.getResult()) {
-//                                teams.add(doc.getId());
-//                            }
-//                            isInTeams = true;
-//                            adapter = new ArrayAdapter(ResultsActivity.this, android.R.layout.simple_list_item_1, teams);
-//                            lv.setAdapter(adapter);
-//
-//                        } else {
-//                            Log.w(TAG, "Error getting documents.", task.getException());
-//                        }
-//                    }
-//                });
+        type = getIntent().getStringExtra("type");
+        teams = new ArrayList<>();
+        database.collection("teams").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
+                if (task.isSuccessful()) {
+                    for(DocumentSnapshot doc:task.getResult().getDocuments()) {
+                        teams.add(new Team(doc.get("number").toString(),doc.get("name").toString()));
+                        int pos = teams.size();
+                        pos--;
+                        teams.get(pos).setAutoBaseLine(doc.get("auto_line").toString());
+                        teams.get(pos).setAutoScale(doc.get("auto_scale").toString());
+                        teams.get(pos).setAutoSwitch(doc.get("auto_switch").toString());
+                        teams.get(pos).setClimbs(doc.get("does_climb").toString());
+                        teams.get(pos).setCubesAt(doc.get("cubes_at").toString());
+                        teams.get(pos).setCubeSystem(doc.get("cube_system").toString());
+                        teams.get(pos).setDrivingSystem(doc.get("driving_system").toString());
+                        teams.get(pos).setGeneralStrategy(doc.get("strategy").toString());
+                        teams.get(pos).setHelpsClimb(doc.get("helps_climb").toString());
+                        teams.get(pos).setIssuesPotential(doc.get("problems").toString());
+                        teams.get(pos).setPitScouter(doc.get("scouter").toString());
+                        teams.get(pos).setRobotRole(doc.get("role").toString());
+                        teams.get(pos).setRoleComment(doc.get("role_comment").toString());
+                        teams.get(pos).setWheelType(doc.get("wheel_type").toString());
+                    }
+                }
+            }
+        });
+        database.collection("games").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc:task.getResult().getDocuments()){
 
-    }
+                        for (int i = 0; i<teams.size();i++) {
+
+                            if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
+                                teams.get(i).addAutoLinePass(doc.get("passed_auto_line").toString());
+                                teams.get(i).addAutoScaleCubes(doc.get("auto_scale").toString());
+                                teams.get(i).addAutoSwitchCubes(doc.get("auto_switch").toString());
+                                teams.get(i).addClimbedFast(doc.get("climbed_fast").toString());
+                                teams.get(i).addCrashed(doc.get("did_crash").toString());
+                                teams.get(i).addDidClimb(doc.get("did_climb").toString());
+                                teams.get(i).addGameComments(doc.get("comments").toString());
+                                teams.get(i).addGameRole(doc.get("role").toString());
+                                teams.get(i).addHelpedClimb(doc.get("helped_climb").toString());
+                                teams.get(i).addPickFeeder(doc.get("pick_feeder").toString());
+                                teams.get(i).addPickFloor(doc.get("pick_floor").toString());
+                                teams.get(i).addPutScale(doc.get("put_scale").toString());
+                                teams.get(i).addPutSwitch(doc.get("put_switch").toString());
+                                teams.get(i).addPutVault(doc.get("put_vault").toString());
+                                teams.get(i).addReachPlatform(doc.get("reach_platform").toString());
+                                teams.get(i).addScouter(doc.get("scouter").toString());
+                                teams.get(i).addStartPos(doc.get("start_position").toString());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        database.collection("comments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                        for (int i = 0; i<teams.size();i++) {
+                            if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
+                                teams.get(i).addComments(doc.get("comment").toString());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+                    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
         final ArrayList<String> teamInfo = new ArrayList<>();
-        db.collection("teams")
+        database.collection("teams")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

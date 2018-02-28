@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 
 public class Team implements Serializable {
-    private int teamNumber;
+    private String teamNumber;
     private String teamName;
 
     //pit scouting
@@ -51,7 +51,7 @@ public class Team implements Serializable {
     //comments
     private ArrayList<String> comments;
 
-    public Team(int teamNumber, String teamName) {
+    public Team(String teamNumber, String teamName) {
         this.teamNumber = teamNumber;
         this.teamName = teamName;
         this.scouter = new ArrayList<>();
@@ -278,7 +278,7 @@ public class Team implements Serializable {
         this.comments.add(comments);
     }
 
-    public int getTeamNumber() {
+    public String getTeamNumber() {
         return teamNumber;
     }
 
@@ -346,7 +346,7 @@ public class Team implements Serializable {
         this.issuesPotential = issuesPotential;
     }
 
-    public void setTeamNumber(int teamNumber) {
+    public void setTeamNumber(String teamNumber) {
         this.teamNumber = teamNumber;
     }
 

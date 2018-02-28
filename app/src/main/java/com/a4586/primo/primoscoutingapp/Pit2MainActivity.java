@@ -99,6 +99,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
 
     private void sendForm() {
         Map<String, Object> team = new HashMap<>();
+        team.put("scouter",scoutingArr[0]);
         team.put("number", scoutingArr[1]);
         team.put("name", scoutingArr[2]);
         team.put("role", scoutingArr[3]);

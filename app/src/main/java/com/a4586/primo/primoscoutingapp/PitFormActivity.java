@@ -10,8 +10,8 @@ import android.widget.EditText;
 import java.io.Serializable;
 
 public class PitFormActivity extends AppCompatActivity implements Serializable, View.OnClickListener {
-    private EditText teamNum;
-    private EditText teamName;
+    private EditText teamNumET;
+    private EditText teamNameET;
     private Button contBtn;
     private String[] scoutingArr;
 
@@ -23,9 +23,9 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
 
         scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
 
-        teamNum = (EditText) findViewById(R.id.teamNum);
+        teamNumET = (EditText) findViewById(R.id.teamNum);
 
-        teamName = (EditText) findViewById(R.id.teamName);
+        teamNameET = (EditText) findViewById(R.id.teamName);
 
         contBtn = (Button) findViewById(R.id.contBtn);
 
@@ -35,8 +35,13 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
     @Override
     public void onClick(View v) {
         if (v.getId() == contBtn.getId()) {
-            scoutingArr[1] = teamNum.getText().toString();
-            scoutingArr[2] = teamName.getText().toString();
+            String teamNumber = teamNumET.getText().toString();
+
+            while (teamNumber.length()<4) {
+                teamNumber = 0 + teamNumber;
+            }
+            scoutingArr[1] = teamNumber;
+            scoutingArr[2] = teamNameET.getText().toString();
             Intent intent = new Intent(PitFormActivity.this, PitMainActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);
             startActivity(intent);

@@ -113,8 +113,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 }
             }
         });
-
-                    }
+    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {

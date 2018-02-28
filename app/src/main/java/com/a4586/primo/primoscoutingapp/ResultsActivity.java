@@ -25,10 +25,10 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     ListView lv;
     String[] arr;
-    readData rd = new readData();
     ArrayAdapter adapter;
     ArrayList<String> teams;
     boolean isInTeams;
+
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -39,35 +39,35 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         isInTeams = false;
-        arr = new String[3];
-        arr[0] = "0";
-        arr[1] = "1";
-        arr[2] = "2";
-        lv = (ListView) findViewById(R.id.resultListView);
-        lv.setOnItemClickListener(this);
-//        myRef.addValueEventListener(this);
-        teams = new ArrayList<>();
-        db.collection("teams")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            //for (DocumentSnapshot document : task.getResult()) {
-                            DocumentSnapshot document = task.getResult().getDocuments().get(2);
-                            Log.d(TAG, document.getId() + " => " + document.getData());
-                            for (DocumentSnapshot doc : task.getResult()) {
-                                teams.add(doc.getId());
-                            }
-                            isInTeams = true;
-                            adapter = new ArrayAdapter(ResultsActivity.this, android.R.layout.simple_list_item_1, teams);
-                            lv.setAdapter(adapter);
-
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+//        arr = new String[3];
+//        arr[0] = "0";
+//        arr[1] = "1";
+//        arr[2] = "2";
+//        lv = (ListView) findViewById(R.id.resultListView);
+//        lv.setOnItemClickListener(this);
+////        myRef.addValueEventListener(this);
+//        teams = new ArrayList<>();
+//        db.collection("teams")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            //for (DocumentSnapshot document : task.getResult()) {
+//                            DocumentSnapshot document = task.getResult().getDocuments().get(2);
+//                            Log.d(TAG, document.getId() + " => " + document.getData());
+//                            for (DocumentSnapshot doc : task.getResult()) {
+//                                teams.add(doc.getId());
+//                            }
+//                            isInTeams = true;
+//                            adapter = new ArrayAdapter(ResultsActivity.this, android.R.layout.simple_list_item_1, teams);
+//                            lv.setAdapter(adapter);
+//
+//                        } else {
+//                            Log.w(TAG, "Error getting documents.", task.getException());
+//                        }
+//                    }
+//                });
 
 
     }

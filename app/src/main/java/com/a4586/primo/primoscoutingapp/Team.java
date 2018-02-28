@@ -12,66 +12,270 @@ public class Team implements Serializable {
     private String teamName;
 
     //pit scouting
+    private String pitScouter;
     private String robotRole;
     private String roleComment;
-    private Boolean doesDynamic;
-    private Boolean doesStatic;
-    private Boolean autoBaseLine;
-    private Boolean shoots;
-    private Boolean autoShoot;
-    private Boolean autoGear;
-    private String autoGearSide;
-    private Boolean autoControlSquare;
-    private Boolean endGameControlSquare;
+    private String autoBaseLine;
     private String drivingSystem;
     private String wheelType;
-    private Boolean visionProc;
     private String generalStrategy;
     private String issuesPotential;
+    private String cubesAt;
+    private String cubeSystem;
+    private String climbs;
+    private String helpsClimb;
+    private String autoSwitch;
+    private String autoScale;
+
+
 
     //game scouting
-    private int autoGearTries;
-    private int autoGearSuccesses;
-    private int successfulRightAutoGear;
-    private int successfulLeftAutoGear;
-    private int gamesAutoShoot;
-    private int timesAutoShoot;
-    private int autoBaseLinePass;
-    private int autoControlSquareTimes;
-    private int timesPlayed;
-    private int avgStaticGears;
-    private int avgDynamicGears;
-    private int gamesShot;
-    private int avgSuccesfulShoot;
-    private int timesWonMidSquare;
-    private int endGameControlSquareTimes;
-    private int avgSpeed;
-    private int defenceTimes;
-    private int timesCrashed;
+    private ArrayList<String> scouter;
+    private ArrayList<String> startPos;
+    private ArrayList<String> autoLinePass;
+    private ArrayList<String> autoSwitchCubes;
+    private ArrayList<String> autoScaleCubes;
+    private ArrayList<String> pickFeeder;
+    private ArrayList<String> pickFloor;
+    private ArrayList<String> putVault;
+    private ArrayList<String> putSwitch;
+    private ArrayList<String> putScale;
+    private ArrayList<String> reachPlatform;
+    private ArrayList<String> didClimb;
+    private ArrayList<String> helpedClimb;
+    private ArrayList<String> climbedFast;
+    private ArrayList<String> gameRole;
+    private ArrayList<String> crashed;
+    private ArrayList<String> gameComments;
+
+    //comments
     private ArrayList<String> comments;
 
     public Team(int teamNumber, String teamName) {
         this.teamNumber = teamNumber;
         this.teamName = teamName;
-        this.autoGearTries = 0;
-        this.autoGearSuccesses = 0;
-        this.successfulLeftAutoGear = 0;
-        this.successfulRightAutoGear = 0;
-        this.gamesAutoShoot = 0;
-        this.timesAutoShoot = 0;
-        this.autoBaseLinePass = 0;
-        this.autoControlSquareTimes = 0;
-        this.timesPlayed = 0;
-        this.avgStaticGears = 0;
-        this.avgDynamicGears = 0;
-        this.gamesShot = 0;
-        this.avgSuccesfulShoot = 0;
-        this.timesWonMidSquare = 0;
-        this.endGameControlSquareTimes = 0;
-        this.avgSpeed = 0;
-        this.defenceTimes = 0;
-        this.timesCrashed = 0;
+        this.scouter = new ArrayList<>();
+        this.startPos = new ArrayList<>();
+        this.autoLinePass = new ArrayList<>();
+        this.autoSwitchCubes = new ArrayList<>();
+        this.autoScaleCubes = new ArrayList<>();
+        this.pickFeeder = new ArrayList<>();
+        this.pickFloor = new ArrayList<>();
+        this.putVault = new ArrayList<>();
+        this.putSwitch = new ArrayList<>();
+        this.putScale = new ArrayList<>();
+        this.reachPlatform = new ArrayList<>();
+        this.didClimb = new ArrayList<>();
+        this.helpedClimb = new ArrayList<>();
+        this.climbedFast = new ArrayList<>();
+        this.gameRole = new ArrayList<>();
+        this.crashed = new ArrayList<>();
+        this.gameComments = new ArrayList<>();
         this.comments = new ArrayList<>();
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getPitScouter() {
+        return pitScouter;
+    }
+
+    public void setPitScouter(String pitScouter) {
+        this.pitScouter = pitScouter;
+    }
+
+    public String getCubesAt() {
+        return cubesAt;
+    }
+
+    public void setCubesAt(String cubesAt) {
+        this.cubesAt = cubesAt;
+    }
+
+    public String getCubeSystem() {
+        return cubeSystem;
+    }
+
+    public void setCubeSystem(String cubeSystem) {
+        this.cubeSystem = cubeSystem;
+    }
+
+    public String getClimbs() {
+        return climbs;
+    }
+
+    public void setClimbs(String climbs) {
+        this.climbs = climbs;
+    }
+
+    public String getHelpsClimb() {
+        return helpsClimb;
+    }
+
+    public void setHelpsClimb(String helpsClimb) {
+        this.helpsClimb = helpsClimb;
+    }
+
+    public String getAutoSwitch() {
+        return autoSwitch;
+    }
+
+    public void setAutoSwitch(String autoSwitch) {
+        this.autoSwitch = autoSwitch;
+    }
+
+    public String getAutoScale() {
+        return autoScale;
+    }
+
+    public void setAutoScale(String autoScale) {
+        this.autoScale = autoScale;
+    }
+
+    public ArrayList<String> getScouter() {
+        return scouter;
+    }
+
+    public void addScouter(String scouter) {
+        this.scouter.add(scouter);
+    }
+
+    public ArrayList<String> getStartPos() {
+        return startPos;
+    }
+
+    public void addStartPos(String startPos) {
+        this.startPos.add(startPos);
+    }
+
+    public ArrayList<String> getAutoLinePass() {
+        return autoLinePass;
+    }
+
+    public void addAutoLinePass(String autoLinePass) {
+        this.autoLinePass.add(autoLinePass);
+    }
+
+    public ArrayList<String> getAutoSwitchCubes() {
+        return autoSwitchCubes;
+    }
+
+    public void addAutoSwitchCubes(String autoSwitchCubes) {
+        this.autoSwitchCubes.add(autoSwitchCubes);
+    }
+
+    public ArrayList<String> getAutoScaleCubes() {
+        return autoScaleCubes;
+    }
+
+    public void addAutoScaleCubes(String autoScaleCubes) {
+        this.autoScaleCubes.add(autoScaleCubes);
+    }
+
+    public ArrayList<String> getPickFeeder() {
+        return pickFeeder;
+    }
+
+    public void addPickFeeder(String pickFeeder) {
+        this.pickFeeder.add(pickFeeder);
+    }
+
+    public ArrayList<String> getPickFloor() {
+        return pickFloor;
+    }
+
+    public void addPickFloor(String pickFloor) {
+        this.pickFloor.add(pickFloor);
+    }
+
+    public ArrayList<String> getPutVault() {
+        return putVault;
+    }
+
+    public void addPutVault(String putVault) {
+        this.putVault.add(putVault);
+    }
+
+    public ArrayList<String> getPutSwitch() {
+        return putSwitch;
+    }
+
+    public void addPutSwitch(String putSwitch) {
+        this.putSwitch.add(putSwitch);
+    }
+
+    public ArrayList<String> getPutScale() {
+        return putScale;
+    }
+
+    public void addPutScale(String putScale) {
+        this.putScale.add(putScale);
+    }
+
+    public ArrayList<String> getReachPlatform() {
+        return reachPlatform;
+    }
+
+    public void addReachPlatform(String reachPlatform) {
+        this.reachPlatform.add(reachPlatform);
+    }
+
+    public ArrayList<String> getDidClimb() {
+        return didClimb;
+    }
+
+    public void addDidClimb(String didClimb) {
+        this.didClimb.add(didClimb);
+    }
+
+    public ArrayList<String> getHelpedClimb() {
+        return helpedClimb;
+    }
+
+    public void addHelpedClimb(String helpedClimb) {
+        this.helpedClimb.add(helpedClimb);
+    }
+
+    public ArrayList<String> getClimbedFast() {
+        return climbedFast;
+    }
+
+    public void addClimbedFast(String climbedFast) {
+        this.climbedFast.add(climbedFast);
+    }
+
+    public ArrayList<String> getGameRole() {
+        return gameRole;
+    }
+
+    public void addGameRole(String gameRole) {
+        this.gameRole.add(gameRole);
+    }
+
+    public ArrayList<String> getCrashed() {
+        return crashed;
+    }
+
+    public void addCrashed(String crashed) {
+        this.crashed.add(crashed);
+    }
+
+    public ArrayList<String> getGameComments() {
+        return gameComments;
+    }
+
+    public void addGameComments(String gameComments) {
+        this.gameComments.add(gameComments);
+    }
+
+    public ArrayList<String> getComments() {
+        return comments;
+    }
+
+    public void addComments(String comments) {
+        this.comments.add(comments);
     }
 
     public int getTeamNumber() {
@@ -98,77 +302,16 @@ public class Team implements Serializable {
         this.roleComment = roleComment;
     }
 
-    public Boolean getDoesDynamic() {
-        return doesDynamic;
-    }
 
-    public void setDoesDynamic(Boolean doesDynamic) {
-        this.doesDynamic = doesDynamic;
-    }
-
-    public Boolean getDoesStatic() {
-        return doesStatic;
-    }
-
-    public void setDoesStatic(Boolean doesStatic) {
-        this.doesStatic = doesStatic;
-    }
-
-    public Boolean getAutoBaseLine() {
+    public String getAutoBaseLine() {
         return autoBaseLine;
     }
 
-    public void setAutoBaseLine(Boolean autoBaseLine) {
+    public void setAutoBaseLine(String autoBaseLine) {
         this.autoBaseLine = autoBaseLine;
     }
 
-    public Boolean getShoots() {
-        return shoots;
-    }
 
-    public void setShoots(Boolean shoots) {
-        this.shoots = shoots;
-    }
-
-    public Boolean getAutoShoot() {
-        return autoShoot;
-    }
-
-    public void setAutoShoot(Boolean autoShoot) {
-        this.autoShoot = autoShoot;
-    }
-
-    public Boolean getAutoGear() {
-        return autoGear;
-    }
-
-    public void setAutoGear(Boolean autoGear) {
-        this.autoGear = autoGear;
-    }
-
-    public String getAutoGearSide() {
-        return autoGearSide;
-    }
-
-    public void setAutoGearSide(String autoGearSide) {
-        this.autoGearSide = autoGearSide;
-    }
-
-    public Boolean getAutoControlSquare() {
-        return autoControlSquare;
-    }
-
-    public void setAutoControlSquare(Boolean autoControlSquare) {
-        this.autoControlSquare = autoControlSquare;
-    }
-
-    public Boolean getEndGameControlSquare() {
-        return endGameControlSquare;
-    }
-
-    public void setEndGameControlSquare(Boolean endGameControlSquare) {
-        this.endGameControlSquare = endGameControlSquare;
-    }
 
     public String getDrivingSystem() {
         return drivingSystem;
@@ -186,13 +329,6 @@ public class Team implements Serializable {
         this.wheelType = wheelType;
     }
 
-    public Boolean getVisionProc() {
-        return visionProc;
-    }
-
-    public void setVisionProc(Boolean visionProc) {
-        this.visionProc = visionProc;
-    }
 
     public String getGeneralStrategy() {
         return generalStrategy;
@@ -210,157 +346,8 @@ public class Team implements Serializable {
         this.issuesPotential = issuesPotential;
     }
 
-    public int getAutoGearTries() {
-        return autoGearTries;
+    public void setTeamNumber(int teamNumber) {
+        this.teamNumber = teamNumber;
     }
 
-    public void addAutoGearTries() {
-        this.autoGearTries++;
-    }
-
-    public int getAutoGearSuccesses() {
-        return autoGearSuccesses;
-    }
-
-    public void addAutoGearSuccesses() {
-        this.autoGearSuccesses++;
-    }
-
-    public int getSuccessfulRightAutoGear() {
-        return successfulRightAutoGear;
-    }
-
-    public void addSuccessfulRightAutoGear() {
-        this.successfulRightAutoGear++;
-    }
-
-    public int getSuccessfulLeftAutoGear() {
-        return successfulLeftAutoGear;
-    }
-
-    public void addSuccessfulLeftAutoGear() {
-        this.successfulLeftAutoGear++;
-    }
-
-    public int getGamesAutoShoot() {
-        return gamesAutoShoot;
-    }
-
-    public void addGamesAutoShoot() {
-        this.gamesAutoShoot++;
-    }
-
-    public int gettimesAutoShoot() {
-        return timesAutoShoot;
-    }
-
-    public void addtimesAutoShoot() {
-        this.timesAutoShoot++;
-    }
-
-    public int getAutoBaseLinePass() {
-        return autoBaseLinePass;
-    }
-
-    public void addAutoBaseLinePass() {
-        this.autoBaseLinePass++;
-    }
-
-    public int getAutoControlSquareTimes() {
-        return autoControlSquareTimes;
-    }
-
-    public void addAutoControlSquareTimes() {
-        this.autoControlSquareTimes++;
-    }
-
-    public int getTimesPlayed() {
-        return timesPlayed;
-    }
-
-    public void addTimesPlayed() {
-        this.timesPlayed++;
-    }
-
-    public int getAvgStaticGears() {
-        return avgStaticGears;
-    }
-
-    public void addAvgStaticGears(int gears) {
-        this.avgStaticGears = ((avgStaticGears * (this.timesPlayed - 1)) + (gears)) / timesPlayed;
-    }
-
-    public int getAvgDynamicGears() {
-        return avgDynamicGears;
-    }
-
-    public void addAvgDynamicGears(int gears) {
-        this.avgDynamicGears = ((avgDynamicGears * (this.timesPlayed - 1)) + (gears)) / timesPlayed;
-    }
-
-    public int getGamesShot() {
-        return gamesShot;
-    }
-
-    public void addGamesShot() {
-        this.gamesShot++;
-    }
-
-    public int getAvgSuccesfulShoot() {
-        return avgSuccesfulShoot;
-    }
-
-    public void addAvgSuccesfulShoot(int shots) {
-        this.avgSuccesfulShoot = ((avgSuccesfulShoot * (this.gamesShot - 1)) + (shots)) / gamesShot;
-    }
-
-    public int getTimesWonMidSquare() {
-        return timesWonMidSquare;
-    }
-
-    public void addTimesWonMidSquare() {
-        this.timesWonMidSquare++;
-    }
-
-    public int getEndGameControlSquareTimes() {
-        return endGameControlSquareTimes;
-    }
-
-    public void addEndGameControlSquareTimes() {
-        this.endGameControlSquareTimes++;
-    }
-
-    public int getAvgSpeed() {
-        return avgSpeed;
-    }
-
-    public void addSpeed(int speed) {
-        this.avgSpeed = ((avgSpeed * (this.timesPlayed - 1)) + (speed)) / timesPlayed;
-    }
-
-    public int getDefenceTimes() {
-        return defenceTimes;
-    }
-
-    public void addDefenceTimes() {
-        this.defenceTimes++;
-    }
-
-    public int getTimesCrashed() {
-        return timesCrashed;
-    }
-
-    public void addTimesCrashed() {
-        this.timesCrashed++;
-    }
-
-    public String getComments(int i) {
-        if (i >= comments.size())
-            i = comments.size() - 1;
-        return comments.get(i).toString();
-    }
-
-    public void addComments(String comment) {
-        this.comments.add(comment);
-    }
 }

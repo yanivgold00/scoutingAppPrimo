@@ -1,37 +1,28 @@
 package com.a4586.primo.primoscoutingapp;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
 
 public class ResultsActivity extends AppCompatActivity implements ListView.OnItemClickListener,View.OnClickListener {
 
     TextView titleTV;
-    Button backBtn;
-    ListView lv;
-    String[] arr;
+    ListView resultListView;
+    ArrayList<String> viewList;
     ArrayAdapter adapter;
     ArrayList<Team> teams;
-    String resultView;
+    String viewLevel;
 
+    int teamPos;
     String type;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
 
@@ -39,105 +30,105 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        titleTV = findViewById(R.id.resultTV);
-        backBtn = findViewById(R.id.backBtn);
+        resultListView = findViewById(R.id.resultListView);
+        resultListView.setOnItemClickListener(this);
         type = getIntent().getStringExtra("type");
-        resultView = type;
-        teams = new ArrayList<>();
-        database.collection("teams").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()) {
-                    for(DocumentSnapshot doc:task.getResult().getDocuments()) {
-                        teams.add(new Team(doc.get("number").toString(),doc.get("name").toString()));
-                        int pos = teams.size();
-                        pos--;
-                        teams.get(pos).setAutoBaseLine(doc.get("auto_line").toString());
-                        teams.get(pos).setAutoScale(doc.get("auto_scale").toString());
-                        teams.get(pos).setAutoSwitch(doc.get("auto_switch").toString());
-                        teams.get(pos).setClimbs(doc.get("does_climb").toString());
-                        teams.get(pos).setCubesAt(doc.get("cubes_at").toString());
-                        teams.get(pos).setCubeSystem(doc.get("cube_system").toString());
-                        teams.get(pos).setDrivingSystem(doc.get("driving_system").toString());
-                        teams.get(pos).setGeneralStrategy(doc.get("strategy").toString());
-                        teams.get(pos).setHelpsClimb(doc.get("helps_climb").toString());
-                        teams.get(pos).setIssuesPotential(doc.get("problems").toString());
-//                        teams.get(pos).setPitScouter(doc.get("scouter").toString());
-                        teams.get(pos).setRobotRole(doc.get("role").toString());
-                        teams.get(pos).setRoleComment(doc.get("role_comment").toString());
-                        teams.get(pos).setWheelType(doc.get("wheel_type").toString());
-                    }
-                }
-            }
-        });
-        database.collection("games").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot doc:task.getResult().getDocuments()){
-
-                        for (int i = 0; i<teams.size();i++) {
-
-                            if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
-                                teams.get(i).addAutoLinePass(doc.get("passed_auto_line").toString());
-                                teams.get(i).addAutoScaleCubes(doc.get("auto_scale").toString());
-                                teams.get(i).addAutoSwitchCubes(doc.get("auto_switch").toString());
-                                teams.get(i).addClimbedFast(doc.get("climbed_fast").toString());
-                                teams.get(i).addCrashed(doc.get("did_crash").toString());
-                                teams.get(i).addDidClimb(doc.get("did_climb").toString());
-                                teams.get(i).addGameComments(doc.get("comments").toString());
-                                teams.get(i).addGameRole(doc.get("role").toString());
-                                teams.get(i).addHelpedClimb(doc.get("helped_climb").toString());
-                                teams.get(i).addPickFeeder(doc.get("pick_feeder").toString());
-                                teams.get(i).addPickFloor(doc.get("pick_floor").toString());
-                                teams.get(i).addPutScale(doc.get("put_scale").toString());
-                                teams.get(i).addPutSwitch(doc.get("put_switch").toString());
-                                teams.get(i).addPutVault(doc.get("put_vault").toString());
-                                teams.get(i).addReachPlatform(doc.get("reach_platform").toString());
-                                teams.get(i).addScouter(doc.get("scouter").toString());
-                                teams.get(i).addStartPos(doc.get("start_position").toString());
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        database.collection("comments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                        for (int i = 0; i<teams.size();i++) {
-                            if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
-                                teams.get(i).addComments(doc.get("comment").toString());
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        Log.v("teams","teams complete");
+        viewLevel = type;
+        titleTV = findViewById(R.id.resultTV);
         titleTV.setText(type);
-        backBtn.setOnClickListener(this);
+        readData();
+        String team = getIntent().getStringExtra("team");
+        if(team.equals("")) {
+            viewList = new ArrayList<>();
+            viewList.add("סקייל");
+            viewList.add("סוויץ'");
+            viewList.add("אקסצ'יינג'");
+            viewList.add("תלייה");
+            adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+            resultListView.setAdapter(adapter);
+        }
+        else {
+            boolean hasTeam = false;
+            for (int i=0;i<teams.size();i++) {
+                if(teams.get(i).getTeamNumber().equals(team)) {
+                    teamPos = i;
+                    hasTeam = true;
+                    break;
+                }
+            }
+            if(hasTeam) {
+               titleTV.setText(teams.get(teamPos).getTeamNumber()+" - "+teams.get(teamPos).getTeamName());
+                viewList = new ArrayList<>();
+                viewList.add("אוטונומי");
+                viewList.add("שאר המשחק");
+                adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+                resultListView.setAdapter(adapter);
+            }
+
+        }
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-        final ArrayList<String> teamInfo = new ArrayList<>();
 
     }
 
     @Override
     public void onClick(View view) {
-        if (resultView.equals(type)) {
-            Intent intent = new Intent(this,ScoutingChooseActivity.class);
-            intent.putExtras(getIntent().getExtras());
-            startActivity(intent);
-            finish();
+
+    }
+
+    public void readData() {
+        teams = new ArrayList<>();
+        for(DocumentSnapshot doc:database.collection("teams").get().getResult().getDocuments()) {
+            Team t = new Team(doc.get("number").toString(),doc.get("name").toString());
+            t.setAutoBaseLine(doc.get("auto_line").toString());
+            t.setAutoScale(doc.get("auto_scale").toString());
+            t.setAutoSwitch(doc.get("auto_switch").toString());
+            t.setClimbs(doc.get("does_climb").toString());
+            t.setCubesAt(doc.get("cubes_at").toString());
+            t.setCubeSystem(doc.get("cube_system").toString());
+            t.setDrivingSystem(doc.get("driving_system").toString());
+            t.setGeneralStrategy(doc.get("strategy").toString());
+            t.setHelpsClimb(doc.get("helps_climb").toString());
+            t.setIssuesPotential(doc.get("problems").toString());
+//            t.setPitScouter(doc.get("scouter").toString());
+            t.setRobotRole(doc.get("role").toString());
+            t.setRoleComment(doc.get("role_comment").toString());
+            t.setWheelType(doc.get("wheel_type").toString());
+        }
+        for(DocumentSnapshot doc:database.collection("games").get().getResult().getDocuments()) {
+            for (int i = 0; i<teams.size();i++) {
+                if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
+                    teams.get(i).addAutoLinePass(doc.get("passed_auto_line").toString());
+                    teams.get(i).addAutoScaleCubes(doc.get("auto_scale").toString());
+                    teams.get(i).addAutoSwitchCubes(doc.get("auto_switch").toString());
+                    teams.get(i).addClimbedFast(doc.get("climbed_fast").toString());
+                    teams.get(i).addCrashed(doc.get("did_crash").toString());
+                    teams.get(i).addDidClimb(doc.get("did_climb").toString());
+                    teams.get(i).addGameComments(doc.get("comments").toString());
+                    teams.get(i).addGameRole(doc.get("role").toString());
+                    teams.get(i).addHelpedClimb(doc.get("helped_climb").toString());
+                    teams.get(i).addPickFeeder(doc.get("pick_feeder").toString());
+                    teams.get(i).addPickFloor(doc.get("pick_floor").toString());
+                    teams.get(i).addPutScale(doc.get("put_scale").toString());
+                    teams.get(i).addPutSwitch(doc.get("put_switch").toString());
+                    teams.get(i).addPutVault(doc.get("put_vault").toString());
+                    teams.get(i).addReachPlatform(doc.get("reach_platform").toString());
+                    teams.get(i).addScouter(doc.get("scouter").toString());
+                    teams.get(i).addStartPos(doc.get("start_position").toString());
+                    break;
+                }
+            }
+        }
+        for(DocumentSnapshot doc:database.collection("games").get().getResult().getDocuments()) {
+            for (int i = 0; i<teams.size();i++) {
+                if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
+                    teams.get(i).addComments(doc.get("comment").toString());
+                    break;
+                }
+            }
         }
     }
 }

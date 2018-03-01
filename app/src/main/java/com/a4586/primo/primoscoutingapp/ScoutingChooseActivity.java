@@ -66,7 +66,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 startActivity(intent);
             }
             else {
-                Intent intent = new Intent(this,ResultsActivity.class);
+                Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","game");
                 intent.putExtra("level","strat");
                 intent.putExtra("name",getIntent().getStringExtra("name"));

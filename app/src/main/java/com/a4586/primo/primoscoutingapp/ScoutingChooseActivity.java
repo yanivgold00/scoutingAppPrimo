@@ -3,6 +3,7 @@ package com.a4586.primo.primoscoutingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -45,6 +46,14 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent setIntent = new Intent(this,MainActivity.class);
+        startActivity(setIntent);
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {
         String[] scoutingArr;
         if (v.getId() == gameBtn.getId()) {
@@ -59,6 +68,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,ResultsActivity.class);
                 intent.putExtra("type","game");
+                intent.putExtra("level","strat");
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
@@ -78,6 +88,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","pit");
+                intent.putExtra("level","strat");
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
@@ -97,6 +108,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","comments");
+                intent.putExtra("level","strat");
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }

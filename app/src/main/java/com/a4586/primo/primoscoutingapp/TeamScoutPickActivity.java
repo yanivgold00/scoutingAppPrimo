@@ -17,16 +17,16 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_team_scout_pick);
         teamET = findViewById(R.id.teamET);
         contBtn = findViewById(R.id.contBtn);
+        contBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == contBtn.getId())
-        {
+
             Intent intent = new Intent(this,ResultsActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra("team",teamET.getText().toString());
             startActivity(intent);
-        }
+            finish();
     }
 }

@@ -3,6 +3,7 @@ package com.a4586.primo.primoscoutingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +13,11 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.javalite.http.Http;
 import org.javalite.http.Post;
@@ -98,25 +103,39 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void sendForm() {
-        Map<String, Object> team = new HashMap<>();
-        team.put("scouter",scoutingArr[0]);
-        team.put("number", scoutingArr[1]);
-        team.put("name", scoutingArr[2]);
-        team.put("role", scoutingArr[3]);
-        team.put("role_comment", scoutingArr[4]);
-        team.put("cubes_at", scoutingArr[5]);
-        team.put("cube_system", scoutingArr[6]);
-        team.put("does_climb", scoutingArr[7]);
-        team.put("helps_climb", scoutingArr[8]);
-        team.put("auto_line", scoutingArr[9]);
-        team.put("auto_switch", scoutingArr[10]);
-        team.put("auto_scale", scoutingArr[11]);
-        team.put("driving_system", scoutingArr[12]);
-        team.put("wheel_type", scoutingArr[13]);
-        team.put("strategy", scoutingArr[14]);
-        team.put("problems", scoutingArr[15]);
+        database.collection("teams").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-        database.collection("teams").document(scoutingArr[1]).set(team);
+                if (task.isSuccessful()) {
+                    int counter = 0;
+//                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
+                    for (DocumentSnapshot doc:task.getResult().getDocuments()) {
+                        counter++;
+                    }
+                    Map<String, Object> team = new HashMap<>();
+                    team.put("scouter",scoutingArr[0]);
+                    team.put("number", scoutingArr[1]);
+                    team.put("name", scoutingArr[2]);
+                    team.put("role", scoutingArr[3]);
+                    team.put("role_comment", scoutingArr[4]);
+                    team.put("cubes_at", scoutingArr[5]);
+                    team.put("cube_system", scoutingArr[6]);
+                    team.put("does_climb", scoutingArr[7]);
+                    team.put("helps_climb", scoutingArr[8]);
+                    team.put("auto_line", scoutingArr[9]);
+                    team.put("auto_switch", scoutingArr[10]);
+                    team.put("auto_scale", scoutingArr[11]);
+                    team.put("driving_system", scoutingArr[12]);
+                    team.put("wheel_type", scoutingArr[13]);
+                    team.put("strategy", scoutingArr[14]);
+                    team.put("problems", scoutingArr[15]);
+
+                    database.collection("teams").document(""+counter).set(team);
+                }
+            }
+        });
+
 
     }
 

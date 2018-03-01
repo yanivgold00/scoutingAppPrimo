@@ -62,7 +62,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 if (task.isSuccessful()) {
-                    int counter = 1;
+                    int counter = 0;
 //                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
                     String teamNumber = teamET.getText().toString();
 
@@ -70,10 +70,8 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                         teamNumber = 0 + teamNumber;
                     }
                     for (DocumentSnapshot doc:task.getResult().getDocuments()) {
-                        if (doc.getId().toString().substring(0,4).contains(teamNumber))
-                        {
-                            counter++;
-                        }
+                        counter++;
+
                     }
 
                     Map<String, Object> comment = new HashMap<>();
@@ -81,7 +79,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                     comment.put("team",teamET.getText().toString());
                     comment.put("comment",commentET.getText().toString());
 
-                    database.collection("comments").document(teamNumber+counter).set(comment);
+                    database.collection("comments").document(""+counter).set(comment);
                     Log.v("TAG", "succes");
                     Toast.makeText(CommentActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
                     teamET.setText("");

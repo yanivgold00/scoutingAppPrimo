@@ -74,6 +74,51 @@ public class Team implements Serializable {
         this.comments = new ArrayList<>();
     }
 
+    public double getAvgClimb() {
+        double avg = getTimesClimbed();
+        if (avg != 0) {
+            avg /= didClimb.size();
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getTimesClimbed(){
+        double counter = 0;
+        for (String climb:this.didClimb) {
+            if (climb.equals("כן")||climb.equals("נעזר במוט מוארך של רובוט אחר")||climb.equals("נעזר בפלטפורמה של רובוט אחר")) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public double getAvgScale() {
+        double avg = getCubesScale();
+        if (avg != 0) {
+            avg /= (putScale.size()+autoScaleCubes.size());
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getCubesScale() {
+        double counter = 0;
+        for (String cubes:this.putScale) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        for (String cubes:this.autoScaleCubes) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        return counter;
+    }
+
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "890414930556-6tb4fmk9498lma81s7gdindr8pl0utpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.a4586.primo.primoscoutingapp",
+            "certificate_hash": "10010e95d06aa446504809cd292839355a8a7eb7"
+          }
+        },
+        {
           "client_id": "890414930556-vp323786p7kqrnn4is4iukgailokqf9s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

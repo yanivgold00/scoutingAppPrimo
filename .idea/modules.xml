@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/PrimoscoutingApp.iml" filepath="$PROJECT_DIR$/PrimoscoutingApp.iml" />
       <module fileurl="file://C:\Users\user\Desktop\primoscouting\scoutingAppPrimo\PrimoscoutingApp.iml" filepath="C:\Users\user\Desktop\primoscouting\scoutingAppPrimo\PrimoscoutingApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\Users\yaniv\StudioProjects\PrimoscoutingApp\app\app.iml" filepath="D:\Users\yaniv\StudioProjects\PrimoscoutingApp\app\app.iml" />
-      <module fileurl="file://D:\Users\yaniv\StudioProjects\PrimoscoutingApp\primoScoutingApp.iml" filepath="D:\Users\yaniv\StudioProjects\PrimoscoutingApp\primoScoutingApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/scoutingAppPrimo.iml" filepath="$PROJECT_DIR$/scoutingAppPrimo.iml" />
+      <module fileurl="file://D:\Users\yaniv\StudioProjects\PrimoscoutingApp\scoutingAppPrimo.iml" filepath="D:\Users\yaniv\StudioProjects\PrimoscoutingApp\scoutingAppPrimo.iml" />
     </modules>
   </component>
 </project>

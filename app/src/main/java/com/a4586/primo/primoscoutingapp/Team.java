@@ -22,6 +22,7 @@ public class Team implements Serializable {
     private String issuesPotential;
     private String cubesAt;
     private String cubeSystem;
+    private String robotMass;
     private String climbs;
     private String helpsClimb;
     private String autoSwitch;
@@ -29,7 +30,10 @@ public class Team implements Serializable {
 
 
 
+
+
     //game scouting
+    private ArrayList<String> games;
     private ArrayList<String> scouter;
     private ArrayList<String> startPos;
     private ArrayList<String> autoLinePass;
@@ -72,6 +76,96 @@ public class Team implements Serializable {
         this.crashed = new ArrayList<>();
         this.gameComments = new ArrayList<>();
         this.comments = new ArrayList<>();
+        this.games = new ArrayList<>();
+    }
+
+    public double getAvgClimb() {
+        double avg = getTimesClimbed();
+        if (avg != 0) {
+            avg /= didClimb.size();
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getTimesClimbed(){
+        double counter = 0;
+        for (String climb:this.didClimb) {
+            if (climb.equals("כן")||climb.equals("נעזר במוט מוארך של רובוט אחר")||climb.equals("נעזר בפלטפורמה של רובוט אחר")) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public double getAvgScale() {
+        double avg = getCubesScale();
+        if (avg != 0) {
+            avg /= (putScale.size());
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getCubesScale() {
+        double counter = 0;
+        for (String cubes:this.putScale) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        for (String cubes:this.autoScaleCubes) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        return counter;
+    }
+
+    public double getAvgSwitch() {
+        double avg = getCubesSwitch();
+        if (avg != 0) {
+            avg /= (putSwitch.size());
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getCubesSwitch() {
+        double counter = 0;
+        for (String cubes:this.putSwitch) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        for (String cubes:this.autoSwitchCubes) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        return counter;
+    }
+
+    public double getAvgVault() {
+        double avg = getCubesVault();
+        if (avg != 0) {
+            avg /= (putVault.size());
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getCubesVault() {
+        double counter = 0;
+        for (String cubes:this.putVault) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        return counter;
     }
 
     public void setTeamName(String teamName) {
@@ -128,6 +222,14 @@ public class Team implements Serializable {
 
     public String getAutoScale() {
         return autoScale;
+    }
+
+    public ArrayList<String> getGames() {
+        return games;
+    }
+
+    public void addGame(String game) {
+        this.games.add(game);
     }
 
     public void setAutoScale(String autoScale) {
@@ -349,5 +451,10 @@ public class Team implements Serializable {
     public void setTeamNumber(String teamNumber) {
         this.teamNumber = teamNumber;
     }
+
+    public void setRobotMass(String robotMass) {this.robotMass = robotMass;}
+
+    public String getRobotMass(){return robotMass;}
+
 
 }

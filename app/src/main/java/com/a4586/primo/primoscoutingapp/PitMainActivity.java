@@ -24,6 +24,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
     private EditText helpsClimbET;
     private Switch baseLineSwitch;
     private Button contBtn;
+    private EditText massET;
 
     private ArrayAdapter adapter;
     private ArrayList<String> roleList;
@@ -61,6 +62,8 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         contBtn = (Button) findViewById(R.id.contBtn);
 
         contBtn.setOnClickListener(this);
+
+        massET = (EditText) findViewById(R.id.robotMassED);
     }
 
     @Override
@@ -86,6 +89,8 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
             scoutingArr[8] = helpsClimbET.getText().toString();
 
             scoutingArr[9] = baseLineSwitch.isChecked()+"";
+
+            scoutingArr[10] = massET.getText().toString();
 
             Intent intent = new Intent(PitMainActivity.this, Pit2MainActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);

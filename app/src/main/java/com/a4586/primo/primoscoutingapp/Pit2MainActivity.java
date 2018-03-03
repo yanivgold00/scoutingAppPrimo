@@ -26,15 +26,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Pit2MainActivity extends AppCompatActivity implements View.OnClickListener {
-
     FirebaseFirestore database = FirebaseFirestore.getInstance();
     private CheckBox rightAutoSwitchCB, midAutoSwitchCB, leftAutoSwitchCB;
     private CheckBox rightAutoScaleCB, midAutoScaleCB, leftAutoScaleCB;
     private EditText drivingSystemET;
     private EditText wheelTypeET;
     private EditText stratET;
+    private EditText massET;
     private EditText issueET;
     private Button sendBtn;
+
 
     private String[] scoutingArr;
 
@@ -68,31 +69,32 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if ((v.getId() == sendBtn.getId())) {
             sendBtn.setClickable(false);
-            scoutingArr[10] = "";
-            if(rightAutoSwitchCB.isChecked()) {
-                scoutingArr[10] += "ימין,";
-            }
-            if(midAutoSwitchCB.isChecked()) {
-                scoutingArr[10] += "מרכז,";
-            }
-            if(leftAutoSwitchCB.isChecked()) {
-                scoutingArr[10] += "שמאל,";
-            }
-
             scoutingArr[11] = "";
-            if(rightAutoScaleCB.isChecked()) {
+            if(rightAutoSwitchCB.isChecked()) {
                 scoutingArr[11] += "ימין,";
             }
-            if(midAutoScaleCB.isChecked()) {
+            if(midAutoSwitchCB.isChecked()) {
                 scoutingArr[11] += "מרכז,";
             }
-            if(leftAutoScaleCB.isChecked()) {
+            if(leftAutoSwitchCB.isChecked()) {
                 scoutingArr[11] += "שמאל,";
             }
-            scoutingArr[12] = drivingSystemET.getText().toString();
-            scoutingArr[13] = wheelTypeET.getText().toString();
-            scoutingArr[14] = stratET.getText().toString();
-            scoutingArr[15] = issueET.getText().toString();
+
+            scoutingArr[12] = "";
+            if(rightAutoScaleCB.isChecked()) {
+                scoutingArr[12] += "ימין,";
+            }
+            if(midAutoScaleCB.isChecked()) {
+                scoutingArr[12] += "מרכז,";
+            }
+            if(leftAutoScaleCB.isChecked()) {
+                scoutingArr[12] += "שמאל,";
+            }
+            scoutingArr[13] = drivingSystemET.getText().toString();
+            scoutingArr[14] = wheelTypeET.getText().toString();
+            scoutingArr[15] = stratET.getText().toString();
+            scoutingArr[16] = issueET.getText().toString();
+
 
             sendForm();
             Toast.makeText(Pit2MainActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
@@ -124,12 +126,13 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
                     team.put("does_climb", scoutingArr[7]);
                     team.put("helps_climb", scoutingArr[8]);
                     team.put("auto_line", scoutingArr[9]);
-                    team.put("auto_switch", scoutingArr[10]);
-                    team.put("auto_scale", scoutingArr[11]);
-                    team.put("driving_system", scoutingArr[12]);
-                    team.put("wheel_type", scoutingArr[13]);
-                    team.put("strategy", scoutingArr[14]);
-                    team.put("problems", scoutingArr[15]);
+                    team.put("robot_mass", scoutingArr[10]);
+                    team.put("auto_switch", scoutingArr[11]);
+                    team.put("auto_scale", scoutingArr[12]);
+                    team.put("driving_system", scoutingArr[13]);
+                    team.put("wheel_type", scoutingArr[14]);
+                    team.put("strategy", scoutingArr[15]);
+                    team.put("problems", scoutingArr[16]);
 
                     database.collection("teams").document(""+counter).set(team);
                 }

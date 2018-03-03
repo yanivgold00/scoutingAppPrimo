@@ -49,7 +49,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
             }
         if (view.getId()==backBtn.getId()) {
             Intent intent = new Intent(this,ScoutingChooseActivity.class);
-            intent.putExtra("level","strat");
+            intent.putExtra("level",getIntent().getStringExtra("level"));
             intent.putExtra("name",getIntent().getStringExtra("name"));
             startActivity(intent);
             finish();
@@ -66,9 +66,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 //                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
                     String teamNumber = teamET.getText().toString();
 
-                    while (teamNumber.length()<4) {
-                        teamNumber = 0 + teamNumber;
-                    }
                     for (DocumentSnapshot doc:task.getResult().getDocuments()) {
                         counter++;
 

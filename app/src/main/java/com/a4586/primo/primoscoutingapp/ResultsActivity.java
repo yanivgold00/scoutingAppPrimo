@@ -33,6 +33,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     String viewLevel;
     Button backBtn;
 
+    ArrayList<GameComment> comments;
     String team;
     int teamPos;
     String type;
@@ -51,6 +52,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         team = getIntent().getStringExtra("team");
         backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(this);
+        comments = new ArrayList<>();
         readData();
         if(team.equals("")) {
             gameTeamNull();
@@ -370,6 +372,11 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     startActivity(intent);
                     finish();
                     break;
+                case "comments":intent = new Intent(this,ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent().getExtras());
+                    startActivity(intent);
+                    finish();
+                    break;
                 case "gameAvg":
                     gameTeamNull();
                     break;
@@ -419,6 +426,54 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             viewList = new ArrayList<>();
             viewList.add("אין קבוצה כזאת");
             Log.d("teams",teams.size()+" size");
+        }
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        resultListView.setAdapter(adapter);
+    }
+
+    private void teamComment() {
+        viewLevel = "comments";
+        boolean hasTeam = false;
+        for (int i=0;i<teams.size();i++) {
+            if(teams.get(i).getTeamNumber().equals(team)) {
+                teamPos = i;
+                hasTeam = true;
+                break;
+            }
+        }
+        if(hasTeam) {
+            titleTV.setText(teams.get(teamPos).getTeamNumber()+" - "+teams.get(teamPos).getTeamName());
+            viewList = teams.get(teamPos).getGameComments();
+            viewList.addAll(teams.get(teamPos).getComments());
+        }
+        else {
+            viewList = new ArrayList<>();
+            viewList.add("אין קבוצה כזאת");
+            Log.d("teams",teams.size()+" size");
+        }
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        resultListView.setAdapter(adapter);
+    }
+
+    private void gameComment() {
+        viewLevel = "comments";
+        boolean hasGame = false;
+        for (int i=0;i<comments.size();i++) {
+            if(comments.get(i).getGameNum().equals(team)) {
+                teamPos = i;
+                hasGame = true;
+                break;
+            }
+        }
+        if(hasGame) {
+            titleTV.setText(comments.get(teamPos).getGameNum());
+            viewList = new ArrayList<>();
+            viewList.add(comments.get(teamPos).getComment());
+        }
+        else {
+            viewList = new ArrayList<>();
+            viewList.add("אין הערה למשחק זה");
+            Log.d("comments",teams.size()+" size");
         }
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
         resultListView.setAdapter(adapter);
@@ -496,11 +551,25 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 Log.d("teams","comment");
                 for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
-                    for (int i = 0; i<teams.size();i++) {
-                        if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
-                            teams.get(i).addComments(doc.get("comment").toString());
-                            break;
+                    if (doc.get("team").toString().length()<4) {
+                        comments.add(new GameComment(doc.get("team").toString(),doc.get("comment").toString()));
+                    }
+                    else {
+                        for (int i = 0; i < teams.size(); i++) {
+                            if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
+                                teams.get(i).addComments(doc.get("comment").toString());
+                                break;
+                            }
                         }
+                    }
+
+                }
+                if (type.equals("comments")) {
+                    if (team.length()==4) {
+                        teamComment();
+                    }
+                    else {
+                        gameComment();
                     }
                 }
             }

@@ -19,7 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class ResultsActivity extends AppCompatActivity implements ListView.OnItemClickListener,View.OnClickListener {
+public class ResultsActivity extends AppCompatActivity implements ListView.OnItemClickListener, View.OnClickListener {
 
     TextView titleTV;
     ListView resultListView;
@@ -48,56 +48,55 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(this);
         readData();
-        if(team.equals("")) {
+        if (team.equals("")) {
             gameTeamNull();
         }
 
 
     }
 
-    private void gameTeamNonNull(){
+    private void gameTeamNonNull() {
         viewLevel = type;
-        if(!team.equals("")) {
+        if (!team.equals("")) {
             boolean hasTeam = false;
-            for (int i=0;i<teams.size();i++) {
-                if(teams.get(i).getTeamNumber().equals(team)) {
+            for (int i = 0; i < teams.size(); i++) {
+                if (teams.get(i).getTeamNumber().equals(team)) {
                     teamPos = i;
                     hasTeam = true;
                     break;
                 }
             }
-            if(hasTeam) {
-                titleTV.setText(teams.get(teamPos).getTeamNumber()+" - "+teams.get(teamPos).getTeamName());
+            if (hasTeam) {
+                titleTV.setText(teams.get(teamPos).getTeamNumber() + " - " + teams.get(teamPos).getTeamName());
                 viewList = new ArrayList<>();
                 viewList.add("אוטונומי");
                 viewList.add("שאר המשחק");
-                adapter = new ArrayAdapter(ResultsActivity.this,android.R.layout.simple_list_item_1,viewList);
+                adapter = new ArrayAdapter(ResultsActivity.this, android.R.layout.simple_list_item_1, viewList);
                 resultListView.setAdapter(adapter);
-            }
-            else {
+            } else {
                 viewList = new ArrayList<>();
                 viewList.add("אין קבוצה כזאת");
-                adapter = new ArrayAdapter(ResultsActivity.this,android.R.layout.simple_list_item_1,viewList);
+                adapter = new ArrayAdapter(ResultsActivity.this, android.R.layout.simple_list_item_1, viewList);
                 resultListView.setAdapter(adapter);
-                Log.d("teams",teams.size()+" size");
+                Log.d("teams", teams.size() + " size");
             }
         }
     }
 
-    private void gameTeamNull(){
+    private void gameTeamNull() {
         viewLevel = type;
         viewList = new ArrayList<>();
         viewList.add("סקייל");
         viewList.add("סוויץ'");
         viewList.add("אקסצ'יינג'");
         viewList.add("תלייה");
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
         resultListView.setAdapter(adapter);
     }
 
     private void gameAvgClimb() {
         ArrayList<Team> tempTeams = new ArrayList();
-        for (Team t:teams) {
+        for (Team t : teams) {
             if (t.getClimbs().equals("true")) {
                 tempTeams.add(t);
             }
@@ -105,29 +104,26 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgClimb() < tempTeams.get(j).getAvgClimb())
-                {
-                    tempTeams.add(j-1,tempTeams.remove(j));
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j - 1).getAvgClimb() < tempTeams.get(j).getAvgClimb()) {
+                    tempTeams.add(j - 1, tempTeams.remove(j));
                 }
             }
         }
 
         viewList = new ArrayList<>();
-        for (Team t:tempTeams) {
-            viewList.add(t.getTeamNumber()+" - "+(t.getAvgClimb()*100)+"% - "+t.getTimesClimbed());
+        for (Team t : tempTeams) {
+            viewList.add(t.getTeamNumber() + " - " + (t.getAvgClimb() * 100) + "% - " + t.getTimesClimbed());
         }
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
         resultListView.setAdapter(adapter);
 
     }
 
     private void gameAvgScale() {
         ArrayList<Team> tempTeams = new ArrayList();
-        for (Team t:teams) {
+        for (Team t : teams) {
             if (t.getCubesAt().contains("סקייל")) {
                 tempTeams.add(t);
             }
@@ -135,29 +131,26 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgScale() < tempTeams.get(j).getAvgScale())
-                {
-                    tempTeams.add(j-1,tempTeams.remove(j));
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j - 1).getAvgScale() < tempTeams.get(j).getAvgScale()) {
+                    tempTeams.add(j - 1, tempTeams.remove(j));
                 }
             }
         }
 
         viewList = new ArrayList<>();
-        for (Team t:tempTeams) {
-            viewList.add(t.getTeamNumber()+" - "+(t.getAvgScale())+" - "+t.getCubesScale());
+        for (Team t : tempTeams) {
+            viewList.add(t.getTeamNumber() + " - " + (t.getAvgScale()) + " - " + t.getCubesScale());
         }
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
         resultListView.setAdapter(adapter);
 
     }
 
     private void gameAvgSwitch() {
         ArrayList<Team> tempTeams = new ArrayList();
-        for (Team t:teams) {
+        for (Team t : teams) {
             if (t.getCubesAt().contains("סוויץ'")) {
                 tempTeams.add(t);
             }
@@ -165,29 +158,26 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgSwitch() < tempTeams.get(j).getAvgSwitch())
-                {
-                    tempTeams.add(j-1,tempTeams.remove(j));
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j - 1).getAvgSwitch() < tempTeams.get(j).getAvgSwitch()) {
+                    tempTeams.add(j - 1, tempTeams.remove(j));
                 }
             }
         }
 
         viewList = new ArrayList<>();
-        for (Team t:tempTeams) {
-            viewList.add(t.getTeamNumber()+" - "+(t.getAvgSwitch())+" - "+t.getCubesSwitch());
+        for (Team t : tempTeams) {
+            viewList.add(t.getTeamNumber() + " - " + (t.getAvgSwitch()) + " - " + t.getCubesSwitch());
         }
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
         resultListView.setAdapter(adapter);
 
     }
 
     private void gameAvgVault() {
         ArrayList<Team> tempTeams = new ArrayList();
-        for (Team t:teams) {
+        for (Team t : teams) {
             if (t.getCubesAt().contains("אקסציינג'")) {
                 tempTeams.add(t);
             }
@@ -195,85 +185,126 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgVault() < tempTeams.get(j).getAvgVault())
-                {
-                    tempTeams.add(j-1,tempTeams.remove(j));
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j - 1).getAvgVault() < tempTeams.get(j).getAvgVault()) {
+                    tempTeams.add(j - 1, tempTeams.remove(j));
                 }
             }
         }
 
         viewList = new ArrayList<>();
-        for (Team t:tempTeams) {
-            viewList.add(t.getTeamNumber()+" - "+(t.getAvgVault())+" - "+t.getCubesVault());
+        for (Team t : tempTeams) {
+            viewList.add(t.getTeamNumber() + " - " + (t.getAvgVault()) + " - " + t.getCubesVault());
         }
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
         resultListView.setAdapter(adapter);
 
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-        if(type.equals("game")) {
-            if(viewLevel.equals("game")) {
+        if (type.equals("game")) {
+            if (viewLevel.equals("game")) {
                 if (team.equals("")) {
                     viewLevel = "gameAvg";
-                    if (i==3) {
+                    if (i == 3) {
                         titleTV.setText("טיפוס");
                         gameAvgClimb();
-                    }
-                    else if (i==0) {
+                    } else if (i == 0) {
                         titleTV.setText("סקייל");
                         gameAvgScale();
-                    }
-                    else if (i == 1) {
+                    } else if (i == 1) {
                         titleTV.setText("סוויץ'");
                         gameAvgSwitch();
-                    }
-                    else if (i == 2) {
+                    } else if (i == 2) {
                         titleTV.setText("אקסצ'יינג'");
                         gameAvgVault();
                     }
-                }
-                else {
-                    if (i==0) {
+                } else {
+                    if (i == 0) {
                         viewLevel = "gamesAutoTeam";
-                        titleTV.setText(team+" אוטונומי ");
-                    }
-                    else {
+                        titleTV.setText(team + " אוטונומי ");
+                    } else {
                         viewLevel = "gamesRestTeam";
-                        titleTV.setText(" שאר המשחק "+team);
+                        titleTV.setText(" שאר המשחק " + team);
                     }
                     teamGames();
                 }
             }
+            else if (viewLevel.equals("gamesAutoTeam")) {
+                titleTV.setText(team+" auto "+teams.get(teamPos).getGames().get(i));
+                viewLevel = "gameAuto";
+                teamGameAuto(i);
+
+            }
+            else if (viewLevel.equals("gamesRestTeam")) {
+                titleTV.setText(team+" game "+teams.get(teamPos).getGames().get(i));
+                viewLevel = "gameRest";
+                teamGameRest(i);
+            }
         }
+    }
+
+    private void teamGameAuto(int position) {
+        viewList = new ArrayList<>();
+        viewList.add("Scale " + teams.get(teamPos).getAutoScaleCubes().get(position));
+        viewList.add("Switch " + teams.get(teamPos).getAutoSwitchCubes().get(position));
+        viewList.add("Passes auto line " + teams.get(teamPos).getAutoLinePass().get(position));
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
+        resultListView.setAdapter(adapter);
+    }
+
+    private void teamGameRest(int position) {
+        viewList = new ArrayList<>();
+        viewList.add("Scale " + teams.get(teamPos).getPutScale().get(position));
+        viewList.add("Switch " + teams.get(teamPos).getPutSwitch().get(position));
+        viewList.add("Exchange " + teams.get(teamPos).getPutVault().get(position));
+        viewList.add("Floor pickup " + teams.get(teamPos).getPickFloor().get(position));
+        viewList.add("Feeder pickup " + teams.get(teamPos).getPickFeeder().get(position));
+        viewList.add("Climbed " + teams.get(teamPos).getDidClimb().get(position));
+        viewList.add("Helped climb " + teams.get(teamPos).getHelpedClimb().get(position));
+        viewList.add("Role " + teams.get(teamPos).getGameRole().get(position));
+        viewList.add("Crashed " + teams.get(teamPos).getCrashed().get(position));
+        viewList.add("Comments " + teams.get(teamPos).getGameComments().get(position));
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
+        resultListView.setAdapter(adapter);
     }
 
     private void teamGames() {
         viewList = teams.get(teamPos).getGames();
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
         resultListView.setAdapter(adapter);
     }
 
     @Override
     public void onClick(View view) {
-        if(backBtn.getId()==view.getId()) {
+        if (backBtn.getId() == view.getId()) {
             switch (viewLevel) {
-                case "game":Intent intent = new Intent(this,ScoutingChooseActivity.class);
+                case "game":
+                    Intent intent = new Intent(this, ScoutingChooseActivity.class);
                     intent.putExtras(getIntent().getExtras());
                     startActivity(intent);
                     finish();
                     break;
-                case "gameAvg": gameTeamNull();
+                case "gameAvg":
+                    gameTeamNull();
                     break;
-                case "gamesAutoTeam": gameTeamNonNull();
+                case "gamesAutoTeam":
+                    gameTeamNonNull();
                     break;
-                case "gamesRestTeam": gameTeamNonNull();
+                case "gamesRestTeam":
+                    gameTeamNonNull();
                     break;
+                case "gameAuto":
+                    titleTV.setText(team + " אוטונומי ");
+                    teamGames();
+                    break;
+                case "gameRest":
+                    titleTV.setText(" שאר המשחק " + team);
+                    teamGames();
+                    break;
+
             }
 
         }
@@ -284,9 +315,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         database.collection("teams").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                Log.d("teams","team"+documentSnapshots.size());
-                for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
-                    Team t = new Team(doc.get("number").toString(),doc.get("name").toString());
+                Log.d("teams", "team" + documentSnapshots.size());
+                for (DocumentSnapshot doc : documentSnapshots.getDocuments()) {
+                    Team t = new Team(doc.get("number").toString(), doc.get("name").toString());
                     t.setAutoBaseLine(doc.get("auto_line").toString());
                     t.setAutoScale(doc.get("auto_scale").toString());
                     t.setAutoSwitch(doc.get("auto_switch").toString());
@@ -310,9 +341,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         database.collection("games").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                Log.d("teams","game");
-                for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
-                    for (int i = 0; i<teams.size();i++) {
+                Log.d("teams", "game");
+                for (DocumentSnapshot doc : documentSnapshots.getDocuments()) {
+                    for (int i = 0; i < teams.size(); i++) {
                         if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
                             teams.get(i).addGame(doc.get("game_number").toString());
                             teams.get(i).addAutoLinePass(doc.get("passed_auto_line").toString());
@@ -342,9 +373,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         database.collection("comments").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                Log.d("teams","comment");
-                for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
-                    for (int i = 0; i<teams.size();i++) {
+                Log.d("teams", "comment");
+                for (DocumentSnapshot doc : documentSnapshots.getDocuments()) {
+                    for (int i = 0; i < teams.size(); i++) {
                         if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
                             teams.get(i).addComments(doc.get("comment").toString());
                             break;

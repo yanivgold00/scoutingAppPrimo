@@ -26,21 +26,29 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         infoBtn = (Button) findViewById(R.id.infoBtn);
         isInfo = false;
         level = getIntent().getStringExtra("level");
-        if (level.equals("admin")) {
+
+        if (level.equals("45PrimoAdmin86")) {
             infoBtn.setText("תוצאות");
             infoBtn.setClickable(true);
             infoBtn.setVisibility(View.VISIBLE);
             infoBtn.setOnClickListener(this);
         }
-        else if (level.equals("strat")) {
+        else if (level.equals("PrimoStrat4586")) {
             infoBtn.setText("אסטרטגיה");
             infoBtn.setClickable(true);
             infoBtn.setVisibility(View.VISIBLE);
             infoBtn.setOnClickListener(this);
 
         }
+        else if(level.equals("PassPriGon"))
+        {
+            pitBtn.setClickable(false);
+            pitBtn.setVisibility(View.INVISIBLE);
+
+        }
 
         gameBtn.setOnClickListener(this);
+        if(level.equals("amitlaba0") || level.equals("microgali0"))
         pitBtn.setOnClickListener(this);
 
     }

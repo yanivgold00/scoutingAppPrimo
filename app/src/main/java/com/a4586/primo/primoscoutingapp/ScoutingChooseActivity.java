@@ -68,7 +68,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,ResultsActivity.class);
                 intent.putExtra("type","game");
-                intent.putExtra("level","strat");
+                intent.putExtra("level",getIntent().getStringExtra("level"));
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
@@ -88,7 +88,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","pit");
-                intent.putExtra("level","strat");
+                intent.putExtra("level",getIntent().getStringExtra("level"));
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
@@ -98,7 +98,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             if (!isInfo) {
                 if (level.equals("strat")) {
                     Intent intent = new Intent(this,CommentActivity.class);
-                    intent.putExtra("level","strat");
+                    intent.putExtra("level",getIntent().getStringExtra("level"));
                     intent.putExtra("name",getIntent().getStringExtra("name"));
                     startActivity(intent);
                 } else {
@@ -108,7 +108,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","comments");
-                intent.putExtra("level","strat");
+                intent.putExtra("level",getIntent().getStringExtra("level"));
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }

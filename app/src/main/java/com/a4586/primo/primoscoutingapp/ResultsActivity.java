@@ -254,6 +254,17 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     teamGames();
                 }
             }
+            else if (viewLevel.equals("gamesAutoTeam")) {
+                titleTV.setText(team+" auto "+teams.get(teamPos).getGames().get(i));
+                viewLevel = "gameAuto";
+                teamGameAuto(i);
+
+            }
+            else if (viewLevel.equals("gamesRestTeam")) {
+                titleTV.setText(team+" game "+teams.get(teamPos).getGames().get(i));
+                viewLevel = "gameRest";
+                teamGameRest(i);
+            }
         }
         else if(type.equals("pit")){
             if(viewLevel.equals("pit")){
@@ -279,6 +290,30 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    private void teamGameAuto(int position) {
+        viewList = new ArrayList<>();
+        viewList.add("Scale " + teams.get(teamPos).getAutoScaleCubes().get(position));
+        viewList.add("Switch " + teams.get(teamPos).getAutoSwitchCubes().get(position));
+        viewList.add("Passes auto line " + teams.get(teamPos).getAutoLinePass().get(position));
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
+        resultListView.setAdapter(adapter);
+    }
+
+    private void teamGameRest(int position) {
+        viewList = new ArrayList<>();
+        viewList.add("Scale " + teams.get(teamPos).getPutScale().get(position));
+        viewList.add("Switch " + teams.get(teamPos).getPutSwitch().get(position));
+        viewList.add("Exchange " + teams.get(teamPos).getPutVault().get(position));
+        viewList.add("Floor pickup " + teams.get(teamPos).getPickFloor().get(position));
+        viewList.add("Feeder pickup " + teams.get(teamPos).getPickFeeder().get(position));
+        viewList.add("Climbed " + teams.get(teamPos).getDidClimb().get(position));
+        viewList.add("Helped climb " + teams.get(teamPos).getHelpedClimb().get(position));
+        viewList.add("Role " + teams.get(teamPos).getGameRole().get(position));
+        viewList.add("Crashed " + teams.get(teamPos).getCrashed().get(position));
+        viewList.add("Comments " + teams.get(teamPos).getGameComments().get(position));
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, viewList);
+        resultListView.setAdapter(adapter);
+    }
 
     private void teamPitRobot() {
         viewList = new ArrayList<>();
@@ -335,11 +370,22 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     startActivity(intent);
                     finish();
                     break;
-                case "gameAvg": gameTeamNull();
+                case "gameAvg":
+                    gameTeamNull();
                     break;
-                case "gamesAutoTeam": gameTeamNonNull();
+                case "gamesAutoTeam":
+                    gameTeamNonNull();
                     break;
-                case "gamesRestTeam": gameTeamNonNull();
+                case "gamesRestTeam":
+                    gameTeamNonNull();
+                    break;
+                case "gameAuto":
+                    titleTV.setText(team + " אוטונומי ");
+                    teamGames();
+                    break;
+                case "gameRest":
+                    titleTV.setText(" שאר המשחק " + team);
+                    teamGames();
                     break;
                 case "pitRobot": pitMainTable();
                     break;

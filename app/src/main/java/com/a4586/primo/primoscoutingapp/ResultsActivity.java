@@ -400,10 +400,26 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     private void pitMainTable() {
         viewLevel = "pit";
-        viewList = new ArrayList<>();
-        viewList.add("Robot");
-        viewList.add("Functionality");
-        viewList.add("Autonomous");
+        boolean hasTeam = false;
+        for (int i=0;i<teams.size();i++) {
+            if(teams.get(i).getTeamNumber().equals(team)) {
+                teamPos = i;
+                hasTeam = true;
+                break;
+            }
+        }
+        if(hasTeam) {
+            titleTV.setText(teams.get(teamPos).getTeamNumber()+" - "+teams.get(teamPos).getTeamName());
+            viewList = new ArrayList<>();
+            viewList.add("Robot");
+            viewList.add("Functionality");
+            viewList.add("Autonomous");
+        }
+        else {
+            viewList = new ArrayList<>();
+            viewList.add("אין קבוצה כזאת");
+            Log.d("teams",teams.size()+" size");
+        }
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
         resultListView.setAdapter(adapter);
     }

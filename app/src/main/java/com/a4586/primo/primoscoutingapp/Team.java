@@ -29,7 +29,9 @@ public class Team implements Serializable {
 
 
 
+
     //game scouting
+    private ArrayList<String> games;
     private ArrayList<String> scouter;
     private ArrayList<String> startPos;
     private ArrayList<String> autoLinePass;
@@ -72,6 +74,7 @@ public class Team implements Serializable {
         this.crashed = new ArrayList<>();
         this.gameComments = new ArrayList<>();
         this.comments = new ArrayList<>();
+        this.games = new ArrayList<>();
     }
 
     public double getAvgClimb() {
@@ -98,7 +101,7 @@ public class Team implements Serializable {
     public double getAvgScale() {
         double avg = getCubesScale();
         if (avg != 0) {
-            avg /= (putScale.size()+autoScaleCubes.size());
+            avg /= (putScale.size());
         }
         else {
             avg = 0;
@@ -113,6 +116,50 @@ public class Team implements Serializable {
         }
 
         for (String cubes:this.autoScaleCubes) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        return counter;
+    }
+
+    public double getAvgSwitch() {
+        double avg = getCubesSwitch();
+        if (avg != 0) {
+            avg /= (putSwitch.size());
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getCubesSwitch() {
+        double counter = 0;
+        for (String cubes:this.putSwitch) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        for (String cubes:this.autoSwitchCubes) {
+            counter += Double.parseDouble(cubes);
+        }
+
+        return counter;
+    }
+
+    public double getAvgVault() {
+        double avg = getCubesVault();
+        if (avg != 0) {
+            avg /= (putVault.size());
+        }
+        else {
+            avg = 0;
+        }
+        return avg;
+    }
+
+    public double getCubesVault() {
+        double counter = 0;
+        for (String cubes:this.putVault) {
             counter += Double.parseDouble(cubes);
         }
 
@@ -173,6 +220,14 @@ public class Team implements Serializable {
 
     public String getAutoScale() {
         return autoScale;
+    }
+
+    public ArrayList<String> getGames() {
+        return games;
+    }
+
+    public void addGame(String game) {
+        this.games.add(game);
     }
 
     public void setAutoScale(String autoScale) {

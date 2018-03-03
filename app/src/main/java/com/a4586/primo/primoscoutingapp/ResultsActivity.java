@@ -125,28 +125,157 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    private void gameAvgScale() {
+        ArrayList<Team> tempTeams = new ArrayList();
+        for (Team t:teams) {
+            if (t.getCubesAt().contains("סקייל")) {
+                tempTeams.add(t);
+            }
+
+
+        }
+
+        for (int i = (tempTeams.size() - 1); i >= 0; i--)
+        {
+            for (int j = 1; j <= i; j++)
+            {
+                if (tempTeams.get(j-1).getAvgScale() < tempTeams.get(j).getAvgScale())
+                {
+                    tempTeams.add(j-1,tempTeams.remove(j));
+                }
+            }
+        }
+
+        viewList = new ArrayList<>();
+        for (Team t:tempTeams) {
+            viewList.add(t.getTeamNumber()+" - "+(t.getAvgScale())+" - "+t.getCubesScale());
+        }
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        resultListView.setAdapter(adapter);
+
+    }
+
+    private void gameAvgSwitch() {
+        ArrayList<Team> tempTeams = new ArrayList();
+        for (Team t:teams) {
+            if (t.getCubesAt().contains("סוויץ'")) {
+                tempTeams.add(t);
+            }
+
+
+        }
+
+        for (int i = (tempTeams.size() - 1); i >= 0; i--)
+        {
+            for (int j = 1; j <= i; j++)
+            {
+                if (tempTeams.get(j-1).getAvgSwitch() < tempTeams.get(j).getAvgSwitch())
+                {
+                    tempTeams.add(j-1,tempTeams.remove(j));
+                }
+            }
+        }
+
+        viewList = new ArrayList<>();
+        for (Team t:tempTeams) {
+            viewList.add(t.getTeamNumber()+" - "+(t.getAvgSwitch())+" - "+t.getCubesSwitch());
+        }
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        resultListView.setAdapter(adapter);
+
+    }
+
+    private void gameAvgVault() {
+        ArrayList<Team> tempTeams = new ArrayList();
+        for (Team t:teams) {
+            if (t.getCubesAt().contains("אקסציינג'")) {
+                tempTeams.add(t);
+            }
+
+
+        }
+
+        for (int i = (tempTeams.size() - 1); i >= 0; i--)
+        {
+            for (int j = 1; j <= i; j++)
+            {
+                if (tempTeams.get(j-1).getAvgVault() < tempTeams.get(j).getAvgVault())
+                {
+                    tempTeams.add(j-1,tempTeams.remove(j));
+                }
+            }
+        }
+
+        viewList = new ArrayList<>();
+        for (Team t:tempTeams) {
+            viewList.add(t.getTeamNumber()+" - "+(t.getAvgVault())+" - "+t.getCubesVault());
+        }
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        resultListView.setAdapter(adapter);
+
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
         if(type.equals("game")) {
             if(viewLevel.equals("game")) {
                 if (team.equals("")) {
+                    viewLevel = "gameAvg";
                     if (i==3) {
+                        titleTV.setText("טיפוס");
                         gameAvgClimb();
                     }
+                    else if (i==0) {
+                        titleTV.setText("סקייל");
+                        gameAvgScale();
+                    }
+                    else if (i == 1) {
+                        titleTV.setText("סוויץ'");
+                        gameAvgSwitch();
+                    }
+                    else if (i == 2) {
+                        titleTV.setText("אקסצ'יינג'");
+                        gameAvgVault();
+                    }
+                }
+                else {
+                    if (i==0) {
+                        viewLevel = "gamesAutoTeam";
+                        titleTV.setText(team+" אוטונומי ");
+                    }
+                    else {
+                        viewLevel = "gamesRestTeam";
+                        titleTV.setText(" שאר המשחק "+team);
+                    }
+                    teamGames();
                 }
             }
         }
     }
 
+    private void teamGames() {
+        viewList = teams.get(teamPos).getGames();
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        resultListView.setAdapter(adapter);
+    }
+
     @Override
     public void onClick(View view) {
         if(backBtn.getId()==view.getId()) {
-            if (viewLevel.equals(type)) {
-                Intent intent = new Intent(this,ScoutingChooseActivity.class);
-                intent.putExtras(intent.getExtras());
-                startActivity(intent);
-                finish();
+            switch (viewLevel) {
+                case "game":Intent intent = new Intent(this,ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent().getExtras());
+                    startActivity(intent);
+                    finish();
+                    break;
+                case "gameAvg": gameTeamNull();
+                    break;
+                case "gamesAutoTeam": gameTeamNonNull();
+                    break;
+                case "gamesRestTeam": gameTeamNonNull();
+                    break;
             }
+
         }
     }
 
@@ -185,6 +314,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
                     for (int i = 0; i<teams.size();i++) {
                         if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
+                            teams.get(i).addGame(doc.get("game_number").toString());
                             teams.get(i).addAutoLinePass(doc.get("passed_auto_line").toString());
                             teams.get(i).addAutoScaleCubes(doc.get("auto_scale").toString());
                             teams.get(i).addAutoSwitchCubes(doc.get("auto_switch").toString());

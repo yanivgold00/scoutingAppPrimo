@@ -256,28 +256,24 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             }
         }
         else if(type.equals("pit")){
-            if(viewList.equals("pit")){
-                if(team.equals("")){
-                    //I'm not sure what to change here
+            if(viewLevel.equals("pit")){
+                if(i==0){
+                    titleTV.setText(team+" Robot ");
+                    viewLevel = "pitRobot";
+                    teamPitRobot();
                 }
+                else if(i==1){
+                    titleTV.setText(team+" Robot ");
+                    viewLevel = "pitFunctinalities";
+                    teamPitFunctionality();
+                }
+                else if(i==2){
+                    titleTV.setText(team+" Robot ");
+                    viewLevel = "pitAutonomus";
+                    teamPitAutonomus();
+                }
+            }
 
-
-            }
-            else if(viewLevel.equals("pitRobot")){
-                titleTV.setText(team+" Robot ");
-                viewLevel = "pitRobot";
-                teamPitRobot();
-            }
-            else if(viewLevel.equals("pitFunctinalities")){
-                titleTV.setText(team+" Robot ");
-                viewLevel = "pitFunctinalities";
-                teamPitFunctionality();
-            }
-            else if(viewLevel.equals("PitAutonomus")){
-                titleTV.setText(team+" Robot ");
-                viewLevel = "pitAutonomus";
-                teamPitAutonomus();
-            }
         }
 
 
@@ -310,8 +306,8 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     private void teamPitAutonomus(){
         viewList = new ArrayList<>();
         viewList.add("Does Pass Auto Line: " + teams.get(teamPos).getAutoBaseLine());
-        viewList.add("Does Put Cube In Switch while Auto: " + teams.get(teamPos).getAutoSwitch());
-        viewList.add("Does put Cube In Scale whule Auto: " + teams.get(teamPos).getAutoScaleCubes());
+        viewList.add("Where Put Cube In Switch while Auto: " + teams.get(teamPos).getAutoSwitch());
+        viewList.add("Where put Cube In Scale while Auto: " + teams.get(teamPos).getAutoScale());
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
         resultListView.setAdapter(adapter);
 
@@ -327,8 +323,14 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     @Override
     public void onClick(View view) {
         if(backBtn.getId()==view.getId()) {
+            Intent intent;
             switch (viewLevel) {
-                case "game":Intent intent = new Intent(this,ScoutingChooseActivity.class);
+                case "game":intent = new Intent(this,ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent().getExtras());
+                    startActivity(intent);
+                    finish();
+                    break;
+                case "pit":intent = new Intent(this,ScoutingChooseActivity.class);
                     intent.putExtras(getIntent().getExtras());
                     startActivity(intent);
                     finish();
@@ -339,9 +341,25 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     break;
                 case "gamesRestTeam": gameTeamNonNull();
                     break;
+                case "pitRobot": pitMainTable();
+                    break;
+                case "pitFunctinalities": pitMainTable();
+                    break;
+                case "pitAutonomus": pitMainTable();
+                    break;
             }
 
         }
+    }
+
+    private void pitMainTable() {
+        viewLevel = "pit";
+        viewList = new ArrayList<>();
+        viewList.add("Robot");
+        viewList.add("Functionality");
+        viewList.add("Autonomous");
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        resultListView.setAdapter(adapter);
     }
 
     public void readData() {
@@ -362,13 +380,19 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     t.setGeneralStrategy(doc.get("strategy").toString());
                     t.setHelpsClimb(doc.get("helps_climb").toString());
                     t.setIssuesPotential(doc.get("problems").toString());
-//            t.setPitScouter(doc.get("scouter").toString());
+                    t.setRobotMass(doc.get("robot_mass").toString());
                     t.setRobotRole(doc.get("role").toString());
                     t.setRoleComment(doc.get("role_comment").toString());
                     t.setWheelType(doc.get("wheel_type").toString());
                     teams.add(t);
                 }
-                gameTeamNonNull();
+                if (type.equals("game")) {
+                    gameTeamNonNull();
+                }
+                else if (type.equals("pit")) {
+                    pitMainTable();
+                }
+
 
             }
         });

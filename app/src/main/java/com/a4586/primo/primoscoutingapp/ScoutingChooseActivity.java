@@ -80,7 +80,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             if(!isInfo) {
                 Toast.makeText(ScoutingChooseActivity.this, "Pit Form", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ScoutingChooseActivity.this, PitFormActivity.class);
-                scoutingArr = new String[16];
+                scoutingArr = new String[17];
                 scoutingArr[0] = getIntent().getStringExtra("name");
                 intent.putExtra("scoutingArr", scoutingArr);
                 startActivity(intent);

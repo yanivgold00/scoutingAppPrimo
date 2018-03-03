@@ -194,4 +194,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cubeSystemET" />
 
+    <TextView
+        android:id="@+id/robotMassTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="משקל רובוט"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baseLineSwitch" />
+
+    <EditText
+        android:id="@+id/robotMassED"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/robotMassTV"
+        app:layout_constraintTop_toBottomOf="@+id/baseLineSwitch" />
+
 </android.support.constraint.ConstraintLayout>

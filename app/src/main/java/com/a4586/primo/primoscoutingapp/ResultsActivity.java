@@ -91,6 +91,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     }
 
     private void gameTeamNull(){
+        titleTV.setText(type);
         viewLevel = type;
         viewList = new ArrayList<>();
         viewList.add("סקייל");
@@ -487,6 +488,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 Log.d("teams","team"+documentSnapshots.size());
                 for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
                     Team t = new Team(doc.get("number").toString(),doc.get("name").toString());
+                    Log.d("teams",t.getTeamNumber());
                     t.setAutoBaseLine(doc.get("auto_line").toString());
                     t.setAutoScale(doc.get("auto_scale").toString());
                     t.setAutoSwitch(doc.get("auto_switch").toString());
@@ -497,7 +499,12 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     t.setGeneralStrategy(doc.get("strategy").toString());
                     t.setHelpsClimb(doc.get("helps_climb").toString());
                     t.setIssuesPotential(doc.get("problems").toString());
-                    t.setRobotMass(doc.get("robot_mass").toString());
+                    if(doc.contains("robot_mass")) {
+                        t.setRobotMass(doc.get("robot_mass").toString());
+                    }
+                    else {
+                        t.setRobotMass("");
+                    }
                     t.setRobotRole(doc.get("role").toString());
                     t.setRoleComment(doc.get("role_comment").toString());
                     t.setWheelType(doc.get("wheel_type").toString());

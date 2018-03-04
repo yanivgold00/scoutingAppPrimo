@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TeamScoutPickActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText teamET;
@@ -22,11 +23,15 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
-
-            Intent intent = new Intent(this,ResultsActivity.class);
+        if (!(teamET.getText().toString().isEmpty()&&getIntent().getStringExtra("level").equals("Admin"))) {
+            Intent intent = new Intent(this, ResultsActivity.class);
             intent.putExtras(getIntent().getExtras());
-            intent.putExtra("team",teamET.getText().toString());
+            intent.putExtra("team", teamET.getText().toString());
             startActivity(intent);
             finish();
+        }
+        else {
+            Toast.makeText(this, "Team number empty", Toast.LENGTH_SHORT).show();
+        }
     }
 }

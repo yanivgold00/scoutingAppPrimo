@@ -14,6 +14,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     private Button gameBtn;
     private Button pitBtn;
     private Button infoBtn;
+    private Button gameCommentBtn;
     private boolean isInfo;
     String level;
 
@@ -24,20 +25,45 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         gameBtn = (Button) findViewById(R.id.gameBtn);
         pitBtn = (Button) findViewById(R.id.pitBtn);
         infoBtn = (Button) findViewById(R.id.infoBtn);
+        gameCommentBtn = findViewById(R.id.gameCommentBtn);
+
         isInfo = false;
         level = getIntent().getStringExtra("level");
-        if (level.equals("admin")) {
+
+        if (level.equals("shalosH")) {
             infoBtn.setText("תוצאות");
             infoBtn.setClickable(true);
             infoBtn.setVisibility(View.VISIBLE);
             infoBtn.setOnClickListener(this);
+            gameCommentBtn.setText("הערות");
+            gameCommentBtn.setClickable(true);
+            gameCommentBtn.setVisibility(View.VISIBLE);
+            gameCommentBtn.setOnClickListener(this);
         }
-        else if (level.equals("strat")) {
-            infoBtn.setText("אסטרטגיה");
+        else if (level.equals("Strat4586")) {
+            infoBtn.setText("תוצאות");
             infoBtn.setClickable(true);
             infoBtn.setVisibility(View.VISIBLE);
             infoBtn.setOnClickListener(this);
+            gameCommentBtn.setText("הערות");
+            gameCommentBtn.setClickable(true);
+            gameCommentBtn.setVisibility(View.VISIBLE);
+            gameCommentBtn.setOnClickListener(this);
 
+        }
+        else if(level.equals("Pass"))
+        {
+            pitBtn.setClickable(false);
+            pitBtn.setVisibility(View.INVISIBLE);
+
+        }
+        else if (level.equals("Admin")) {
+            pitBtn.setClickable(false);
+            pitBtn.setVisibility(View.INVISIBLE);
+            infoBtn.setText("תוצאות");
+            infoBtn.setClickable(true);
+            infoBtn.setVisibility(View.VISIBLE);
+            infoBtn.setOnClickListener(this);
         }
 
         gameBtn.setOnClickListener(this);
@@ -66,15 +92,13 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 startActivity(intent);
             }
             else {
-                Intent intent = new Intent(this,ResultsActivity.class);
+                Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","game");
-                intent.putExtra("level",getIntent().getStringExtra("level"));
+                intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
         }
-
-
 
         if (v.getId() == pitBtn.getId()) {
             if(!isInfo) {
@@ -88,7 +112,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","pit");
-                intent.putExtra("level",getIntent().getStringExtra("level"));
+                intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
@@ -96,23 +120,37 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
 
         if (v.getId() == infoBtn.getId()) {
             if (!isInfo) {
-                if (level.equals("strat")) {
-                    Intent intent = new Intent(this,CommentActivity.class);
-                    intent.putExtra("level",getIntent().getStringExtra("level"));
+
+                if (level.equals("Admin")){
+                    Intent intent = new Intent(this,TeamScoutPickActivity.class);
+                    intent.putExtra("type","game");
+                    intent.putExtra("level",level);
                     intent.putExtra("name",getIntent().getStringExtra("name"));
                     startActivity(intent);
-                } else {
+                }
+                else {
                     isInfo = true;
+                    gameCommentBtn.setClickable(false);
+                    gameCommentBtn.setVisibility(View.INVISIBLE);
+                    infoBtn.setText("הערות");
                 }
             }
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","comments");
-                intent.putExtra("level",getIntent().getStringExtra("level"));
+                intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
             }
         }
 
+        if (v.getId() == gameCommentBtn.getId()) {
+            Intent intent = new Intent(this,CommentActivity.class);
+            intent.putExtra("level",level);
+            intent.putExtra("name",getIntent().getStringExtra("name"));
+            startActivity(intent);
+        }
+
     }
 }
+

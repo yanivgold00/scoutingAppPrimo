@@ -1,3 +1,4 @@
+
 package com.a4586.primo.primoscoutingapp;
 
 import android.content.Intent;
@@ -36,20 +37,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == loginBtn.getId()) {
 //            if (this.pw.getText().toString().equals("microgali0") || this.pw.getText().toString().equals("amitlaba0")||this.pw.getText().toString().equals("strat")) {
-            if (this.pw.getText().toString().equals("")||this.pw.getText().toString().equals("strat")) {
+            //strategy team!!
+            if (this.pw.getText().toString().equals("Strat4586")) {
+                Toast.makeText(MainActivity.this, "You are logged in as strat", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
+                intent.putExtra("name", name.getText().toString());
+                intent.putExtra("level", pw.getText().toString());
+                startActivity(intent);
+
+            }
+            //admin for PRIMO!!
+            else if (this.pw.getText().toString().equals("shalosH")) {
+                Toast.makeText(MainActivity.this, "You are logged in as admin", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
+                intent.putExtra("name", name.getText().toString());
+                intent.putExtra("level", pw.getText().toString());
+                startActivity(intent);
+            }
+            //admin for Trigon
+            else if(this.pw.getText().toString().equals("Admin"))
+            {
+                Toast.makeText(MainActivity.this, "You are logged in as admin", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
+                intent.putExtra("name", name.getText().toString());
+                intent.putExtra("level", pw.getText().toString());
+                startActivity(intent);
+
+            }
+            //scouter Trigon
+            else if (this.pw.getText().toString().equals("Pass"))
+            {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
 
-            } else if (this.pw.getText().toString().equals("admin")) {
+            }
+            //scouter for PRIMO!!
+            else if (this.pw.getText().toString().equals("amitlaba0") || this.pw.getText().toString().equals("microgali0"))
+            {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
-            } else {
+
+            }
+
+            //wrong password
+            else {
                 Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
             }
         }

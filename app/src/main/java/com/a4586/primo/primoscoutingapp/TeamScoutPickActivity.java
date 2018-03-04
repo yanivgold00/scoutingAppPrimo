@@ -12,6 +12,7 @@ import android.widget.Toast;
 public class TeamScoutPickActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText teamET;
     private Button contBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

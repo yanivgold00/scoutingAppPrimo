@@ -81,6 +81,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 resultListView.setAdapter(adapter);
             }
             else {
+                viewLevel = "noTeam";
                 viewList = new ArrayList<>();
                 viewList.add("אין קבוצה כזאת");
                 adapter = new ArrayAdapter(ResultsActivity.this,android.R.layout.simple_list_item_1,viewList);
@@ -368,6 +369,11 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     startActivity(intent);
                     finish();
                     break;
+                case "noTeam":intent = new Intent(this,ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent().getExtras());
+                    startActivity(intent);
+                    finish();
+                    break;
                 case "pit":intent = new Intent(this,ScoutingChooseActivity.class);
                     intent.putExtras(getIntent().getExtras());
                     startActivity(intent);
@@ -426,6 +432,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             viewList.add("Autonomous");
         }
         else {
+            viewLevel = "noTeam";
             viewList = new ArrayList<>();
             viewList.add("אין קבוצה כזאת");
             Log.d("teams",teams.size()+" size");
@@ -450,6 +457,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             viewList.addAll(teams.get(teamPos).getComments());
         }
         else {
+            viewLevel = "noTeam";
             viewList = new ArrayList<>();
             viewList.add("אין קבוצה כזאת");
             Log.d("teams",teams.size()+" size");
@@ -474,6 +482,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             viewList.add(comments.get(teamPos).getComment());
         }
         else {
+            viewLevel = "noTeam";
             viewList = new ArrayList<>();
             viewList.add("אין הערה למשחק זה");
             Log.d("comments",teams.size()+" size");

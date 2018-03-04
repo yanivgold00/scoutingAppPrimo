@@ -23,7 +23,7 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
-        if (!(teamET.getText().toString().isEmpty()&&getIntent().getStringExtra("level").equals("Admin"))) {
+        if (!(teamET.getText().toString().isEmpty()&&(getIntent().getStringExtra("level").equals("Admin")||!getIntent().getStringExtra("type").equals("game")))) {
             Intent intent = new Intent(this, ResultsActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra("team", teamET.getText().toString());

@@ -277,12 +277,12 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     teamPitRobot();
                 }
                 else if(i==1){
-                    titleTV.setText(team+" Robot ");
+                    titleTV.setText(team+" functions ");
                     viewLevel = "pitFunctinalities";
                     teamPitFunctionality();
                 }
                 else if(i==2){
-                    titleTV.setText(team+" Robot ");
+                    titleTV.setText(team+" autonomous ");
                     viewLevel = "pitAutonomus";
                     teamPitAutonomus();
                 }

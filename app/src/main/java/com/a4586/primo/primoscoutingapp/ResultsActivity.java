@@ -390,10 +390,12 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 case "gameAuto":
                     titleTV.setText(team + " אוטונומי ");
                     teamGames();
+                    viewLevel = "gamesAutoTeam";
                     break;
                 case "gameRest":
                     titleTV.setText(" שאר המשחק " + team);
                     teamGames();
+                    viewLevel = "gamesRestTeam";
                     break;
                 case "pitRobot": pitMainTable();
                     break;

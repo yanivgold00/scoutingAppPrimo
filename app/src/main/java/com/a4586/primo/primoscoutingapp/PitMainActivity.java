@@ -95,6 +95,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
             Intent intent = new Intent(PitMainActivity.this, Pit2MainActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);
             startActivity(intent);
+            finish();
         }
     }
 }

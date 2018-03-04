@@ -101,6 +101,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
             Intent intent = new Intent(Pit2MainActivity.this, PitFormActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -110,7 +111,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 if (task.isSuccessful()) {
-                    int counter = 0;
+                    int counter = 1;
 //                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
                     for (DocumentSnapshot doc:task.getResult().getDocuments()) {
                         counter++;

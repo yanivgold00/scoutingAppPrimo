@@ -36,15 +36,16 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
     public void onClick(View v) {
         if (v.getId() == contBtn.getId()) {
             String teamNumber = teamNumET.getText().toString();
-
-            while (teamNumber.length()<4) {
-                teamNumber = 0 + teamNumber;
+            if(teamNumber.length()>0&& teamNameET.getText().toString().length()>0) {
+                while (teamNumber.length() < 4) {
+                    teamNumber = 0 + teamNumber;
+                }
+                scoutingArr[1] = teamNumber;
+                scoutingArr[2] = teamNameET.getText().toString();
+                Intent intent = new Intent(PitFormActivity.this, PitMainActivity.class);
+                intent.putExtra("scoutingArr", scoutingArr);
+                startActivity(intent);
             }
-            scoutingArr[1] = teamNumber;
-            scoutingArr[2] = teamNameET.getText().toString();
-            Intent intent = new Intent(PitFormActivity.this, PitMainActivity.class);
-            intent.putExtra("scoutingArr", scoutingArr);
-            startActivity(intent);
 
         }
     }

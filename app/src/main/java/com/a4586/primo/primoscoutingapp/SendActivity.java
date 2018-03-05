@@ -113,7 +113,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     game.put("did_crash",scoutingArr[17]);
                     game.put("comments",scoutingArr[18]);
 
-                    database.collection("games").document(""+counter).set(game);
+                    database.collection("games").document(scoutingArr[1]+counter).set(game);
                     Log.v("TAG", "succes");
                     Toast.makeText(SendActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SendActivity.this, GameActivity.class);

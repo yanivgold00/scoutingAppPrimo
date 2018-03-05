@@ -135,7 +135,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
                     team.put("strategy", scoutingArr[15]);
                     team.put("problems", scoutingArr[16]);
 
-                    database.collection("teams").document(""+counter).set(team);
+                    database.collection("teams").document(scoutingArr[1]+counter).set(team);
                 }
             }
         });

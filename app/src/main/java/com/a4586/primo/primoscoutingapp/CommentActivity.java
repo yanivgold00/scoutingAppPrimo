@@ -73,10 +73,10 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
                     Map<String, Object> comment = new HashMap<>();
                     comment.put("name",getIntent().getStringExtra("name"));
-                    comment.put("team",teamET.getText().toString());
+                    comment.put("team",teamNumber);
                     comment.put("comment",commentET.getText().toString());
 
-                    database.collection("comments").document(""+counter).set(comment);
+                    database.collection("comments").document(teamNumber+counter).set(comment);
                     Log.v("TAG", "succes");
                     Toast.makeText(CommentActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
                     teamET.setText("");

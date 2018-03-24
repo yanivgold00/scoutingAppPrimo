@@ -1,11 +1,19 @@
 package com.a4586.primo.primoscoutingapp;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +42,20 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 
 public class SendActivity extends AppCompatActivity implements View.OnClickListener {
+    Context context;
+    Intent musicService;
+    private boolean mIsBound = false;
+    private MusicThread mServ;
+    Menu mainMenu = null;
+    private ServiceConnection Scon  =new ServiceConnection(){
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            mServ = ((MusicThread.ServiceBinder)binder).getService();
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            mServ = null;
+        }
+    };
     ToggleButton roleBtn;
     Switch didCrashSwitch;
     EditText commentsET;
@@ -49,6 +71,13 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_send);
+        context = this; // This screen
+        //Music handle
+        musicService= new Intent();
+        mServ = new MusicThread();
+        doBindService();
+        musicService.setClass(this,MusicThread.class);
+        startService(musicService);
         scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
         roleBtn = findViewById(R.id.offenseDefenseBtn);
         roleBtn.setTextOff("התקפה");
@@ -128,52 +157,67 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void SendForm() {
-        try {
-
-
-            String formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSf8hbbZX6_szgBuMoitXPHltq-2LRedoMYezOuPX4_vLNvSYg/formResponse";
-
-            URL url = new URL(formUrl);
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            http.connect();
-            http.getErrorStream();
-
-            Log.i("TAG", "a");
-            Post post = Http.post(formUrl)
-                    .param("entry.121731091", "microgali0")//sends password
-                    .param("entry.1597244100", scoutingArr[0])// sends name
-                    .param("entry.265635630", scoutingArr[1])// sends game number
-                    .param("entry.363359792", scoutingArr[2])// sends team number
-                    .param("entry.16142172", scoutingArr[3])// sends team starting position
-                    .param("entry.1600769749", scoutingArr[4])// sends if crossed auto line
-                    .param("entry.1977761629", scoutingArr[5])// sends amount put in switch
-                    .param("entry.1219347675", scoutingArr[6])// sends amount put in scale
-                    .param("entry.178698834", scoutingArr[7])// sends how much got from floor
-                    .param("entry.1669736291", scoutingArr[8])// sends how much got from feeder
-                    .param("entry.1231018242", scoutingArr[9])// sends how much put in switch
-                    .param("entry.977065219", scoutingArr[10])// sends how much put in scale
-                    .param("entry.1928014287", scoutingArr[11])// sends how much put in exchange
-                    .param("entry.982237502", scoutingArr[12])// sends if got to platform
-                    .param("entry.982237502", scoutingArr[13])// sends if climbed
-                    .param("entry.642395940", scoutingArr[14]);// sends if used platform of robot
-//                    .param("", scoutingArr[15])// sends if climbed
-//                    .param("", scoutingArr[16])// sends if climbed
-//                    .param("", scoutingArr[17])// sends if climbed
-//                    .param("", scoutingArr[18]);// sends if climbed
-            Log.i("TAG", "b");
-
-            Log.i("TAG", "c");
-            if (post.text() != null)
-                Toast.makeText(SendActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(SendActivity.this, GameActivity.class);
-            intent.putExtra("scoutingArr", scoutingArr);
-            startActivity(intent);
-        } catch (Exception e) {
-            Log.i("TAG", "error => " + e.toString());
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-            //nextScreenBtn.setClickable(true);
+    //Action bar handle
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.bulletmenu, menu);
+        mainMenu=menu;
+        return true;
+    }
+    //Menu press should open 3 dot menu
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode== KeyEvent.KEYCODE_MENU) {
+            mainMenu.performIdentifierAction(R.id.call, 0);
+            return true;
         }
+        return super.onKeyDown(keyCode, event);
+    }
+    //Click listener
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId()){
+            case R.id.call:
+                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                startActivity(call);
+                break;
+            case R.id.exit:
+                //Close the app
+                finish();
+                break;
+            case R.id.toggleMusic:
+                mServ.toogleMusic();
+        }
+        return true;
+    }
+    //Music bind and Unbind
+    private void doBindService(){
+        bindService(new Intent(context,MusicThread.class),
+                Scon, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+
+    private void doUnbindService()
+    {
+        if(mIsBound)
+        {
+            unbindService(Scon);
+            mIsBound = false;
+        }
+    }
+    @Override
+    public void onBackPressed(){
+    }
+    @Override
+    public void onUserLeaveHint() {
+        mServ.stopMusic();
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        doUnbindService();
     }
 
 

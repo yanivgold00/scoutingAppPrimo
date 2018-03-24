@@ -1,11 +1,19 @@
 package com.a4586.primo.primoscoutingapp;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -39,12 +47,34 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
 
     private String[] scoutingArr;
 
+    Context context;
+    Intent musicService;
+    private boolean mIsBound = false;
+    private MusicThread mServ;
+    Menu mainMenu = null;
+    private ServiceConnection Scon  =new ServiceConnection(){
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            mServ = ((MusicThread.ServiceBinder)binder).getService();
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            mServ = null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_pit2_main);
+        context = this; // This screen
+        //Music handle
+        musicService= new Intent();
+        mServ = new MusicThread();
+        doBindService();
+        musicService.setClass(this,MusicThread.class);
+        startService(musicService);
         scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
         drivingSystemET = (EditText) findViewById(R.id.drivingSystemET);
         wheelTypeET = (EditText) findViewById(R.id.wheelTypeET);
@@ -139,46 +169,66 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void SendForm() {
-        try {
-
-
-            String formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScrDeMHTLM0-kliGBVETaw2xaTiEajX7SPAVX_hpkf-9F0O4g/formResponse";
-
-
-            Log.i("Pit2MainActivity", "a");
-            Post post = Http.post(formUrl)
-                    .param("entry.152796453", scoutingArr[0])// sends name
-                    .param("entry.1816721099", scoutingArr[1])// sends team number
-                    .param("entry.107010567", scoutingArr[2])// sends team name
-                    .param("entry.896162751", scoutingArr[3])// sends the team role
-                    .param("entry.1032822360", scoutingArr[4])// sends the role comment
-                    .param("entry.1862553258", scoutingArr[5])// sends if does dynamic gear
-                    .param("entry.88312064", scoutingArr[6])// sends if does static gear
-                    .param("entry.1334275440", scoutingArr[7])// sends if passed auto line
-                    .param("entry.1589277901", scoutingArr[8])// sends if shoots
-                    .param("entry.303197516", scoutingArr[9])// sends if auto shoots
-                    .param("entry.987288446", scoutingArr[10])// sends if puts auto gear
-                    .param("entry.1695539192", scoutingArr[11])// sends where puts auto gear
-                    .param("entry.1387442404", scoutingArr[12])// sends if goes to control square in auto
-                    .param("entry.82727232", scoutingArr[13])// sends if goes to control square at end game
-                    .param("entry.962080235", scoutingArr[14])// sends the driving system
-                    .param("entry.556400298", scoutingArr[15])// sends the wheel type
-                    .param("entry.1173387920", scoutingArr[16])// sends if does vision processing
-                    .param("entry.1906800055", scoutingArr[17])// sends general strategy
-                    .param("entry.2014479588", scoutingArr[18]);// sends potential problems
-            Log.i("Pit2MainActivity", "b");
-
-            Log.i("Pit2MainActivity", "c");
-            if (post.text() != null)
-                Toast.makeText(Pit2MainActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Pit2MainActivity.this, PitFormActivity.class);
-            intent.putExtra("scoutingArr", scoutingArr);
-            startActivity(intent);
-        } catch (Exception e) {
-            Log.i("Pit2MainActivity", e.getStackTrace().toString());
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-            sendBtn.setClickable(true);
+    //Action bar handle
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.bulletmenu, menu);
+        mainMenu=menu;
+        return true;
+    }
+    //Menu press should open 3 dot menu
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode== KeyEvent.KEYCODE_MENU) {
+            mainMenu.performIdentifierAction(R.id.call, 0);
+            return true;
         }
+        return super.onKeyDown(keyCode, event);
+    }
+    //Click listener
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId()){
+            case R.id.call:
+                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                startActivity(call);
+                break;
+            case R.id.exit:
+                //Close the app
+                finish();
+                break;
+            case R.id.toggleMusic:
+                mServ.toogleMusic();
+        }
+        return true;
+    }
+    //Music bind and Unbind
+    private void doBindService(){
+        bindService(new Intent(context,MusicThread.class),
+                Scon, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+
+    private void doUnbindService()
+    {
+        if(mIsBound)
+        {
+            unbindService(Scon);
+            mIsBound = false;
+        }
+    }
+    @Override
+    public void onBackPressed(){
+    }
+    @Override
+    public void onUserLeaveHint() {
+        mServ.stopMusic();
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        doUnbindService();
     }
 }

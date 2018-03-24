@@ -354,8 +354,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
 
     private void teamGames() {
-        viewList = teams.get(teamPos).getGames();
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,viewList);
+        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,teams.get(teamPos).getGames());
         resultListView.setAdapter(adapter);
     }
 

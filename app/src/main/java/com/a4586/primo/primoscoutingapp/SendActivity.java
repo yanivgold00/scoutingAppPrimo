@@ -82,11 +82,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 if (task.isSuccessful()) {
-                    int counter = 0;
-//                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
-                    for (DocumentSnapshot doc:task.getResult().getDocuments()) {
-                        counter++;
-                    }
+
                     Map<String, Object> game = new HashMap<>();
                     // general
                     game.put("scouter",scoutingArr[0]);
@@ -113,7 +109,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     game.put("did_crash",scoutingArr[17]);
                     game.put("comments",scoutingArr[18]);
 
-                    database.collection("games").document(scoutingArr[1]+counter).set(game);
+                    database.collection("games").document(scoutingArr[1]+scoutingArr[2]).set(game);
                     Log.v("TAG", "succes");
                     Toast.makeText(SendActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SendActivity.this, GameActivity.class);

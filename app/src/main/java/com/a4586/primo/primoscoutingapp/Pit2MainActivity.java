@@ -111,11 +111,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 if (task.isSuccessful()) {
-                    int counter = 1;
-//                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
-                    for (DocumentSnapshot doc:task.getResult().getDocuments()) {
-                        counter++;
-                    }
+
                     Map<String, Object> team = new HashMap<>();
                     team.put("scouter",scoutingArr[0]);
                     team.put("number", scoutingArr[1]);
@@ -135,7 +131,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
                     team.put("strategy", scoutingArr[15]);
                     team.put("problems", scoutingArr[16]);
 
-                    database.collection("teams").document(scoutingArr[1]+counter).set(team);
+                    database.collection("teams").document(scoutingArr[1]).set(team);
                 }
             }
         });

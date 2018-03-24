@@ -1,6 +1,7 @@
 package com.a4586.primo.primoscoutingapp;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,8 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     private Button gameCommentBtn;
     private boolean isInfo;
     String level;
+    Intent intent;
+    static BatteryService batteryService = new BatteryService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         pitBtn = (Button) findViewById(R.id.pitBtn);
         infoBtn = (Button) findViewById(R.id.infoBtn);
         gameCommentBtn = findViewById(R.id.gameCommentBtn);
-
+        intent = this.getApplicationContext().registerReceiver(batteryService,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         isInfo = false;
         level = getIntent().getStringExtra("level");
 

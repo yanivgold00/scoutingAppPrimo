@@ -72,5 +72,17 @@
                 android:id="@+id/loginBtn"
                 android:layout_marginLeft="125dp" />
         </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:text="Change Music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/changeMusicBtn"
+                android:layout_marginLeft="125dp" />
+        </TableRow>
     </TableLayout>
 </LinearLayout>

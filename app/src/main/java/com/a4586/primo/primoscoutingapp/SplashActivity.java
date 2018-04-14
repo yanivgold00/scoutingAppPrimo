@@ -104,10 +104,6 @@ public class SplashActivity extends AppCompatActivity {
     public void onBackPressed(){
     }
     @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
-    }
-    @Override
     public void onDestroy(){
         super.onDestroy();
         doUnbindService();

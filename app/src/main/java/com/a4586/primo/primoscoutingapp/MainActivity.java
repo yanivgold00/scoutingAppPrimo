@@ -7,18 +7,28 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.StrictMode;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
     Context context;
@@ -38,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText pw;
     private EditText name;
     private Button loginBtn;
+    private Button changeMusicBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +58,97 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
+
         doBindService();
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
         pw = (EditText) findViewById(R.id.pw);
         name = (EditText) findViewById(R.id.Name);
         loginBtn = (Button) findViewById(R.id.loginBtn);
+        changeMusicBtn = findViewById(R.id.changeMusicBtn);
 
-
+        changeMusicBtn.setOnClickListener(this);
         loginBtn.setOnClickListener(this);
 
+    }
+
+    /**
+     * Change music.
+     */
+    public void changeMusic() {
+        ArrayList<File> songList = getPlayList(Environment.DIRECTORY_MUSIC); //Hold all the song on the phone
+        ArrayList<String> songName = new ArrayList<>(); // List of song names
+        ArrayList<String> songPath = new ArrayList<>(); // List of song paths
+        final ArrayList<String> copySongPath = new ArrayList<>(); //Backup of the songPath as a final
+        //If there are songs
+        if (songList != null) {
+            //Split song list to song name and path lists
+            for (int i = 0; i < songList.size(); i++) {
+                String fileName = songList.get(i).getName();
+                String filePath = songList.get(i).getAbsolutePath();
+                songName.add(fileName);
+                songPath.add(filePath);
+            }
+        }
+        copySongPath.addAll(songPath); // adding all the paths to the backup
+        //Creating the dialog that display all the songs
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ListView lv = new ListView(this); //List view to hold the songs
+        LinearLayout main = new LinearLayout(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        main.setLayoutParams(lp);
+        //Inserting the list to the thread
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, songName);
+        lv.setAdapter(arrayAdapter);
+        main.addView(lv);
+        builder.setView(main);
+
+        final AlertDialog alert = builder.create();
+        alert.show();
+        //Click listener for all the songs in the list view
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> list, View v, int pos, long id) {
+                //Changing which song is playing
+                stopService(musicService);
+                mServ.changeSong(Uri.parse(copySongPath.get(pos)).toString());
+                musicService.setClass(context, MusicThread.class);
+                startService(musicService);
+                alert.dismiss();
+            }
+
+        });
+    }
+
+    /**
+     * Get the list of the all the music files
+     *
+     * @param rootPath the root path
+     * @return the play list
+     */
+
+    ArrayList<File> getPlayList(String rootPath) {
+        Log.d("TAG", rootPath);
+        ArrayList<File> fileList = new ArrayList<>(); // Holds the list of the songs
+        File rootFolder = new File(rootPath); //The main folder
+        File[] files = rootFolder.listFiles(); //All the files in the folder
+        //If song add to the list if a directory go in side and add all the song there
+        Log.d("TAG", ("" + rootFolder.isDirectory()));
+        if (rootFolder.isDirectory()) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    if (getPlayList(file.getAbsolutePath()) != null) {
+                        fileList.addAll(getPlayList(file.getAbsolutePath()));
+                    } else {
+                        break;
+                    }
+                    //Add only mp3 files
+                } else if (file.getName().endsWith(".mp3")) {
+                    fileList.add(file);
+                }
+            }
+            Log.d("TAG", "finished");
+        }
+        return fileList;
     }
 
     //Action bar handle
@@ -75,10 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-    @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
     }
     //Click listener
     @Override
@@ -177,6 +265,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else {
                 Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
             }
+        } else if (this.changeMusicBtn.getId() == v.getId()) {
+            changeMusic();
         }
     }
 }

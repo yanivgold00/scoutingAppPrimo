@@ -75,6 +75,7 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
                 Intent intent = new Intent(PitFormActivity.this, PitMainActivity.class);
                 intent.putExtra("scoutingArr", scoutingArr);
                 startActivity(intent);
+                finish();
             }
 
         }
@@ -131,11 +132,19 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         }
     }
     @Override
-    public void onBackPressed(){
+    public void onPause() {
+        super.onPause();
+        if (mIsBound) {
+            mServ.stopMusic();
+        }
     }
+
     @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
+    public void onResume() {
+        super.onResume();
+        if (mIsBound) {
+            mServ.startMusic();
+        }
     }
     @Override
     public void onDestroy(){

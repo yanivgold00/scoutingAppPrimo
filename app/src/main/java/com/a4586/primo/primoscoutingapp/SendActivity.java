@@ -208,16 +208,25 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     @Override
-    public void onBackPressed(){
-    }
-    @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
-    }
-    @Override
     public void onDestroy(){
         super.onDestroy();
         doUnbindService();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mIsBound) {
+            mServ.stopMusic();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mIsBound) {
+            mServ.startMusic();
+        }
     }
 
 

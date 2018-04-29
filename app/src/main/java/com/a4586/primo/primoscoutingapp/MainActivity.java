@@ -59,9 +59,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         musicService= new Intent();
         mServ = new MusicThread();
 
-        doBindService();
+
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
+        Log.d("TAG", "preBind");
+        doBindService();
+
         pw = (EditText) findViewById(R.id.pw);
         name = (EditText) findViewById(R.id.Name);
         loginBtn = (Button) findViewById(R.id.loginBtn);
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @return the play list
      */
 
-    ArrayList<File> getPlayList(String rootPath) {
+    private ArrayList<File> getPlayList(String rootPath) {
         Log.d("TAG", rootPath);
         ArrayList<File> fileList = new ArrayList<>(); // Holds the list of the songs
         File rootFolder = new File(rootPath); //The main folder
@@ -193,6 +196,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bindService(new Intent(context,MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
+        mServ.startMusic();
+        Log.d("TAG", "Started Music");
     }
 
     private void doUnbindService()
@@ -201,18 +206,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             unbindService(Scon);
             mIsBound = false;
+            mServ.stopMusic();
         }
     }
+
     @Override
     public void onDestroy(){
         super.onDestroy();
         doUnbindService();
     }
 
+
     @Override
     public void onClick(View v) {
         if (v.getId() == loginBtn.getId()) {
-//            if (this.pw.getText().toString().equals("microgali0") || this.pw.getText().toString().equals("amitlaba0")||this.pw.getText().toString().equals("strat")) {
             //strategy team!!
             if (this.pw.getText().toString().equals("Strat4586")) {
                 Toast.makeText(MainActivity.this, "You are logged in as strat", Toast.LENGTH_SHORT).show();
@@ -220,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
+                finish();
 
             }
             //admin for PRIMO!!
@@ -229,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
+                finish();
             }
             //admin for Trigon
             else if(this.pw.getText().toString().equals("Admin"))
@@ -238,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
+                finish();
 
             }
             //scouter Trigon
@@ -248,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
+                finish();
 
             }
             //scouter for PRIMO!!
@@ -258,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
                 startActivity(intent);
+                finish();
 
             }
 

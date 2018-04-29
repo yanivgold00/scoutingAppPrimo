@@ -40,11 +40,14 @@ public class SplashActivity extends AppCompatActivity {
         doBindService();
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent homeIntent;
                 homeIntent = new Intent(SplashActivity.this, MainActivity.class);
+                homeIntent.putExtra("isBound", mIsBound);
                 startActivity(homeIntent);
                 finish();
             }
@@ -90,6 +93,7 @@ public class SplashActivity extends AppCompatActivity {
         bindService(new Intent(context,MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
+        mServ.startMusic();
     }
 
     private void doUnbindService()
@@ -98,11 +102,10 @@ public class SplashActivity extends AppCompatActivity {
         {
             unbindService(Scon);
             mIsBound = false;
+            mServ.stopMusic();
         }
     }
-    @Override
-    public void onBackPressed(){
-    }
+
     @Override
     public void onDestroy(){
         super.onDestroy();

@@ -116,11 +116,19 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         }
     }
     @Override
-    public void onBackPressed(){
+    public void onPause() {
+        super.onPause();
+        if (mIsBound) {
+            mServ.stopMusic();
+        }
     }
+
     @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
+    public void onResume() {
+        super.onResume();
+        if (mIsBound) {
+            mServ.startMusic();
+        }
     }
     @Override
     public void onDestroy(){

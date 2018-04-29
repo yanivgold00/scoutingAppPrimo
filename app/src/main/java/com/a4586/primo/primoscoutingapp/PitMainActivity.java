@@ -181,7 +181,19 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         }
     }
     @Override
-    public void onBackPressed(){
+    public void onPause() {
+        super.onPause();
+        if (mIsBound) {
+            mServ.stopMusic();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mIsBound) {
+            mServ.startMusic();
+        }
     }
     @Override
     public void onUserLeaveHint() {

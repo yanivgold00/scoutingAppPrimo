@@ -103,6 +103,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(GameActivity.this, AutonomousActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);
             startActivity(intent);
+            finish();
         }
 
     }
@@ -158,11 +159,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     @Override
-    public void onBackPressed(){
+    public void onPause() {
+        super.onPause();
+        if (mIsBound) {
+            mServ.stopMusic();
+        }
     }
+
     @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
+    public void onResume() {
+        super.onResume();
+        if (mIsBound) {
+            mServ.startMusic();
+        }
     }
     @Override
     public void onDestroy(){

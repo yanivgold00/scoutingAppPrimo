@@ -160,6 +160,22 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (mIsBound) {
+            mServ.stopMusic();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mIsBound) {
+            mServ.startMusic();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");
         Intent setIntent = new Intent(this,MainActivity.class);
@@ -167,10 +183,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         finish();
     }
 
-    @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
-    }
+
 
 
     @Override
@@ -184,6 +197,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 scoutingArr[0] = getIntent().getStringExtra("name");
                 intent.putExtra("scoutingArr", scoutingArr);
                 startActivity(intent);
+                finish();
             }
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
@@ -191,6 +205,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
+                finish();
             }
         }
 
@@ -202,6 +217,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 scoutingArr[0] = getIntent().getStringExtra("name");
                 intent.putExtra("scoutingArr", scoutingArr);
                 startActivity(intent);
+                finish();
             }
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
@@ -209,6 +225,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
+                finish();
             }
         }
 
@@ -221,6 +238,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                     intent.putExtra("level",level);
                     intent.putExtra("name",getIntent().getStringExtra("name"));
                     startActivity(intent);
+                    finish();
                 }
                 else {
                     isInfo = true;
@@ -235,6 +253,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
                 startActivity(intent);
+                finish();
             }
         }
 
@@ -243,6 +262,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             intent.putExtra("level",level);
             intent.putExtra("name",getIntent().getStringExtra("name"));
             startActivity(intent);
+            finish();
         }
 
     }

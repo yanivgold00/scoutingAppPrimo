@@ -143,13 +143,25 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     public void onBackPressed(){
     }
     @Override
-    public void onUserLeaveHint() {
-        mServ.stopMusic();
-    }
-    @Override
     public void onDestroy(){
         super.onDestroy();
         doUnbindService();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mIsBound) {
+            mServ.stopMusic();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mIsBound) {
+            mServ.startMusic();
+        }
     }
 
     private void gameTeamNonNull(){

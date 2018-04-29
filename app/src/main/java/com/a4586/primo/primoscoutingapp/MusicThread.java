@@ -104,6 +104,11 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
         length=mPlayer.getCurrentPosition();
     }
 
+    public void startMusic() {
+        mPlayer.seekTo(length);
+        mPlayer.start();
+    }
+
     /**
      * Change the song based on a given string.
      *
@@ -144,6 +149,8 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
             }
         }
     }
+
+
     //Display error when MediaPlayer does not work
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Toast.makeText( this, "music player failed", Toast.LENGTH_SHORT).show();

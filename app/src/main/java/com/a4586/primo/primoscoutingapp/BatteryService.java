@@ -20,12 +20,12 @@ public class BatteryService extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(!ran){
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0); // Getting the level
-            if(level < 50) {
+            if(level < 20) {
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(context)
                                 .setSmallIcon(R.mipmap.app_logo)
                                 .setContentTitle("Battery Low")
-                                .setContentText("Battery is under 50% D:");
+                                .setContentText("Battery is under 20% load before your next game");
                 int NOTIFICATION_ID = 12345;
                 Intent targetIntent = new Intent(context, ScoutingChooseActivity.class);
                 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);

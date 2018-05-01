@@ -18,23 +18,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.javalite.http.Http;
-import org.javalite.http.Post;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Pit2MainActivity extends AppCompatActivity implements View.OnClickListener {
-    FirebaseFirestore database = FirebaseFirestore.getInstance();
+    FirebaseFirestore database = FirebaseFirestore.getInstance(); // DataBase connection
+
+    // UI Handle
     private CheckBox rightAutoSwitchCB, midAutoSwitchCB, leftAutoSwitchCB;
     private CheckBox rightAutoScaleCB, midAutoScaleCB, leftAutoScaleCB;
     private EditText drivingSystemET;
@@ -45,13 +42,16 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     private Button sendBtn;
 
 
-    private String[] scoutingArr;
+    private String[] scoutingArr; // Array of form answers
 
-    Context context;
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -66,17 +66,20 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_pit2_main);
+
         context = this; // This screen
+
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
         doBindService();
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+
+        scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Getting the answers array
+
+        // Connection to UI
         drivingSystemET = (EditText) findViewById(R.id.drivingSystemET);
         wheelTypeET = (EditText) findViewById(R.id.wheelTypeET);
         stratET = (EditText) findViewById(R.id.stratET);
@@ -84,16 +87,14 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         rightAutoScaleCB = findViewById(R.id.rightAutoScale);
         midAutoScaleCB = findViewById(R.id.midAutoScale);
         leftAutoScaleCB = findViewById(R.id.leftAutoScale);
-
         rightAutoSwitchCB = findViewById(R.id.rightAutoSwitch);
         midAutoSwitchCB =findViewById(R.id.midAutoSwitch);
         leftAutoSwitchCB = findViewById(R.id.leftAutoSwitch);
-
         sendBtn = (Button) findViewById(R.id.sendBtn);
+
+        // Set click listener
         sendBtn.setClickable(true);
         sendBtn.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -138,6 +139,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    // Upload form to FireBase
     private void sendForm() {
         database.collection("teams").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -172,7 +174,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    //Action bar handle
+    // Creates option menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -180,7 +182,8 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -189,7 +192,8 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -203,11 +207,12 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }
-    //Music bind and Unbind
+
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -221,6 +226,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -234,6 +240,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -241,6 +248,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");

@@ -21,25 +21,13 @@ import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.javalite.http.Http;
-import org.javalite.http.Post;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-
-import static android.content.ContentValues.TAG;
 
 public class SendActivity extends AppCompatActivity implements View.OnClickListener {
     Context context;
@@ -192,7 +180,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }

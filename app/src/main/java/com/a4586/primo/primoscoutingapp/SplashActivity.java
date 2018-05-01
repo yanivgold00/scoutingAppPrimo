@@ -22,18 +22,20 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent homeIntent;
-                homeIntent = new Intent(SplashActivity.this, MainActivity.class);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(homeIntent);
-            }
-        }, 1000);
+        Intent homeIntent;
+        homeIntent = new Intent(SplashActivity.this, MainActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeIntent);
+
     }
-    //Action bar handle
+
+    //Creates Option Menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -41,6 +43,7 @@ public class SplashActivity extends AppCompatActivity {
         mainMenu=menu;
         return true;
     }
+
     //Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -50,7 +53,8 @@ public class SplashActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    //Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);

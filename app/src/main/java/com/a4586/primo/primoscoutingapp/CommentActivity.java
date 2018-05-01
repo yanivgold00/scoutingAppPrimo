@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -157,7 +156,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }

@@ -15,32 +15,20 @@ import android.widget.Toast;
 
 import java.io.File;
 
-/**
- * The type Music thread.
- */
 //Class that control the music
 public class MusicThread extends Service implements MediaPlayer.OnErrorListener {
     private final IBinder mBinder = new ServiceBinder(); // Used to binned the service to the activity
-    /**
-     * Main MediaPlayer.
-     */
+
+    //Main MediaPlayer.
     MediaPlayer mPlayer = new MediaPlayer();
     private int length = 0; // Where the song was paused to resume it later
 
-    /**
-     * Instantiates a new Music thread.
-     */
+    // Instantiates a new Music thread.
     public MusicThread(){}
 
-    /**
-     * Enable to bind the service the activity
-     */
+    // Enable to bind the service the activity
     public class ServiceBinder extends Binder {
-        /**
-         * Gets service.
-         *
-         * @return the service
-         */
+        // Gets service.
         MusicThread getService() {
             return MusicThread.this;
         }
@@ -48,6 +36,7 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
 
     @Override
     public IBinder onBind(Intent arg0){return mBinder;}
+
     //Creating the basic player
     @Override
     public void onCreate (){
@@ -70,6 +59,7 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
         });
         mPlayer.start();
     }
+
     //Starting the player
     @Override
     public int onStartCommand (Intent intent, int flags, int startId)
@@ -83,12 +73,8 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
         return START_STICKY;
     }
 
-    /**
-     * Toggle Pause and UnPause the music.
-     */
-
-    public void toogleMusic()
-    {
+    // Toggle Pause and UnPause the music.
+    public void toggleMusic() {
         if(mPlayer.isPlaying())
         {
             mPlayer.pause();
@@ -99,22 +85,19 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
         }
     }
 
+    // Pauses the music
     public void stopMusic(){
         mPlayer.pause();
         length=mPlayer.getCurrentPosition();
     }
 
+    // UnPauses the music
     public void startMusic() {
         mPlayer.seekTo(length);
         mPlayer.start();
     }
 
-    /**
-     * Change the song based on a given string.
-     *
-     * @param src the src
-     */
-
+    // Change the song based on a given source.
     public void changeSong(String src){
         onDestroy();
         File song= new File(src);
@@ -134,7 +117,8 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
             }
         });
     }
-    //Kill the player
+
+    // Kill the player
     @Override
     public void onDestroy ()
     {
@@ -151,7 +135,7 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
     }
 
 
-    //Display error when MediaPlayer does not work
+    // Display error when MediaPlayer does not work
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Toast.makeText( this, "music player failed", Toast.LENGTH_SHORT).show();
         if(mPlayer != null)

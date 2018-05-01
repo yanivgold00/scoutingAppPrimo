@@ -25,6 +25,8 @@ import java.util.ArrayList;
 
 
 public class PitMainActivity extends AppCompatActivity implements Serializable, View.OnClickListener {
+
+    // UI
     private Spinner roleSpinner;
     private EditText roleET;
     private CheckBox vaultCB, switchCB, scaleCB;
@@ -35,17 +37,22 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
     private Button contBtn;
     private EditText massET;
 
+    // Spinner's adapter and array list
     private ArrayAdapter adapter;
     private ArrayList<String> roleList;
-    private String[] scoutingArr;
 
-    Context context;
+    private String[] scoutingArr; // Form answers array
+
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
-    private ServiceConnection Scon  =new ServiceConnection(){
+    private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
             mServ = ((MusicThread.ServiceBinder)binder).getService();
         }
@@ -61,6 +68,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         setContentView(R.layout.activity_pit_main);
 
         context = this; // This screen
+
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
@@ -68,35 +76,30 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
 
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+        scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Receive prev answers in form
 
+        // Connection to UI
+        roleET = findViewById(R.id.commentRoleET);
+        vaultCB = findViewById(R.id.vaultCB);
+        switchCB = findViewById(R.id.switchCB);
+        scaleCB = findViewById(R.id.scaleCB);
+        roleSpinner = findViewById(R.id.roleSpinner);
+        cubeSystemET = findViewById(R.id.cubeSystemET);
+        climbsSwitch = findViewById(R.id.climbsSwitch);
+        helpsClimbET = findViewById(R.id.helpsClimbET);
+        baseLineSwitch = findViewById(R.id.baseLineSwitch);
+        contBtn = findViewById(R.id.contBtn);
+        massET = findViewById(R.id.robotMassED);
+
+        // Spinner list and connection
         roleList = new ArrayList<>();
         roleList.add("התקפה");
         roleList.add("הגנה");
         roleList.add("שניהם");
         adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, roleList);
-        roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
         roleSpinner.setAdapter(adapter);
 
-        roleET = (EditText) findViewById(R.id.commentRoleET);
-
-        vaultCB = findViewById(R.id.vaultCB);
-        switchCB = findViewById(R.id.switchCB);
-        scaleCB = findViewById(R.id.scaleCB);
-
-        cubeSystemET = findViewById(R.id.cubeSystemET);
-
-        climbsSwitch = findViewById(R.id.climbsSwitch);
-
-        helpsClimbET = findViewById(R.id.helpsClimbET);
-
-        baseLineSwitch = (Switch) findViewById(R.id.baseLineSwitch);
-
-        contBtn = (Button) findViewById(R.id.contBtn);
-
-        contBtn.setOnClickListener(this);
-
-        massET = (EditText) findViewById(R.id.robotMassED);
+        contBtn.setOnClickListener(this); // Set click listener
     }
 
     @Override
@@ -134,7 +137,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         }
     }
 
-    //Action bar handle
+    // Creates options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -142,7 +145,8 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -151,7 +155,8 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -165,11 +170,12 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }
-    //Music bind and Unbind
+
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -183,6 +189,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -196,6 +203,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -203,6 +211,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         doBindService();
     }
 
+    // Back press Handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");

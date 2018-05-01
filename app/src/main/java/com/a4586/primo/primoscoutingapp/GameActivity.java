@@ -144,7 +144,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }

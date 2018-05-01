@@ -19,16 +19,22 @@ import android.widget.EditText;
 import java.io.Serializable;
 
 public class PitFormActivity extends AppCompatActivity implements Serializable, View.OnClickListener {
+
+    // UI
     private EditText teamNumET;
     private EditText teamNameET;
     private Button contBtn;
-    private String[] scoutingArr;
 
-    Context context;
+    private String[] scoutingArr; // Form answers array
+
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -46,6 +52,7 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         setContentView(R.layout.activity_pit_form);
 
         context = this; // This screen
+
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
@@ -53,15 +60,14 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
 
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+        scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Receive array in correct size with scouter name
 
+        // UI connection
         teamNumET = (EditText) findViewById(R.id.teamNum);
-
         teamNameET = (EditText) findViewById(R.id.teamName);
-
         contBtn = (Button) findViewById(R.id.contBtn);
 
-        contBtn.setOnClickListener(this);
+        contBtn.setOnClickListener(this); // Set click listener
     }
 
     @Override
@@ -85,7 +91,7 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         }
     }
 
-    //Action bar handle
+    // Creates option menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -93,7 +99,8 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -102,7 +109,8 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -116,11 +124,12 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }
-    //Music bind and Unbind
+
+    //Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -134,6 +143,7 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -154,6 +164,7 @@ public class PitFormActivity extends AppCompatActivity implements Serializable, 
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");

@@ -1,7 +1,6 @@
 
 package com.a4586.primo.primoscoutingapp;
 
-import android.*;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
-import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -205,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.exit:
                 finish();
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
                 break;
         }
         return true;

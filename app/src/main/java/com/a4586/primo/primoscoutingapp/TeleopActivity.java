@@ -21,11 +21,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class TeleopActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
-    Context context;
+
+    Menu mainMenu = null; // Menu
+
+    Context context; // Context
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -36,17 +40,20 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
             mServ = null;
         }
     };
+
+    // UI handle
     private Spinner cycleTookFromSpinner;
     private Spinner cyclePutInSpinner;
     private Button nextCycleBtn;
     private Button endGameBtn;
-    private String[] scoutingArr;
-    private ArrayList<String> tookFrom;
-    private ArrayList<String> putIn;
 
-    private ArrayAdapter adapter;
+    private String[] scoutingArr; // Array for the form information
 
-    private int tookFeeder, tookFloor, putScale, putSwitch, putVault;
+    private ArrayList<String> tookFrom; // Array list of the pick up options for the spinner
+    private ArrayList<String> putIn; // Array list of the target options for the spinner
+    private ArrayAdapter adapter; // Adapter for the spinners
+
+    private int tookFeeder, tookFloor, putScale, putSwitch, putVault; // Counters for spinner choices
 
 
     @Override
@@ -55,6 +62,7 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_teleop);
 
         context = this; // This screen
+
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
@@ -62,11 +70,13 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
 
+        // Connection to UI
         cyclePutInSpinner = findViewById(R.id.cyclePutInSpinner);
         cycleTookFromSpinner = findViewById(R.id.cycleTookFromSpinner);
         nextCycleBtn = findViewById(R.id.nextCycleBtn);
         endGameBtn = findViewById(R.id.endGameBtn);
 
+        // Reset spinners
         tookFrom = new ArrayList<>();
         tookFrom.add(" ");
         tookFrom.add("רצפה");
@@ -82,17 +92,19 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
         adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, putIn);
         cyclePutInSpinner.setAdapter(adapter);
 
+        // Reset counters
         tookFeeder = 0;
         tookFloor = 0;
         putScale = 0;
         putSwitch = 0;
         putVault = 0;
 
+        // Set click listeners
         endGameBtn.setOnClickListener(this);
         nextCycleBtn.setOnClickListener(this);
     }
 
-    //Action bar handle
+    // Options menu handle
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -100,7 +112,8 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -109,7 +122,8 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -123,11 +137,12 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }
-    //Music bind and Unbind
+
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -141,6 +156,7 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -161,6 +177,7 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");
@@ -174,7 +191,9 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+
         if (v.getId() == endGameBtn.getId()) {
+            // Updates counters and switches to next activity
             if (cycleTookFromSpinner.getSelectedItem().toString().equals("רצפה")) {
                 tookFloor++;
             } else if (cycleTookFromSpinner.getSelectedItem().toString().equals("פידר/אקסצ'יינג'")) {
@@ -202,9 +221,8 @@ public class TeleopActivity extends AppCompatActivity implements View.OnClickLis
             pauseMusic = false;
             startActivity(intent);
 
-        }
-
-        if (v.getId() == nextCycleBtn.getId()) {
+        } else if (v.getId() == nextCycleBtn.getId()) {
+            // Updates counters and resets spinners
             if (cycleTookFromSpinner.getSelectedItem().toString().equals("רצפה")) {
                 tookFloor++;
             } else if (cycleTookFromSpinner.getSelectedItem().toString().equals("פידר/אקסצ'יינג'")) {

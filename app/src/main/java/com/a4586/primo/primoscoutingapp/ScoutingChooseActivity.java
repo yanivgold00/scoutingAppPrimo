@@ -3,7 +3,6 @@ package com.a4586.primo.primoscoutingapp;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -135,7 +134,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
                 break;
         }
         return true;

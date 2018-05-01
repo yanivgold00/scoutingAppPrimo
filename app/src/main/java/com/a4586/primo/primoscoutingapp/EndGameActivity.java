@@ -118,7 +118,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }

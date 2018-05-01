@@ -19,7 +19,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.logging.Level;
 
 public class AutonomousActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
     private Button addSwitchBtn;
@@ -112,7 +111,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }

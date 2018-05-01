@@ -15,15 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class TeamScoutPickActivity extends AppCompatActivity implements View.OnClickListener {
+    // Menu
+    Menu mainMenu = null;
+
+    //Context
     Context context;
+
+    //Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -34,6 +38,8 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
             mServ = null;
         }
     };
+
+    //UI objects
     private EditText teamET;
     private Button contBtn;
 
@@ -41,20 +47,27 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_scout_pick);
+
         context = this; // This screen
+
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
         doBindService();
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
+
+        //UI handle
         teamET = findViewById(R.id.teamET);
         contBtn = findViewById(R.id.contBtn);
+
+        //Set click listener
         contBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
+        //Checks if user filled team/game number and if not checks if user searches for correct information type and has clearance for the information
         if (!(teamET.getText().toString().isEmpty()&&(getIntent().getStringExtra("level").equals("Admin")||!getIntent().getStringExtra("type").equals("game")))) {
             Intent intent = new Intent(this, ResultsActivity.class);
             intent.putExtras(getIntent());
@@ -68,7 +81,7 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    //Action bar handle
+    //Menu handle
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -76,6 +89,7 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         mainMenu=menu;
         return true;
     }
+
     //Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -85,7 +99,8 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    //Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -99,11 +114,12 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }
-    //Music bind and Unbind
+
+    //Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -117,6 +133,7 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    //Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -130,6 +147,7 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -137,6 +155,7 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         doBindService();
     }
 
+    //Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");

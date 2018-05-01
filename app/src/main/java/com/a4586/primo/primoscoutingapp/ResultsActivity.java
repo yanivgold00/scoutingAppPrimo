@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,8 +19,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,15 +27,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
-
 public class ResultsActivity extends AppCompatActivity implements ListView.OnItemClickListener,View.OnClickListener {
-    Context context;
+
+    FirebaseFirestore database = FirebaseFirestore.getInstance(); // Connection to FireBase
+
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
     boolean pauseMusic = true;
-    Menu mainMenu = null;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
             mServ = ((MusicThread.ServiceBinder)binder).getService();
@@ -49,49 +50,59 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         }
     };
 
+    // UI
     TextView titleTV;
     ListView resultListView;
-    ArrayList<String> viewList;
-    ArrayAdapter adapter;
-    ArrayList<Team> teams;
-    String viewLevel;
     Button backBtn;
 
-    ArrayList<GameComment> comments;
-    String team;
-    int teamPos;
-    String type;
-    FirebaseFirestore database = FirebaseFirestore.getInstance();
+
+    ArrayList<String> viewList; // The list shown in the list view
+    ArrayList<Team> teams; // Array list of all teams
+    ArrayAdapter adapter; // Adapter for the list view
+    String viewLevel; // The level of view in currently
+    ArrayList<GameComment> comments; // Array list of game comments
+    String team; // The team viewed
+    int teamPos; // Position in teams list
+    String type; // Type of info needed (Pit, Game or Comments)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+
         context = this; // This screen
+
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
         doBindService();
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
-        resultListView = findViewById(R.id.resultListView);
-        resultListView.setOnItemClickListener(this);
-        type = getIntent().getStringExtra("type");
-        viewLevel = type;
+
+        // Connection to UI
         titleTV = findViewById(R.id.resultTV);
-        titleTV.setText(type);
-        team = getIntent().getStringExtra("team");
+        resultListView = findViewById(R.id.resultListView);
         backBtn = findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(this);
+
+        type = getIntent().getStringExtra("type"); // Get type from prev activity
+        viewLevel = type; // View level is the most basic and is type
+        titleTV.setText(type); // Set screen title
+        team = getIntent().getStringExtra("team"); // Set team viewed
         comments = new ArrayList<>();
-        readData();
+
+        // Set click listeners
+        resultListView.setOnItemClickListener(this);
+        backBtn.setOnClickListener(this);
+
         if(team.equals("")) {
-            gameTeamNull();
+            gameTeamNull(); // Set screen in case of no team
         }
 
-
+        readData(); // Read Data from FireBase + Set screen for team
     }
-    //Action bar handle
+
+    // Creates options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -99,7 +110,8 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -108,7 +120,8 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -122,11 +135,12 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 finish();
                 break;
             case R.id.toggleMusic:
-                mServ.toogleMusic();
+                mServ.toggleMusic();
         }
         return true;
     }
-    //Music bind and Unbind
+
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -139,11 +153,14 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             mIsBound = false;
         }
     }
+
+    // Back press handle
     @Override
     public void onBackPressed(){
         Intent intent;
         switch (viewLevel) {
             case "game":
+                // Exits screen
                 intent = new Intent(this, ScoutingChooseActivity.class);
                 intent.putExtras(getIntent());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -151,6 +168,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 startActivity(intent);
                 break;
             case "noTeam":
+                // Exits screen
                 intent = new Intent(this, ScoutingChooseActivity.class);
                 intent.putExtras(getIntent());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -158,6 +176,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 startActivity(intent);
                 break;
             case "pit":
+                // Exits screen
                 intent = new Intent(this, ScoutingChooseActivity.class);
                 intent.putExtras(getIntent());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -165,6 +184,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 startActivity(intent);
                 break;
             case "comments":
+                // Exits screen
                 intent = new Intent(this, ScoutingChooseActivity.class);
                 intent.putExtras(getIntent());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -172,35 +192,39 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 startActivity(intent);
                 break;
             case "gameAvg":
-                gameTeamNull();
+                gameTeamNull(); // Set screen in case of no team
                 break;
             case "gamesAutoTeam":
-                gameTeamNonNull();
+                gameTeamNonNull(); // Set screen in case of team for game info
                 break;
             case "gamesRestTeam":
-                gameTeamNonNull();
+                gameTeamNonNull(); // Set screen in case of team for game info
                 break;
             case "gameAuto":
+                // Set screen for team games for auto screen
                 titleTV.setText(team + " אוטונומי ");
                 teamGames();
                 viewLevel = "gamesAutoTeam";
                 break;
             case "gameRest":
+                // Set screen for team games for rest of game screen
                 titleTV.setText(" שאר המשחק " + team);
                 teamGames();
                 viewLevel = "gamesRestTeam";
                 break;
             case "pitRobot":
-                pitMainTable();
+                pitMainTable(); // Sets screen for basic pit info
                 break;
             case "pitFunctinalities":
-                pitMainTable();
+                pitMainTable(); // Sets screen for basic pit info
                 break;
             case "pitAutonomus":
-                pitMainTable();
+                pitMainTable(); // Sets screen for basic pit info
                 break;
         }
     }
+
+    // Music handle with activity
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -214,6 +238,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -221,11 +246,12 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         doBindService();
     }
 
+    // Set screen in case of team for game info
     private void gameTeamNonNull(){
         viewLevel = type;
         if(!team.equals("")) {
             boolean hasTeam = false;
-            for (int i=0;i<teams.size();i++) {
+            for (int i = 0; i<teams.size(); i++) {
                 if(teams.get(i).getTeamNumber().equals(team)) {
                     teamPos = i;
                     hasTeam = true;
@@ -239,8 +265,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 viewList.add("שאר המשחק");
                 adapter = new ArrayAdapter(ResultsActivity.this,android.R.layout.simple_list_item_1,viewList);
                 resultListView.setAdapter(adapter);
-            }
-            else {
+            } else {
                 viewLevel = "noTeam";
                 viewList = new ArrayList<>();
                 viewList.add("אין קבוצה כזאת");
@@ -251,6 +276,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         }
     }
 
+    // Set screen in case of no team
     private void gameTeamNull(){
         titleTV.setText(type);
         viewLevel = type;
@@ -263,6 +289,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         resultListView.setAdapter(adapter);
     }
 
+    // Sort teams that climb by climb percentage in games
     private void gameAvgClimb() {
         ArrayList<Team> tempTeams = new ArrayList();
         for (Team t:teams) {
@@ -273,12 +300,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgClimb() < tempTeams.get(j).getAvgClimb())
-                {
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j-1).getAvgClimb() < tempTeams.get(j).getAvgClimb()) {
                     tempTeams.add(j-1,tempTeams.remove(j));
                 }
             }
@@ -293,6 +317,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    // Sort teams that put in scale by average cubes in scale per game
     private void gameAvgScale() {
         ArrayList<Team> tempTeams = new ArrayList();
         for (Team t:teams) {
@@ -303,12 +328,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgScale() < tempTeams.get(j).getAvgScale())
-                {
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j-1).getAvgScale() < tempTeams.get(j).getAvgScale()) {
                     tempTeams.add(j-1,tempTeams.remove(j));
                 }
             }
@@ -323,6 +345,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    // Sort teams that put in switch by average cubes in switch per game
     private void gameAvgSwitch() {
         ArrayList<Team> tempTeams = new ArrayList();
         for (Team t:teams) {
@@ -333,12 +356,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgSwitch() < tempTeams.get(j).getAvgSwitch())
-                {
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j-1).getAvgSwitch() < tempTeams.get(j).getAvgSwitch()) {
                     tempTeams.add(j-1,tempTeams.remove(j));
                 }
             }
@@ -353,6 +373,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    // Sort teams that put in vault by average cubes in vault per game
     private void gameAvgVault() {
         ArrayList<Team> tempTeams = new ArrayList();
         for (Team t:teams) {
@@ -363,12 +384,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
         }
 
-        for (int i = (tempTeams.size() - 1); i >= 0; i--)
-        {
-            for (int j = 1; j <= i; j++)
-            {
-                if (tempTeams.get(j-1).getAvgVault() < tempTeams.get(j).getAvgVault())
-                {
+        for (int i = (tempTeams.size() - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                if (tempTeams.get(j-1).getAvgVault() < tempTeams.get(j).getAvgVault()) {
                     tempTeams.add(j-1,tempTeams.remove(j));
                 }
             }
@@ -383,6 +401,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    // List view items click listener
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
         if(type.equals("game")) {
@@ -390,59 +409,60 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 if (team.equals("")) {
                     viewLevel = "gameAvg";
                     if (i==3) {
+                        // Sort teams that climb by climb percentage in games
                         titleTV.setText("טיפוס");
                         gameAvgClimb();
-                    }
-                    else if (i==0) {
+                    } else if (i==0) {
+                        // Sort teams that put in scale by average cubes in scale per game
                         titleTV.setText("סקייל");
                         gameAvgScale();
-                    }
-                    else if (i == 1) {
+                    } else if (i == 1) {
+                        // Sort teams that put in switch by average cubes in switch per game
                         titleTV.setText("סוויץ'");
                         gameAvgSwitch();
-                    }
-                    else if (i == 2) {
+                    } else if (i == 2) {
+                        // Sort teams that put in vault by average cubes in vault per game
                         titleTV.setText("אקסצ'יינג'");
                         gameAvgVault();
                     }
-                }
-                else {
+                } else {
                     if (i==0) {
+                        // Set screen for team games for auto screen
                         viewLevel = "gamesAutoTeam";
                         titleTV.setText(team+" אוטונומי ");
-                    }
-                    else {
+                    } else {
+                        // Set screen for team games for rest of game screen
                         viewLevel = "gamesRestTeam";
                         titleTV.setText(" שאר המשחק "+team);
                     }
                     teamGames();
                 }
-            }
-            else if (viewLevel.equals("gamesAutoTeam")) {
+            } else if (viewLevel.equals("gamesAutoTeam")) {
+                // Shows auto period info of team from game
                 titleTV.setText(team+" auto "+teams.get(teamPos).getGames().get(i));
                 viewLevel = "gameAuto";
                 teamGameAuto(i);
 
-            }
-            else if (viewLevel.equals("gamesRestTeam")) {
+            } else if (viewLevel.equals("gamesRestTeam")) {
+                // Shows rest of the info of team from game
                 titleTV.setText(team+" game "+teams.get(teamPos).getGames().get(i));
                 viewLevel = "gameRest";
                 teamGameRest(i);
             }
-        }
-        else if(type.equals("pit")){
+        } else if(type.equals("pit")){
             if(viewLevel.equals("pit")){
                 if(i==0){
+                    // Shows pit form information on the robot
                     titleTV.setText(team+" Robot ");
                     viewLevel = "pitRobot";
                     teamPitRobot();
-                }
-                else if(i==1){
+                } else if(i==1){
+                    // Shows pit form information on the robot functions
                     titleTV.setText(team+" functions ");
                     viewLevel = "pitFunctinalities";
                     teamPitFunctionality();
-                }
-                else if(i==2){
+                } else if(i==2){
+                    // Shows pit form information on the robot autonomous period
                     titleTV.setText(team+" autonomous ");
                     viewLevel = "pitAutonomus";
                     teamPitAutonomus();
@@ -454,6 +474,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    // Shows auto period info of team from game
     private void teamGameAuto(int position) {
         viewList = new ArrayList<>();
         viewList.add("Scale " + teams.get(teamPos).getAutoScaleCubes().get(position));
@@ -463,6 +484,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         resultListView.setAdapter(adapter);
     }
 
+    // Shows rest of the info of team from game
     private void teamGameRest(int position) {
         viewList = new ArrayList<>();
         viewList.add("Scale " + teams.get(teamPos).getPutScale().get(position));
@@ -479,6 +501,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         resultListView.setAdapter(adapter);
     }
 
+    // Shows pit form information on the robot
     private void teamPitRobot() {
         viewList = new ArrayList<>();
         viewList.add("General Strat: " + teams.get(teamPos).getRobotRole());
@@ -492,6 +515,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
+    // Shows pit form information on the robot functions
     private void teamPitFunctionality() {
         viewList = new ArrayList<>();
         viewList.add("Cubes System: " + teams.get(teamPos).getCubeSystem());
@@ -502,6 +526,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         resultListView.setAdapter(adapter);
     }
 
+    // Shows pit form information on the robot autonomous period
     private void teamPitAutonomus(){
         viewList = new ArrayList<>();
         viewList.add("Does Pass Auto Line: " + teams.get(teamPos).getAutoBaseLine());
@@ -512,7 +537,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
 
     }
 
-
+    // Set screen for team games
     private void teamGames() {
         adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,teams.get(teamPos).getGames());
         resultListView.setAdapter(adapter);
@@ -523,64 +548,78 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         if(backBtn.getId()==view.getId()) {
             Intent intent;
             switch (viewLevel) {
-                case "game":intent = new Intent(this,ScoutingChooseActivity.class);
-                    intent.putExtras(getIntent().getExtras());
+                case "game":
+                    // Exits screen
+                    intent = new Intent(this, ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     pauseMusic = false;
                     startActivity(intent);
                     break;
-                case "noTeam":intent = new Intent(this,ScoutingChooseActivity.class);
-                    intent.putExtras(getIntent().getExtras());
+                case "noTeam":
+                    // Exits screen
+                    intent = new Intent(this, ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     pauseMusic = false;
                     startActivity(intent);
                     break;
-                case "pit":intent = new Intent(this,ScoutingChooseActivity.class);
-                    intent.putExtras(getIntent().getExtras());
+                case "pit":
+                    // Exits screen
+                    intent = new Intent(this, ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     pauseMusic = false;
                     startActivity(intent);
                     break;
-                case "comments":intent = new Intent(this,ScoutingChooseActivity.class);
-                    intent.putExtras(getIntent().getExtras());
+                case "comments":
+                    // Exits screen
+                    intent = new Intent(this, ScoutingChooseActivity.class);
+                    intent.putExtras(getIntent());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     pauseMusic = false;
                     startActivity(intent);
                     break;
                 case "gameAvg":
-                    gameTeamNull();
+                    gameTeamNull(); // Set screen in case of no team
                     break;
                 case "gamesAutoTeam":
-                    gameTeamNonNull();
+                    gameTeamNonNull(); // Set screen in case of team for game info
                     break;
                 case "gamesRestTeam":
-                    gameTeamNonNull();
+                    gameTeamNonNull(); // Set screen in case of team for game info
                     break;
                 case "gameAuto":
+                    // Set screen for team games for auto screen
                     titleTV.setText(team + " אוטונומי ");
                     teamGames();
                     viewLevel = "gamesAutoTeam";
                     break;
                 case "gameRest":
+                    // Set screen for team games for rest of game screen
                     titleTV.setText(" שאר המשחק " + team);
                     teamGames();
                     viewLevel = "gamesRestTeam";
                     break;
-                case "pitRobot": pitMainTable();
+                case "pitRobot":
+                    pitMainTable(); // Sets screen for basic pit info
                     break;
-                case "pitFunctinalities": pitMainTable();
+                case "pitFunctinalities":
+                    pitMainTable(); // Sets screen for basic pit info
                     break;
-                case "pitAutonomus": pitMainTable();
+                case "pitAutonomus":
+                    pitMainTable(); // Sets screen for basic pit info
                     break;
             }
 
         }
     }
 
+    // Sets screen for basic pit info
     private void pitMainTable() {
         viewLevel = "pit";
         boolean hasTeam = false;
-        for (int i=0;i<teams.size();i++) {
+        for (int i = 0; i<teams.size(); i++) {
             if(teams.get(i).getTeamNumber().equals(team)) {
                 teamPos = i;
                 hasTeam = true;
@@ -593,8 +632,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             viewList.add("Robot");
             viewList.add("Functionality");
             viewList.add("Autonomous");
-        }
-        else {
+        } else {
             viewLevel = "noTeam";
             viewList = new ArrayList<>();
             viewList.add("אין קבוצה כזאת");
@@ -604,10 +642,11 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         resultListView.setAdapter(adapter);
     }
 
+    // Shows comments made on the team
     private void teamComment() {
         viewLevel = "comments";
         boolean hasTeam = false;
-        for (int i=0;i<teams.size();i++) {
+        for (int i = 0; i<teams.size(); i++) {
             if(teams.get(i).getTeamNumber().equals(team)) {
                 teamPos = i;
                 hasTeam = true;
@@ -618,8 +657,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             titleTV.setText(teams.get(teamPos).getTeamNumber()+" - "+teams.get(teamPos).getTeamName());
             viewList = teams.get(teamPos).getGameComments();
             viewList.addAll(teams.get(teamPos).getComments());
-        }
-        else {
+        } else {
             viewLevel = "noTeam";
             viewList = new ArrayList<>();
             viewList.add("אין קבוצה כזאת");
@@ -629,10 +667,11 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         resultListView.setAdapter(adapter);
     }
 
+    // Shows comments made on the game
     private void gameComment() {
         viewLevel = "comments";
         boolean hasGame = false;
-        for (int i=0;i<comments.size();i++) {
+        for (int i = 0; i<comments.size(); i++) {
             if(comments.get(i).getGameNum().equals(team)) {
                 teamPos = i;
                 hasGame = true;
@@ -643,8 +682,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             titleTV.setText(comments.get(teamPos).getGameNum());
             viewList = new ArrayList<>();
             viewList.add(comments.get(teamPos).getComment());
-        }
-        else {
+        } else {
             viewLevel = "noTeam";
             viewList = new ArrayList<>();
             viewList.add("אין הערה למשחק זה");
@@ -654,11 +692,14 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         resultListView.setAdapter(adapter);
     }
 
+    // Read Data from FireBase + Set screen for team
     public void readData() {
         teams = new ArrayList<>();
+
         database.collection("teams").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                // Reads pit forms from FireBase and adds the teams to teams list
                 Log.d("teams","team"+documentSnapshots.size());
                 for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
                     Team t = new Team(doc.get("number").toString(),doc.get("name").toString());
@@ -675,8 +716,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     t.setIssuesPotential(doc.get("problems").toString());
                     if(doc.contains("robot_mass")) {
                         t.setRobotMass(doc.get("robot_mass").toString());
-                    }
-                    else {
+                    } else {
                         t.setRobotMass("");
                     }
                     t.setRobotRole(doc.get("role").toString());
@@ -685,10 +725,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                     teams.add(t);
                 }
                 if (type.equals("game")) {
-                    gameTeamNonNull();
-                }
-                else if (type.equals("pit")) {
-                    pitMainTable();
+                    gameTeamNonNull(); // Set screen in case of team for game info
+                } else if (type.equals("pit")) {
+                    pitMainTable(); // Sets screen for basic pit info
                 }
 
 
@@ -697,9 +736,10 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         database.collection("games").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                // Reads games form from FireBase + Adds the games to correct team in teams
                 Log.d("teams","game");
                 for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
-                    for (int i = 0; i<teams.size();i++) {
+                    for (int i = 0; i<teams.size(); i++) {
                         if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
                             teams.get(i).addGame(doc.get("game_number").toString());
                             teams.get(i).addAutoLinePass(doc.get("passed_auto_line").toString());
@@ -730,12 +770,12 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         database.collection("comments").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                // Reads comments form from FireBase + Adds the comments to correct team in teams or adds to gameComments list
                 Log.d("teams","comment");
                 for(DocumentSnapshot doc :documentSnapshots.getDocuments()) {
                     if (doc.get("team").toString().length()<4) {
                         comments.add(new GameComment(doc.get("team").toString(),doc.get("comment").toString()));
-                    }
-                    else {
+                    } else {
                         for (int i = 0; i < teams.size(); i++) {
                             if (teams.get(i).getTeamNumber().equals(doc.get("team"))) {
                                 teams.get(i).addComments(doc.get("comment").toString());
@@ -747,10 +787,9 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
                 }
                 if (type.equals("comments")) {
                     if (team.length()==4) {
-                        teamComment();
-                    }
-                    else {
-                        gameComment();
+                        teamComment(); // Shows comments made on the team
+                    } else {
+                        gameComment(); // Shows comments made on the game
                     }
                 }
             }

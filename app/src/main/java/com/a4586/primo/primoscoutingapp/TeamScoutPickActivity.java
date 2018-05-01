@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
     private boolean mIsBound = false;
     private MusicThread mServ;
     Menu mainMenu = null;
+    boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
             mServ = ((MusicThread.ServiceBinder)binder).getService();
@@ -55,10 +57,11 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         if (!(teamET.getText().toString().isEmpty()&&(getIntent().getStringExtra("level").equals("Admin")||!getIntent().getStringExtra("type").equals("game")))) {
             Intent intent = new Intent(this, ResultsActivity.class);
-            intent.putExtras(getIntent().getExtras());
+            intent.putExtras(getIntent());
             intent.putExtra("team", teamET.getText().toString());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            pauseMusic = false;
             startActivity(intent);
-            finish();
         }
         else {
             Toast.makeText(this, "Team number empty", Toast.LENGTH_SHORT).show();
@@ -101,38 +104,47 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         return true;
     }
     //Music bind and Unbind
-    private void doBindService(){
-        bindService(new Intent(context,MusicThread.class),
+    private void doBindService() {
+        bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
-    private void doUnbindService()
-    {
-        if(mIsBound)
-        {
+    private void doUnbindService() {
+        if (mIsBound) {
             unbindService(Scon);
             mIsBound = false;
         }
     }
+
     @Override
-    public void onPause() {
-        super.onPause();
-        if (mIsBound) {
-            mServ.stopMusic();
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        doUnbindService();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mIsBound) {
-            mServ.startMusic();
+    public void onPause() {
+        super.onPause();
+        if (pauseMusic) {
+            mServ.stopMusic();
         }
     }
     @Override
-    public void onDestroy(){
-        super.onDestroy();
-        doUnbindService();
+    public void onResume() {
+        super.onResume();
+        mServ.startMusic();
+        doBindService();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent setIntent = new Intent(this, ScoutingChooseActivity.class);
+        setIntent.putExtras(getIntent());
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        pauseMusic = false;
+        startActivity(setIntent);
+
     }
 }

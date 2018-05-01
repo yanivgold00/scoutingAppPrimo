@@ -15,31 +15,12 @@ import android.view.MenuItem;
 
 
 public class SplashActivity extends AppCompatActivity {
-    Context context;
-    Intent musicService;
-    private boolean mIsBound = false;
-    private MusicThread mServ;
     Menu mainMenu = null;
-    private ServiceConnection Scon  =new ServiceConnection(){
-        public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
-        }
 
-        public void onServiceDisconnected(ComponentName name) {
-            mServ = null;
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        context = this; // This screen
-        //Music handle
-        musicService= new Intent();
-        mServ = new MusicThread();
-        doBindService();
-        musicService.setClass(this,MusicThread.class);
-        startService(musicService);
 
 
         new Handler().postDelayed(new Runnable() {
@@ -47,9 +28,8 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent homeIntent;
                 homeIntent = new Intent(SplashActivity.this, MainActivity.class);
-                homeIntent.putExtra("isBound", mIsBound);
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(homeIntent);
-                finish();
             }
         }, 1000);
     }
@@ -79,36 +59,9 @@ public class SplashActivity extends AppCompatActivity {
                 Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
-            case R.id.exit:
-                //Close the app
-                finish();
-                break;
-            case R.id.toggleMusic:
-                mServ.toogleMusic();
+
         }
         return true;
     }
-    //Music bind and Unbind
-    private void doBindService(){
-        bindService(new Intent(context,MusicThread.class),
-                Scon, Context.BIND_AUTO_CREATE);
-        mIsBound = true;
-        mServ.startMusic();
-    }
 
-    private void doUnbindService()
-    {
-        if(mIsBound)
-        {
-            unbindService(Scon);
-            mIsBound = false;
-            mServ.stopMusic();
-        }
-    }
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        doUnbindService();
-    }
 }

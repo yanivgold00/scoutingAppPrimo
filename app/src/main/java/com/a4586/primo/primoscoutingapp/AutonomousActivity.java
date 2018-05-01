@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 
 public class AutonomousActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
     private Button addSwitchBtn;
@@ -35,6 +37,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
+    boolean pauseMusic = true;
     Menu mainMenu = null;
     private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -129,25 +132,34 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (mIsBound) {
-            mServ.stopMusic();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mIsBound) {
-            mServ.startMusic();
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         doUnbindService();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (pauseMusic) {
+            mServ.stopMusic();
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mServ.startMusic();
+        doBindService();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent setIntent = new Intent(this, GameActivity.class);
+        setIntent.putExtras(getIntent());
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        pauseMusic = false;
+        startActivity(setIntent);
+
     }
 
     @Override
@@ -165,10 +177,10 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
 
             Intent intent = new Intent(AutonomousActivity.this, TeleopActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);
+            intent.putExtra("level", getIntent().getStringExtra("level"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            pauseMusic = false;
             startActivity(intent);
-            finish();
-
-
         }
         if (v.getId() == addSwitchBtn.getId()) {
             pointSwitchEt.setText("" + (Integer.parseInt(pointSwitchEt.getText().toString()) + 1));

@@ -52,6 +52,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     private boolean mIsBound = false;
     private MusicThread mServ;
     Menu mainMenu = null;
+    boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
             mServ = ((MusicThread.ServiceBinder)binder).getService();
@@ -130,8 +131,10 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(Pit2MainActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Pit2MainActivity.this, PitFormActivity.class);
             intent.putExtra("scoutingArr", scoutingArr);
+            intent.putExtra("level", getIntent().getStringExtra("level"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            pauseMusic = false;
             startActivity(intent);
-            finish();
         }
     }
 
@@ -205,38 +208,47 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         return true;
     }
     //Music bind and Unbind
-    private void doBindService(){
-        bindService(new Intent(context,MusicThread.class),
+    private void doBindService() {
+        bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
-    private void doUnbindService()
-    {
-        if(mIsBound)
-        {
+    private void doUnbindService() {
+        if (mIsBound) {
             unbindService(Scon);
             mIsBound = false;
         }
     }
+
     @Override
-    public void onPause() {
-        super.onPause();
-        if (mIsBound) {
-            mServ.stopMusic();
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        doUnbindService();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mIsBound) {
-            mServ.startMusic();
+    public void onPause() {
+        super.onPause();
+        if (pauseMusic) {
+            mServ.stopMusic();
         }
     }
     @Override
-    public void onDestroy(){
-        super.onDestroy();
-        doUnbindService();
+    public void onResume() {
+        super.onResume();
+        mServ.startMusic();
+        doBindService();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent setIntent = new Intent(this, PitFormActivity.class);
+        setIntent.putExtras(getIntent());
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        pauseMusic = false;
+        startActivity(setIntent);
+
     }
 }

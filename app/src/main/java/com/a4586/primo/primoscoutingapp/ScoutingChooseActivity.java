@@ -26,13 +26,14 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     private Button gameCommentBtn;
     private boolean isInfo;
     String level;
-    Intent intent;
-    static BatteryService batteryService = new BatteryService();
+
+
     Context context;
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
     Menu mainMenu = null;
+    boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
             mServ = ((MusicThread.ServiceBinder)binder).getService();
@@ -58,7 +59,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         pitBtn = (Button) findViewById(R.id.pitBtn);
         infoBtn = (Button) findViewById(R.id.infoBtn);
         gameCommentBtn = findViewById(R.id.gameCommentBtn);
-        intent = this.getApplicationContext().registerReceiver(batteryService,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
         isInfo = false;
         level = getIntent().getStringExtra("level");
 
@@ -135,20 +136,19 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.toggleMusic:
                 mServ.toogleMusic();
+                break;
         }
         return true;
     }
     //Music bind and Unbind
-    private void doBindService(){
-        bindService(new Intent(context,MusicThread.class),
+    private void doBindService() {
+        bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
-    private void doUnbindService()
-    {
-        if(mIsBound)
-        {
+    private void doUnbindService() {
+        if (mIsBound) {
             unbindService(Scon);
             mIsBound = false;
         }
@@ -162,25 +162,25 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     @Override
     public void onPause() {
         super.onPause();
-        if (mIsBound) {
+        if (pauseMusic) {
             mServ.stopMusic();
         }
     }
-
     @Override
     public void onResume() {
         super.onResume();
-        if (mIsBound) {
-            mServ.startMusic();
-        }
+        mServ.startMusic();
+        doBindService();
     }
 
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");
         Intent setIntent = new Intent(this,MainActivity.class);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        pauseMusic = false;
         startActivity(setIntent);
-        finish();
+
     }
 
 
@@ -196,16 +196,20 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 scoutingArr = new String[19];
                 scoutingArr[0] = getIntent().getStringExtra("name");
                 intent.putExtra("scoutingArr", scoutingArr);
+                intent.putExtra("level", level);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
+
             }
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","game");
                 intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
             }
         }
 
@@ -216,16 +220,19 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 scoutingArr = new String[17];
                 scoutingArr[0] = getIntent().getStringExtra("name");
                 intent.putExtra("scoutingArr", scoutingArr);
+                intent.putExtra("level", level);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
             }
             else {
                 Intent intent = new Intent(this,TeamScoutPickActivity.class);
                 intent.putExtra("type","pit");
                 intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
             }
         }
 
@@ -237,8 +244,9 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                     intent.putExtra("type","game");
                     intent.putExtra("level",level);
                     intent.putExtra("name",getIntent().getStringExtra("name"));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    pauseMusic = false;
                     startActivity(intent);
-                    finish();
                 }
                 else {
                     isInfo = true;
@@ -252,8 +260,9 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 intent.putExtra("type","comments");
                 intent.putExtra("level",level);
                 intent.putExtra("name",getIntent().getStringExtra("name"));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
             }
         }
 
@@ -261,8 +270,9 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             Intent intent = new Intent(this,CommentActivity.class);
             intent.putExtra("level",level);
             intent.putExtra("name",getIntent().getStringExtra("name"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            pauseMusic = false;
             startActivity(intent);
-            finish();
         }
 
     }

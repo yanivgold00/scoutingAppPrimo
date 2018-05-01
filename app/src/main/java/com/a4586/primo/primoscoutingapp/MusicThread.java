@@ -75,7 +75,7 @@ public class MusicThread extends Service implements MediaPlayer.OnErrorListener 
     public int onStartCommand (Intent intent, int flags, int startId)
     {
         if(mPlayer!= null){
-            if(mPlayer.isPlaying()){
+            if (!mPlayer.isPlaying()) {
                 mPlayer.start();
             }
         }

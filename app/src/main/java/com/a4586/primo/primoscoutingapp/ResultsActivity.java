@@ -37,6 +37,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
+    boolean pauseMusic = true;
     Menu mainMenu = null;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -47,6 +48,7 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             mServ = null;
         }
     };
+
     TextView titleTV;
     ListView resultListView;
     ArrayList<String> viewList;
@@ -125,22 +127,79 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
         return true;
     }
     //Music bind and Unbind
-    private void doBindService(){
-        bindService(new Intent(context,MusicThread.class),
+    private void doBindService() {
+        bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
-    private void doUnbindService()
-    {
-        if(mIsBound)
-        {
+    private void doUnbindService() {
+        if (mIsBound) {
             unbindService(Scon);
             mIsBound = false;
         }
     }
     @Override
     public void onBackPressed(){
+        Intent intent;
+        switch (viewLevel) {
+            case "game":
+                intent = new Intent(this, ScoutingChooseActivity.class);
+                intent.putExtras(getIntent());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
+                startActivity(intent);
+                break;
+            case "noTeam":
+                intent = new Intent(this, ScoutingChooseActivity.class);
+                intent.putExtras(getIntent());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
+                startActivity(intent);
+                break;
+            case "pit":
+                intent = new Intent(this, ScoutingChooseActivity.class);
+                intent.putExtras(getIntent());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
+                startActivity(intent);
+                break;
+            case "comments":
+                intent = new Intent(this, ScoutingChooseActivity.class);
+                intent.putExtras(getIntent());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
+                startActivity(intent);
+                break;
+            case "gameAvg":
+                gameTeamNull();
+                break;
+            case "gamesAutoTeam":
+                gameTeamNonNull();
+                break;
+            case "gamesRestTeam":
+                gameTeamNonNull();
+                break;
+            case "gameAuto":
+                titleTV.setText(team + " אוטונומי ");
+                teamGames();
+                viewLevel = "gamesAutoTeam";
+                break;
+            case "gameRest":
+                titleTV.setText(" שאר המשחק " + team);
+                teamGames();
+                viewLevel = "gamesRestTeam";
+                break;
+            case "pitRobot":
+                pitMainTable();
+                break;
+            case "pitFunctinalities":
+                pitMainTable();
+                break;
+            case "pitAutonomus":
+                pitMainTable();
+                break;
+        }
     }
     @Override
     public void onDestroy(){
@@ -151,17 +210,15 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
     @Override
     public void onPause() {
         super.onPause();
-        if (mIsBound) {
+        if (pauseMusic) {
             mServ.stopMusic();
         }
     }
-
     @Override
     public void onResume() {
         super.onResume();
-        if (mIsBound) {
-            mServ.startMusic();
-        }
+        mServ.startMusic();
+        doBindService();
     }
 
     private void gameTeamNonNull(){
@@ -468,23 +525,27 @@ public class ResultsActivity extends AppCompatActivity implements ListView.OnIte
             switch (viewLevel) {
                 case "game":intent = new Intent(this,ScoutingChooseActivity.class);
                     intent.putExtras(getIntent().getExtras());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    pauseMusic = false;
                     startActivity(intent);
-                    finish();
                     break;
                 case "noTeam":intent = new Intent(this,ScoutingChooseActivity.class);
                     intent.putExtras(getIntent().getExtras());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    pauseMusic = false;
                     startActivity(intent);
-                    finish();
                     break;
                 case "pit":intent = new Intent(this,ScoutingChooseActivity.class);
                     intent.putExtras(getIntent().getExtras());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    pauseMusic = false;
                     startActivity(intent);
-                    finish();
                     break;
                 case "comments":intent = new Intent(this,ScoutingChooseActivity.class);
                     intent.putExtras(getIntent().getExtras());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    pauseMusic = false;
                     startActivity(intent);
-                    finish();
                     break;
                 case "gameAvg":
                     gameTeamNull();

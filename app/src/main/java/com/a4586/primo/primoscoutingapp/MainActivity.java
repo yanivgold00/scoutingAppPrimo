@@ -1,15 +1,20 @@
 
 package com.a4586.primo.primoscoutingapp;
 
+import android.*;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.StrictMode;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,8 +36,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
+    int myPremmision;
     Context context;
     Intent musicService;
+    Intent intent;
+    boolean pauseMusic = true;
     private boolean mIsBound = false;
     private MusicThread mServ;
     private ServiceConnection Scon  =new ServiceConnection(){
@@ -49,11 +57,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText name;
     private Button loginBtn;
     private Button changeMusicBtn;
+    static BatteryService batteryService = new BatteryService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        intent = this.getApplicationContext().registerReceiver(batteryService, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //Should the request be displayed
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                //request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                        myPremmision);
+            }
+        }
         context = this; // This screen
         //Music handle
         musicService= new Intent();
@@ -65,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("TAG", "preBind");
         doBindService();
 
-        pw = (EditText) findViewById(R.id.pw);
-        name = (EditText) findViewById(R.id.Name);
-        loginBtn = (Button) findViewById(R.id.loginBtn);
+        pw = findViewById(R.id.pw);
+        name = findViewById(R.id.Name);
+        loginBtn = findViewById(R.id.loginBtn);
         changeMusicBtn = findViewById(R.id.changeMusicBtn);
 
         changeMusicBtn.setOnClickListener(this);
@@ -79,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Change music.
      */
     public void changeMusic() {
-        ArrayList<File> songList = getPlayList(Environment.DIRECTORY_MUSIC); //Hold all the song on the phone
+        ArrayList<File> songList = getPlayList(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Music"); //Hold all the song on the phone
         ArrayList<String> songName = new ArrayList<>(); // List of song names
         ArrayList<String> songPath = new ArrayList<>(); // List of song paths
         final ArrayList<String> copySongPath = new ArrayList<>(); //Backup of the songPath as a final
@@ -181,32 +203,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(call);
                 break;
             case R.id.exit:
-                //Close the app
                 finish();
-                break;
             case R.id.toggleMusic:
                 mServ.toogleMusic();
+                break;
         }
         return true;
     }
 
 
     //Music bind and Unbind
-    private void doBindService(){
-        bindService(new Intent(context,MusicThread.class),
+    private void doBindService() {
+        bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
-        mServ.startMusic();
-        Log.d("TAG", "Started Music");
     }
 
-    private void doUnbindService()
-    {
-        if(mIsBound)
-        {
+    private void doUnbindService() {
+        if (mIsBound) {
             unbindService(Scon);
             mIsBound = false;
-            mServ.stopMusic();
         }
     }
 
@@ -214,6 +230,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onDestroy(){
         super.onDestroy();
         doUnbindService();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (pauseMusic) {
+            mServ.stopMusic();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mServ.startMusic();
+        doBindService();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
 
@@ -226,8 +263,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
+
 
             }
             //admin for PRIMO!!
@@ -236,8 +275,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
+
             }
             //admin for Trigon
             else if(this.pw.getText().toString().equals("Admin"))
@@ -246,8 +287,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
+
 
             }
             //scouter Trigon
@@ -257,8 +300,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
+
 
             }
             //scouter for PRIMO!!
@@ -268,8 +313,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("level", pw.getText().toString());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pauseMusic = false;
                 startActivity(intent);
-                finish();
+
 
             }
 

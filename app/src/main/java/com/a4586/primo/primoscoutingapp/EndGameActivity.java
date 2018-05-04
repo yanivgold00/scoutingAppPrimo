@@ -22,11 +22,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class EndGameActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
-    Context context;
+
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -37,14 +41,19 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
             mServ = null;
         }
     };
+
+    // UI
     private Switch reachedPlatform;
     private Spinner climbedSpinner;
     private Spinner helpedClimbSpinner;
     private Switch climbedFast;
     private Button nextScreenBtn;
+
+    // Spinner array and adapter
     private ArrayAdapter adapter;
     private ArrayList<String> spinnerArray;
-    private String[] scoutingArr;
+
+    private String[] scoutingArr; // Form Answers array
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_end_game);
 
         context = this; // This screen
+
         //Music handle
         musicService= new Intent();
         mServ = new MusicThread();
@@ -59,12 +69,14 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
 
+        // UI handle
         reachedPlatform = findViewById(R.id.reachPlatformSwitch);
         climbedSpinner = findViewById(R.id.climbedSpinner);
         helpedClimbSpinner = findViewById(R.id.helpedClimbSpinner);
         climbedFast = findViewById(R.id.wasfastSwitch);
-        nextScreenBtn = (Button) findViewById(R.id.nextScreenBtn);
+        nextScreenBtn = findViewById(R.id.nextScreenBtn);
 
+        // Spinner arrays create
         spinnerArray = new ArrayList<>();
         spinnerArray.add("");
         spinnerArray.add("כן");
@@ -82,12 +94,14 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, spinnerArray);
         helpedClimbSpinner.setAdapter(adapter);
 
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+        scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Get answers form
+
+        // Click listeners
         nextScreenBtn.setClickable(true);
         nextScreenBtn.setOnClickListener(this);
     }
 
-    //Action bar handle
+    // Creates options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -95,7 +109,8 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -104,7 +119,8 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -122,7 +138,8 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         }
         return true;
     }
-    //Music bind and Unbind
+
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -136,6 +153,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -156,6 +174,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");

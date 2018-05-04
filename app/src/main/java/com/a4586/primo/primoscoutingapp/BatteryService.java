@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 public class BatteryService extends BroadcastReceiver {
 
     boolean ran = false; // Don't spam the notification. If notification was already sent
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(!ran){

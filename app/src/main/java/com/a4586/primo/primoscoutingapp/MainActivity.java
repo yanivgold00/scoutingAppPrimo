@@ -34,10 +34,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
-    int myPremmision;
-    Context context;
+
+    int myPremmision; // Storage permission
+
+    Context context; // Context
+
+    // Music
     Intent musicService;
-    Intent intent;
     boolean pauseMusic = true;
     private boolean mIsBound = false;
     private MusicThread mServ;
@@ -50,18 +53,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mServ = null;
         }
     };
-    Menu mainMenu = null;
+
+    Menu mainMenu = null; // Menu
+
+    // UI
     private EditText pw;
     private EditText name;
     private Button loginBtn;
     private Button changeMusicBtn;
+
+    // Battery service
     static BatteryService batteryService = new BatteryService();
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        intent = this.getApplicationContext().registerReceiver(batteryService, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        intent = this.getApplicationContext().registerReceiver(batteryService, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)); // Battery service
+
+        // Get permission
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -74,30 +86,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         myPremmision);
             }
         }
+
         context = this; // This screen
-        //Music handle
+
+        // Music handle
         musicService= new Intent();
         mServ = new MusicThread();
-
-
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
-        Log.d("TAG", "preBind");
         doBindService();
 
+        // UI handle
         pw = findViewById(R.id.pw);
         name = findViewById(R.id.Name);
         loginBtn = findViewById(R.id.loginBtn);
         changeMusicBtn = findViewById(R.id.changeMusicBtn);
 
+        // Click listeners
         changeMusicBtn.setOnClickListener(this);
         loginBtn.setOnClickListener(this);
-
     }
 
-    /**
-     * Change music.
-     */
+    // Change music.
     public void changeMusic() {
         ArrayList<File> songList = getPlayList(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Music"); //Hold all the song on the phone
         ArrayList<String> songName = new ArrayList<>(); // List of song names
@@ -142,13 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    /**
-     * Get the list of the all the music files
-     *
-     * @param rootPath the root path
-     * @return the play list
-     */
-
+    // Get playlist from source path
     private ArrayList<File> getPlayList(String rootPath) {
         Log.d("TAG", rootPath);
         ArrayList<File> fileList = new ArrayList<>(); // Holds the list of the songs
@@ -174,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return fileList;
     }
 
-    //Action bar handle
+    // Creates options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -182,7 +186,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -191,7 +196,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -209,8 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-
-    //Music bind and Unbind
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -224,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -245,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -255,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == loginBtn.getId()) {
-            //strategy team!!
+            // Strategy team!!
             if (this.pw.getText().toString().equals("Strat4586")) {
                 Toast.makeText(MainActivity.this, "You are logged in as strat", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
@@ -267,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }
-            //admin for PRIMO!!
+            // Admin for PRIMO!!
             else if (this.pw.getText().toString().equals("shalosH")) {
                 Toast.makeText(MainActivity.this, "You are logged in as admin", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
@@ -278,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
 
             }
-            //admin for Trigon
+            // Admin for Trigon
             else if(this.pw.getText().toString().equals("Admin"))
             {
                 Toast.makeText(MainActivity.this, "You are logged in as admin", Toast.LENGTH_SHORT).show();
@@ -291,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }
-            //scouter Trigon
+            // Scouter Trigon
             else if (this.pw.getText().toString().equals("Pass"))
             {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
@@ -304,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }
-            //scouter for PRIMO!!
+            // Scouter for PRIMO!!
             else if (this.pw.getText().toString().equals("amitlaba0") || this.pw.getText().toString().equals("microgali0"))
             {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
@@ -317,8 +324,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }
-
-            //wrong password
+            // Wrong password
             else {
                 Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
             }

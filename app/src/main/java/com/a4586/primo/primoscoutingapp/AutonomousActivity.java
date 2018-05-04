@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 public class AutonomousActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
+    // UI
     private Button addSwitchBtn;
     private Button subSwitchBtn;
     private EditText pointSwitchEt;
@@ -30,14 +31,17 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
     private Switch autoLine;
     private Button teleBtn;
 
-    private String[] scoutingArr;
+    private String[] scoutingArr; // Form answers
 
-    Context context;
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
     boolean pauseMusic = true;
-    Menu mainMenu = null;
     private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
             mServ = ((MusicThread.ServiceBinder) binder).getService();
@@ -54,13 +58,15 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_autonomous);
 
         context = this; // This screen
-        //Music handle
+
+        // Music handle
         musicService = new Intent();
         mServ = new MusicThread();
         doBindService();
         musicService.setClass(this, MusicThread.class);
         startService(musicService);
 
+        // UI handle
         addSwitchBtn = (Button) findViewById(R.id.addSwitchBtn);
         addScaleBtn = findViewById(R.id.addScaleBtn);
         subScaleBtn = findViewById(R.id.subAutoScale);
@@ -69,8 +75,10 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         pointScaleEt = findViewById(R.id.scaleNumEt);
         autoLine = (Switch) findViewById(R.id.autoLine);
         teleBtn = (Button) findViewById(R.id.tele);
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
 
+        scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Form prev answers
+
+        // Set click listeners
         addSwitchBtn.setOnClickListener(this);
         addScaleBtn.setOnClickListener(this);
         subSwitchBtn.setOnClickListener(this);
@@ -78,7 +86,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         teleBtn.setOnClickListener(this);
     }
 
-    //Action bar handle
+    // Creates options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -87,7 +95,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         return true;
     }
 
-    //Menu press should open 3 dot menu
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -97,7 +105,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         return super.onKeyDown(keyCode, event);
     }
 
-    //Click listener
+    // Menu Options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -116,7 +124,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         return true;
     }
 
-    //Music bind and Unbind
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -130,6 +138,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -143,6 +152,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -150,6 +160,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");
@@ -164,6 +175,7 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v.getId() == teleBtn.getId()) {
+            // Continue in form
             Toast.makeText(AutonomousActivity.this, "autonomous sent!", Toast.LENGTH_SHORT).show();
             scoutingArr[5] = pointSwitchEt.getText().toString();
             scoutingArr[6] = pointScaleEt.getText().toString();
@@ -182,15 +194,19 @@ public class AutonomousActivity extends AppCompatActivity implements View.OnClic
             startActivity(intent);
         }
         if (v.getId() == addSwitchBtn.getId()) {
+            // Add to switch
             pointSwitchEt.setText("" + (Integer.parseInt(pointSwitchEt.getText().toString()) + 1));
         }
         if (v.getId() == addScaleBtn.getId()) {
+            // Adds to scale
             pointScaleEt.setText("" + (Integer.parseInt(pointScaleEt.getText().toString()) + 1));
         }
         if (v.getId() == subSwitchBtn.getId()) {
+            // Sub from switch
             pointSwitchEt.setText("" + (Integer.parseInt(pointSwitchEt.getText().toString()) - 1));
         }
         if (v.getId() == subScaleBtn.getId()) {
+            // Sub from scale
             pointScaleEt.setText("" + (Integer.parseInt(pointScaleEt.getText().toString()) - 1));
         }
     }

@@ -23,20 +23,25 @@ import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
 
+    // UI
     private Button autoBtn;
     private EditText gameNum;
     private EditText teamNum;
     private Spinner positionSpinner;
     private String[] scoutingArr;
 
+    // Spinner array and adapter
     private ArrayAdapter adapter;
     private ArrayList<String> positionList;
 
-    Context context;
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
     private ServiceConnection Scon  =new ServiceConnection(){
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -54,29 +59,34 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
         context = this; // This screen
-        //Music handle
+
+        // Music handle
         musicService= new Intent();
         mServ = new MusicThread();
         doBindService();
         musicService.setClass(this,MusicThread.class);
         startService(musicService);
 
+        // UI handle
         autoBtn = (Button) findViewById(R.id.autoBtn);
         gameNum = (EditText) findViewById(R.id.gameNum);
         teamNum = (EditText) findViewById(R.id.teamNum);
-        scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
+        positionSpinner = (Spinner) findViewById(R.id.positionSpinner);
 
+        scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Get form prev answers
 
+        // Spinner handle
         positionList = new ArrayList<>();
         positionList.add("ימין");
         positionList.add("מרכז");
         positionList.add("שמאל");
         adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, positionList);
-        positionSpinner = (Spinner) findViewById(R.id.positionSpinner);
         positionSpinner.setAdapter(adapter);
 
-        autoBtn.setOnClickListener(this);
 
+        autoBtn.setOnClickListener(this); // Set click listener
+
+        // Set game number by prev game filled
         if (getIntent().getStringArrayExtra("scoutingArr")[1] != null) {
             int num = Integer.parseInt((getIntent().getStringArrayExtra("scoutingArr")[2]));
             num++;
@@ -113,7 +123,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    //Action bar handle
+    // Creates options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -121,7 +131,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mainMenu=menu;
         return true;
     }
-    //Menu press should open 3 dot menu
+
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode== KeyEvent.KEYCODE_MENU) {
@@ -130,7 +141,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
         return super.onKeyDown(keyCode, event);
     }
-    //Click listener
+
+    // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -148,7 +160,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
         return true;
     }
-    //Music bind and Unbind
+
+    // Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -162,6 +175,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -175,6 +189,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -182,6 +197,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");

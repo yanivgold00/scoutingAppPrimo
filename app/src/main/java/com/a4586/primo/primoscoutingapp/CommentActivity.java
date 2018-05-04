@@ -28,17 +28,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommentActivity extends AppCompatActivity implements View.OnClickListener {
+
+    // UI
     private EditText teamET;
     private EditText commentET;
     private Button sendBtn;
     private Button backBtn;
-    FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-    Context context;
+    FirebaseFirestore database = FirebaseFirestore.getInstance(); // Connection to FireBase
+
+    Context context; // Context
+
+    Menu mainMenu = null; // Menu
+
+    // Music
     Intent musicService;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    Menu mainMenu = null;
     boolean pauseMusic = true;
     private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -56,6 +62,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_comment);
 
         context = this; // This screen
+
         //Music handle
         musicService = new Intent();
         mServ = new MusicThread();
@@ -63,11 +70,13 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         musicService.setClass(this, MusicThread.class);
         startService(musicService);
 
+        // UI handle
         teamET = findViewById(R.id.teamET);
         commentET = findViewById(R.id.commentsET);
         sendBtn = findViewById(R.id.sendBtn);
         backBtn = findViewById(R.id.backBtn);
 
+        // Click listeners
         sendBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
     }
@@ -88,6 +97,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    // Send form to FireBase
     private void sendFireBase() {
         database.collection("comments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -123,7 +133,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    //Action bar handle
+    // Creates options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -132,7 +142,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
-    //Menu press should open 3 dot menu
+    // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -142,7 +152,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         return super.onKeyDown(keyCode, event);
     }
 
-    //Click listener
+    // Menu options click listeners
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -161,7 +171,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
-    //Music bind and Unbind
+    //Music binder and Unbinder
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
                 Scon, Context.BIND_AUTO_CREATE);
@@ -175,6 +185,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    // Music handle with activity
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -196,6 +207,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         doBindService();
     }
 
+    // Back press handle
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");

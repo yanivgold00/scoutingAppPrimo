@@ -54,7 +54,7 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
     boolean pauseMusic = true;
     private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
+            mServ = ((MusicThread.ServiceBinder) binder).getService();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -70,10 +70,10 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
         context = this; // This screen
 
         //Music handle
-        musicService= new Intent();
+        musicService = new Intent();
         mServ = new MusicThread();
         doBindService();
-        musicService.setClass(this,MusicThread.class);
+        musicService.setClass(this, MusicThread.class);
         startService(musicService);
 
         scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Receive prev answers in form
@@ -108,23 +108,23 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
             scoutingArr[3] = roleSpinner.getSelectedItem().toString();
             scoutingArr[4] = roleET.getText().toString();
             scoutingArr[5] = "";
-            if(vaultCB.isChecked()){
-                scoutingArr[5]+="אקסציינג', ";
+            if (vaultCB.isChecked()) {
+                scoutingArr[5] += "אקסציינג', ";
             }
-            if(switchCB.isChecked()){
-                scoutingArr[5]+="סוויץ', ";
+            if (switchCB.isChecked()) {
+                scoutingArr[5] += "סוויץ', ";
             }
-            if(scaleCB.isChecked()){
-                scoutingArr[5]+="סקייל, ";
+            if (scaleCB.isChecked()) {
+                scoutingArr[5] += "סקייל, ";
             }
 
             scoutingArr[6] = cubeSystemET.getText().toString();
 
-            scoutingArr[7] = climbsSwitch.isChecked()+"";
+            scoutingArr[7] = climbsSwitch.isChecked() + "";
 
             scoutingArr[8] = helpsClimbET.getText().toString();
 
-            scoutingArr[9] = baseLineSwitch.isChecked()+"";
+            scoutingArr[9] = baseLineSwitch.isChecked() + "";
 
             scoutingArr[10] = massET.getText().toString();
 
@@ -142,14 +142,14 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bulletmenu, menu);
-        mainMenu=menu;
+        mainMenu = menu;
         return true;
     }
 
     // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             mainMenu.performIdentifierAction(R.id.call, 0);
             return true;
         }
@@ -160,9 +160,9 @@ public class PitMainActivity extends AppCompatActivity implements Serializable, 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.call:
-                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
             case R.id.exit:

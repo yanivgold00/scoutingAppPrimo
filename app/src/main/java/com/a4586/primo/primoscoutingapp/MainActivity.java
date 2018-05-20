@@ -1,4 +1,3 @@
-
 package com.a4586.primo.primoscoutingapp;
 
 import android.content.ComponentName;
@@ -44,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean pauseMusic = true;
     private boolean mIsBound = false;
     private MusicThread mServ;
-    private ServiceConnection Scon  =new ServiceConnection(){
+    private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
+            mServ = ((MusicThread.ServiceBinder) binder).getService();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -90,9 +89,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         context = this; // This screen
 
         // Music handle
-        musicService= new Intent();
+        musicService = new Intent();
         mServ = new MusicThread();
-        musicService.setClass(this,MusicThread.class);
+        mServ.startIsOn();
+        musicService.setClass(this, MusicThread.class);
         startService(musicService);
         doBindService();
 
@@ -183,14 +183,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bulletmenu, menu);
-        mainMenu=menu;
+        mainMenu = menu;
         return true;
     }
 
     // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             mainMenu.performIdentifierAction(R.id.call, 0);
             return true;
         }
@@ -201,9 +201,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.call:
-                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
             case R.id.exit:
@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Music handle with activity
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         doUnbindService();
     }
@@ -286,8 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
             // Admin for Trigon
-            else if(this.pw.getText().toString().equals("Admin"))
-            {
+            else if (this.pw.getText().toString().equals("Admin")) {
                 Toast.makeText(MainActivity.this, "You are logged in as admin", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
@@ -299,8 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
             // Scouter Trigon
-            else if (this.pw.getText().toString().equals("Pass"))
-            {
+            else if (this.pw.getText().toString().equals("Pass")) {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());
@@ -312,8 +310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
             // Scouter for PRIMO!!
-            else if (this.pw.getText().toString().equals("amitlaba0") || this.pw.getText().toString().equals("microgali0"))
-            {
+            else if (this.pw.getText().toString().equals("amitlaba0") || this.pw.getText().toString().equals("microgali0")) {
                 Toast.makeText(MainActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ScoutingChooseActivity.class);
                 intent.putExtra("name", name.getText().toString());

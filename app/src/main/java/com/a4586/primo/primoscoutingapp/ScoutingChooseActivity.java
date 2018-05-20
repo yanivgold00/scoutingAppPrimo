@@ -33,9 +33,9 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     private MusicThread mServ;
     Menu mainMenu = null;
     boolean pauseMusic = true;
-    private ServiceConnection Scon  =new ServiceConnection(){
+    private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
+            mServ = ((MusicThread.ServiceBinder) binder).getService();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -49,10 +49,10 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_scouting_choose);
         context = this; // This screen
         //Music handle
-        musicService= new Intent();
+        musicService = new Intent();
         mServ = new MusicThread();
         doBindService();
-        musicService.setClass(this,MusicThread.class);
+        musicService.setClass(this, MusicThread.class);
         startService(musicService);
         gameBtn = (Button) findViewById(R.id.gameBtn);
         pitBtn = (Button) findViewById(R.id.pitBtn);
@@ -71,8 +71,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             gameCommentBtn.setClickable(true);
             gameCommentBtn.setVisibility(View.VISIBLE);
             gameCommentBtn.setOnClickListener(this);
-        }
-        else if (level.equals("Strat4586")) {
+        } else if (level.equals("Strat4586")) {
             infoBtn.setText("תוצאות");
             infoBtn.setClickable(true);
             infoBtn.setVisibility(View.VISIBLE);
@@ -82,14 +81,11 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             gameCommentBtn.setVisibility(View.VISIBLE);
             gameCommentBtn.setOnClickListener(this);
 
-        }
-        else if(level.equals("Pass"))
-        {
+        } else if (level.equals("Pass")) {
             pitBtn.setClickable(false);
             pitBtn.setVisibility(View.INVISIBLE);
 
-        }
-        else if (level.equals("Admin")) {
+        } else if (level.equals("Admin")) {
             pitBtn.setClickable(false);
             pitBtn.setVisibility(View.INVISIBLE);
             infoBtn.setText("תוצאות");
@@ -108,25 +104,27 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bulletmenu, menu);
-        mainMenu=menu;
+        mainMenu = menu;
         return true;
     }
+
     //Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             mainMenu.performIdentifierAction(R.id.call, 0);
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
     //Click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.call:
-                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
             case R.id.exit:
@@ -139,6 +137,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         }
         return true;
     }
+
     //Music bind and Unbind
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
@@ -152,8 +151,9 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             mIsBound = false;
         }
     }
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         doUnbindService();
     }
@@ -165,6 +165,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -175,14 +176,12 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
     @Override
     public void onBackPressed() {
         Log.d("CDA", "onBackPressed Called");
-        Intent setIntent = new Intent(this,MainActivity.class);
+        Intent setIntent = new Intent(this, MainActivity.class);
         setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         pauseMusic = false;
         startActivity(setIntent);
 
     }
-
-
 
 
     @Override
@@ -200,12 +199,11 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 pauseMusic = false;
                 startActivity(intent);
 
-            }
-            else {
-                Intent intent = new Intent(this,TeamScoutPickActivity.class);
-                intent.putExtra("type","game");
-                intent.putExtra("level",level);
-                intent.putExtra("name",getIntent().getStringExtra("name"));
+            } else {
+                Intent intent = new Intent(this, TeamScoutPickActivity.class);
+                intent.putExtra("type", "game");
+                intent.putExtra("level", level);
+                intent.putExtra("name", getIntent().getStringExtra("name"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 pauseMusic = false;
                 startActivity(intent);
@@ -213,7 +211,7 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         }
 
         if (v.getId() == pitBtn.getId()) {
-            if(!isInfo) {
+            if (!isInfo) {
                 Toast.makeText(ScoutingChooseActivity.this, "Pit Form", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ScoutingChooseActivity.this, PitFormActivity.class);
                 scoutingArr = new String[17];
@@ -223,12 +221,11 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 pauseMusic = false;
                 startActivity(intent);
-            }
-            else {
-                Intent intent = new Intent(this,TeamScoutPickActivity.class);
-                intent.putExtra("type","pit");
-                intent.putExtra("level",level);
-                intent.putExtra("name",getIntent().getStringExtra("name"));
+            } else {
+                Intent intent = new Intent(this, TeamScoutPickActivity.class);
+                intent.putExtra("type", "pit");
+                intent.putExtra("level", level);
+                intent.putExtra("name", getIntent().getStringExtra("name"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 pauseMusic = false;
                 startActivity(intent);
@@ -238,27 +235,25 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         if (v.getId() == infoBtn.getId()) {
             if (!isInfo) {
 
-                if (level.equals("Admin")){
-                    Intent intent = new Intent(this,TeamScoutPickActivity.class);
-                    intent.putExtra("type","game");
-                    intent.putExtra("level",level);
-                    intent.putExtra("name",getIntent().getStringExtra("name"));
+                if (level.equals("Admin")) {
+                    Intent intent = new Intent(this, TeamScoutPickActivity.class);
+                    intent.putExtra("type", "game");
+                    intent.putExtra("level", level);
+                    intent.putExtra("name", getIntent().getStringExtra("name"));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     pauseMusic = false;
                     startActivity(intent);
-                }
-                else {
+                } else {
                     isInfo = true;
                     gameCommentBtn.setClickable(false);
                     gameCommentBtn.setVisibility(View.INVISIBLE);
                     infoBtn.setText("הערות");
                 }
-            }
-            else {
-                Intent intent = new Intent(this,TeamScoutPickActivity.class);
-                intent.putExtra("type","comments");
-                intent.putExtra("level",level);
-                intent.putExtra("name",getIntent().getStringExtra("name"));
+            } else {
+                Intent intent = new Intent(this, TeamScoutPickActivity.class);
+                intent.putExtra("type", "comments");
+                intent.putExtra("level", level);
+                intent.putExtra("name", getIntent().getStringExtra("name"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 pauseMusic = false;
                 startActivity(intent);
@@ -266,9 +261,9 @@ public class ScoutingChooseActivity extends AppCompatActivity implements View.On
         }
 
         if (v.getId() == gameCommentBtn.getId()) {
-            Intent intent = new Intent(this,CommentActivity.class);
-            intent.putExtra("level",level);
-            intent.putExtra("name",getIntent().getStringExtra("name"));
+            Intent intent = new Intent(this, CommentActivity.class);
+            intent.putExtra("level", level);
+            intent.putExtra("name", getIntent().getStringExtra("name"));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pauseMusic = false;
             startActivity(intent);

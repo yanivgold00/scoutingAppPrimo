@@ -32,9 +32,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     private boolean mIsBound = false;
     private MusicThread mServ;
     boolean pauseMusic = true;
-    private ServiceConnection Scon  =new ServiceConnection(){
+    private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
+            mServ = ((MusicThread.ServiceBinder) binder).getService();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -63,10 +63,10 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         context = this; // This screen
 
         //Music handle
-        musicService= new Intent();
+        musicService = new Intent();
         mServ = new MusicThread();
         doBindService();
-        musicService.setClass(this,MusicThread.class);
+        musicService.setClass(this, MusicThread.class);
         startService(musicService);
 
         // UI handle
@@ -106,14 +106,14 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bulletmenu, menu);
-        mainMenu=menu;
+        mainMenu = menu;
         return true;
     }
 
     // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             mainMenu.performIdentifierAction(R.id.call, 0);
             return true;
         }
@@ -124,9 +124,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.call:
-                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
             case R.id.exit:
@@ -167,6 +167,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

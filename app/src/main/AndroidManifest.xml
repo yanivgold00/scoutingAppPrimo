@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <service android:name=".MusicThread" android:stopWithTask="true"/>
+        <service
+            android:name=".MusicThread"
+            android:stopWithTask="true" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />

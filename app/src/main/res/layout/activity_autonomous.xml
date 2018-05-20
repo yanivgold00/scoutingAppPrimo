@@ -12,14 +12,13 @@
     tools:context="com.a4586.primo.primoscoutingapp.AutonomousActivity">
 
 
-
-            <TextView
-                android:text="Autonomous"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/Title"
-                android:textStyle="normal|bold"
-                android:textSize="18sp" />
+    <TextView
+        android:text="Autonomous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Title"
+        android:textStyle="normal|bold"
+        android:textSize="18sp" />
 
 
     <TextView

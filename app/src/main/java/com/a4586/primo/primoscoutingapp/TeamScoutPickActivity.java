@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -29,9 +29,9 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
     private boolean mIsBound = false;
     private MusicThread mServ;
     boolean pauseMusic = true;
-    private ServiceConnection Scon  =new ServiceConnection(){
+    private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
+            mServ = ((MusicThread.ServiceBinder) binder).getService();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -51,10 +51,10 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
         context = this; // This screen
 
         //Music handle
-        musicService= new Intent();
+        musicService = new Intent();
         mServ = new MusicThread();
         doBindService();
-        musicService.setClass(this,MusicThread.class);
+        musicService.setClass(this, MusicThread.class);
         startService(musicService);
 
         //UI handle
@@ -68,15 +68,14 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View view) {
         //Checks if user filled team/game number and if not checks if user searches for correct information type and has clearance for the information
-        if (!(teamET.getText().toString().isEmpty()&&(getIntent().getStringExtra("level").equals("Admin")||!getIntent().getStringExtra("type").equals("game")))) {
+        if (!(teamET.getText().toString().isEmpty() && (getIntent().getStringExtra("level").equals("Admin") || !getIntent().getStringExtra("type").equals("game")))) {
             Intent intent = new Intent(this, ResultsActivity.class);
             intent.putExtras(getIntent());
             intent.putExtra("team", teamET.getText().toString());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pauseMusic = false;
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(this, "Team number empty", Toast.LENGTH_SHORT).show();
         }
     }
@@ -86,14 +85,14 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bulletmenu, menu);
-        mainMenu=menu;
+        mainMenu = menu;
         return true;
     }
 
     //Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             mainMenu.performIdentifierAction(R.id.call, 0);
             return true;
         }
@@ -104,9 +103,9 @@ public class TeamScoutPickActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.call:
-                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
             case R.id.exit:

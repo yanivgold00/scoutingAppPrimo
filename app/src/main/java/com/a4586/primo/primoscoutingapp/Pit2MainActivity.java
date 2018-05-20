@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -53,9 +52,9 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     private boolean mIsBound = false;
     private MusicThread mServ;
     boolean pauseMusic = true;
-    private ServiceConnection Scon  =new ServiceConnection(){
+    private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
+            mServ = ((MusicThread.ServiceBinder) binder).getService();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -71,10 +70,10 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         context = this; // This screen
 
         //Music handle
-        musicService= new Intent();
+        musicService = new Intent();
         mServ = new MusicThread();
         doBindService();
-        musicService.setClass(this,MusicThread.class);
+        musicService.setClass(this, MusicThread.class);
         startService(musicService);
 
         scoutingArr = getIntent().getStringArrayExtra("scoutingArr"); // Getting the answers array
@@ -88,7 +87,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         midAutoScaleCB = findViewById(R.id.midAutoScale);
         leftAutoScaleCB = findViewById(R.id.leftAutoScale);
         rightAutoSwitchCB = findViewById(R.id.rightAutoSwitch);
-        midAutoSwitchCB =findViewById(R.id.midAutoSwitch);
+        midAutoSwitchCB = findViewById(R.id.midAutoSwitch);
         leftAutoSwitchCB = findViewById(R.id.leftAutoSwitch);
         sendBtn = (Button) findViewById(R.id.sendBtn);
 
@@ -102,24 +101,24 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
         if ((v.getId() == sendBtn.getId())) {
             sendBtn.setClickable(false);
             scoutingArr[11] = "";
-            if(rightAutoSwitchCB.isChecked()) {
+            if (rightAutoSwitchCB.isChecked()) {
                 scoutingArr[11] += "ימין,";
             }
-            if(midAutoSwitchCB.isChecked()) {
+            if (midAutoSwitchCB.isChecked()) {
                 scoutingArr[11] += "מרכז,";
             }
-            if(leftAutoSwitchCB.isChecked()) {
+            if (leftAutoSwitchCB.isChecked()) {
                 scoutingArr[11] += "שמאל,";
             }
 
             scoutingArr[12] = "";
-            if(rightAutoScaleCB.isChecked()) {
+            if (rightAutoScaleCB.isChecked()) {
                 scoutingArr[12] += "ימין,";
             }
-            if(midAutoScaleCB.isChecked()) {
+            if (midAutoScaleCB.isChecked()) {
                 scoutingArr[12] += "מרכז,";
             }
-            if(leftAutoScaleCB.isChecked()) {
+            if (leftAutoScaleCB.isChecked()) {
                 scoutingArr[12] += "שמאל,";
             }
             scoutingArr[13] = drivingSystemET.getText().toString();
@@ -148,7 +147,7 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
                 if (task.isSuccessful()) {
 
                     Map<String, Object> team = new HashMap<>();
-                    team.put("scouter",scoutingArr[0]);
+                    team.put("scouter", scoutingArr[0]);
                     team.put("number", scoutingArr[1]);
                     team.put("name", scoutingArr[2]);
                     team.put("role", scoutingArr[3]);
@@ -179,14 +178,14 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bulletmenu, menu);
-        mainMenu=menu;
+        mainMenu = menu;
         return true;
     }
 
     // Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             mainMenu.performIdentifierAction(R.id.call, 0);
             return true;
         }
@@ -197,9 +196,9 @@ public class Pit2MainActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.call:
-                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
             case R.id.exit:

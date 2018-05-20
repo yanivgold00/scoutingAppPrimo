@@ -36,9 +36,9 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
     private MusicThread mServ;
     Menu mainMenu = null;
     boolean pauseMusic = true;
-    private ServiceConnection Scon  =new ServiceConnection(){
+    private ServiceConnection Scon = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mServ = ((MusicThread.ServiceBinder)binder).getService();
+            mServ = ((MusicThread.ServiceBinder) binder).getService();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -62,10 +62,10 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_send);
         context = this; // This screen
         //Music handle
-        musicService= new Intent();
+        musicService = new Intent();
         mServ = new MusicThread();
         doBindService();
-        musicService.setClass(this,MusicThread.class);
+        musicService.setClass(this, MusicThread.class);
         startService(musicService);
         scoutingArr = getIntent().getStringArrayExtra("scoutingArr");
         roleBtn = findViewById(R.id.offenseDefenseBtn);
@@ -103,10 +103,10 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
 
                     Map<String, Object> game = new HashMap<>();
                     // general
-                    game.put("scouter",scoutingArr[0]);
-                    game.put("team",scoutingArr[1]);
-                    game.put("game_number",scoutingArr[2]);
-                    game.put("start_position",scoutingArr[3]);
+                    game.put("scouter", scoutingArr[0]);
+                    game.put("team", scoutingArr[1]);
+                    game.put("game_number", scoutingArr[2]);
+                    game.put("start_position", scoutingArr[3]);
                     // auto
                     game.put("passed_auto_line", scoutingArr[4]);
                     game.put("auto_switch", scoutingArr[5]);
@@ -120,14 +120,14 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     //end game
                     game.put("reach_platform", scoutingArr[12]);
                     game.put("did_climb", scoutingArr[13]);
-                    game.put("helped_climb",scoutingArr[14]);
-                    game.put("climbed_fast",scoutingArr[15]);
+                    game.put("helped_climb", scoutingArr[14]);
+                    game.put("climbed_fast", scoutingArr[15]);
                     //general game
-                    game.put("role",scoutingArr[16]);
-                    game.put("did_crash",scoutingArr[17]);
-                    game.put("comments",scoutingArr[18]);
+                    game.put("role", scoutingArr[16]);
+                    game.put("did_crash", scoutingArr[17]);
+                    game.put("comments", scoutingArr[18]);
 
-                    database.collection("games").document(scoutingArr[1]+scoutingArr[2]).set(game);
+                    database.collection("games").document(scoutingArr[1] + scoutingArr[2]).set(game);
                     Log.v("TAG", "succes");
                     Toast.makeText(SendActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SendActivity.this, GameActivity.class);
@@ -136,7 +136,6 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     pauseMusic = false;
                     startActivity(intent);
-
 
 
                 } else {
@@ -154,25 +153,27 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bulletmenu, menu);
-        mainMenu=menu;
+        mainMenu = menu;
         return true;
     }
+
     //Menu press should open 3 dot menu
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode== KeyEvent.KEYCODE_MENU) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
             mainMenu.performIdentifierAction(R.id.call, 0);
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
     //Click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.call:
-                Intent call= new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
                 startActivity(call);
                 break;
             case R.id.exit:
@@ -184,6 +185,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
         }
         return true;
     }
+
     //Music bind and Unbind
     private void doBindService() {
         bindService(new Intent(context, MusicThread.class),
@@ -197,8 +199,9 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
             mIsBound = false;
         }
     }
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         doUnbindService();
     }
@@ -210,6 +213,7 @@ public class SendActivity extends AppCompatActivity implements View.OnClickListe
             mServ.stopMusic();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

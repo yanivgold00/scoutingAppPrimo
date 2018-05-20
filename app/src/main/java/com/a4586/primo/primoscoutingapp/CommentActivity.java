@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -84,13 +84,13 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if (view.getId()==sendBtn.getId()) {
+        if (view.getId() == sendBtn.getId()) {
             sendFireBase();
-            }
-        if (view.getId()==backBtn.getId()) {
-            Intent intent = new Intent(this,ScoutingChooseActivity.class);
-            intent.putExtra("level",getIntent().getStringExtra("level"));
-            intent.putExtra("name",getIntent().getStringExtra("name"));
+        }
+        if (view.getId() == backBtn.getId()) {
+            Intent intent = new Intent(this, ScoutingChooseActivity.class);
+            intent.putExtra("level", getIntent().getStringExtra("level"));
+            intent.putExtra("name", getIntent().getStringExtra("name"));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pauseMusic = false;
             startActivity(intent);
@@ -108,17 +108,17 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 //                    DocumentReference doc = database.collection("games").document(scoutingArr[1]);
                     String teamNumber = teamET.getText().toString();
 
-                    for (DocumentSnapshot doc:task.getResult().getDocuments()) {
+                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                         counter++;
 
                     }
 
                     Map<String, Object> comment = new HashMap<>();
-                    comment.put("name",getIntent().getStringExtra("name"));
-                    comment.put("team",teamNumber);
-                    comment.put("comment",commentET.getText().toString());
+                    comment.put("name", getIntent().getStringExtra("name"));
+                    comment.put("team", teamNumber);
+                    comment.put("comment", commentET.getText().toString());
 
-                    database.collection("comments").document(teamNumber+counter).set(comment);
+                    database.collection("comments").document(teamNumber + counter).set(comment);
                     Log.v("TAG", "succes");
                     Toast.makeText(CommentActivity.this, "everything sent! yay:)", Toast.LENGTH_SHORT).show();
                     teamET.setText("");

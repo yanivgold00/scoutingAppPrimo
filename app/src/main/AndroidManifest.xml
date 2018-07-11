@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.a4586.primo.primoscoutingapp">
 
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
 
     <application
         android:allowBackup="true"
@@ -15,6 +19,9 @@
         <service
             android:name=".MusicThread"
             android:stopWithTask="true" />
+        <service
+            android:name=".GameNotificationService"
+            android:stopWithTask="false" />
 
         <activity
             android:name=".MainActivity"
@@ -61,7 +68,8 @@
         <activity
             android:name=".CommentActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".TeamScoutPickActivity"></activity>
+        <activity android:name=".TeamScoutPickActivity" />
+        <activity android:name=".CameraActivity"></activity>
     </application>
 
 </manifest>

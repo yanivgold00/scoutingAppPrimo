@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.hardware.camera2.*;
 
 import java.io.File;
 import java.io.Serializable;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Context context; // Context
 
     // Music
-    Intent musicService;
+    static Intent musicService;
     boolean pauseMusic = true;
     private boolean mIsBound = false;
     private MusicThread mServ;
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Battery service
     static BatteryService batteryService = new BatteryService();
     Intent intent;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,14 +200,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onKeyDown(keyCode, event);
     }
 
+    /** Check if this device has a camera */
+    private boolean checkCameraHardware(Context context) {
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            // this device has a camera
+            return true;
+        } else {
+            // no camera on this device
+            return false;
+        }
+    }
+
+
+
     // Menu options click listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.call:
-                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
-                startActivity(call);
+//                Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + ""));
+//                startActivity(call);
+                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
             case R.id.exit:
                 finish();

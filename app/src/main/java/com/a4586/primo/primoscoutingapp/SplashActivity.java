@@ -1,9 +1,12 @@
 package com.a4586.primo.primoscoutingapp;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -13,10 +16,29 @@ import android.view.MenuItem;
 public class SplashActivity extends AppCompatActivity {
     Menu mainMenu = null;
 
+    public static Intent gameService;
+    private boolean mIsBound = false;
+    private GameNotificationService gServ;
+    private ServiceConnection Scon = new ServiceConnection() {
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            gServ = ((GameNotificationService.ServiceBinder) binder).getService();
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            gServ = null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        gameService = new Intent();
+        gServ = new GameNotificationService();
+        gameService.setClass(this, GameNotificationService.class);
+        startService(gameService);
+
 
         new Handler().postDelayed(new Runnable() {
             @Override

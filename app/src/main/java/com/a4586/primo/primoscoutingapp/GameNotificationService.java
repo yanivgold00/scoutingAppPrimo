@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -27,6 +28,7 @@ public class GameNotificationService extends Service {
 
     private final IBinder mBinder = new ServiceBinder(); // Used to binned the service to the activity
 
+    private MediaPlayer mp = new MediaPlayer();
     boolean ran = false; // Don't spam the notification. If notification was already sent
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context = this;
@@ -52,6 +54,18 @@ public class GameNotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (mp != null) {
+            mp.setLooping(true);
+            mp.setVolume(100, 100);
+        }
+        mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            public boolean onError(MediaPlayer mp, int what, int
+                    extra) {
+
+                onError(mp, what, extra);
+                return true;
+            }
+        });
 
 
     }
@@ -76,6 +90,8 @@ public class GameNotificationService extends Service {
                             NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                             nManager.notify(NOTIFICATION_ID, builder.build());
                             ran = true;
+                            mp = MediaPlayer.create(context, R.raw.carefree);
+
 
                         }
 
@@ -98,6 +114,20 @@ public class GameNotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         checkEvent();
         return START_STICKY;
+    }
+
+    // Display error when MediaPlayer does not work
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        Toast.makeText(this, "music player failed", Toast.LENGTH_SHORT).show();
+        if (mp != null) {
+            try {
+                mp.stop();
+                mp.release();
+            } finally {
+                mp = null;
+            }
+        }
+        return false;
     }
 
 

@@ -348,4 +348,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             changeMusic();
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        startService(new Intent(this, GameNotificationService.class));
+
+    }
 }

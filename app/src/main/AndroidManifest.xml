@@ -21,7 +21,14 @@
             android:stopWithTask="true" />
         <service
             android:name=".GameNotificationService"
-            android:stopWithTask="false" />
+            android:stopWithTask="false" >
+
+            <intent-filter>
+                <action android:name="com.a4586.primo.primoscoutingapp.GameNotificationService" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".MainActivity"

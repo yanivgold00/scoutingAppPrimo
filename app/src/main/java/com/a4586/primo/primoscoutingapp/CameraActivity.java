@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -63,9 +64,10 @@ public class CameraActivity extends AppCompatActivity {
     }
     private static File getOutputMediaFile(){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "CameraDemo");
-
+                Environment.DIRECTORY_PICTURES), "Scouting");
+        Log.d("TAG",mediaStorageDir.exists()+"");
         if (!mediaStorageDir.exists()){
+
             if (!mediaStorageDir.mkdirs()){
                 return null;
             }

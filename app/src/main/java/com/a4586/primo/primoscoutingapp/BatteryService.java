@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 /**
  * Created by yaniv on 24/03/2018.
@@ -21,7 +22,9 @@ public class BatteryService extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (!ran) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0); // Getting the level
-            if (level < 90) {
+            int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 1);
+            Log.d("TAG",plugged + "");
+            if (level < 90 && plugged == 0) {
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(context, "M_CH_ID")
                                 .setSmallIcon(R.mipmap.app_logo)

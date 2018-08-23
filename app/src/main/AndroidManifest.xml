@@ -2,18 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.a4586.primo.primoscoutingapp">
 
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <service
@@ -21,8 +19,7 @@
             android:stopWithTask="true" />
         <service
             android:name=".GameNotificationService"
-            android:stopWithTask="false" >
-
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.a4586.primo.primoscoutingapp.GameNotificationService" />
 
@@ -76,7 +73,8 @@
             android:name=".CommentActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".TeamScoutPickActivity" />
-        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".CameraActivity" />
+        <activity android:name=".CameraActivity2"></activity>
     </application>
 
 </manifest>
